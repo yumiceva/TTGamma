@@ -19,4 +19,4 @@ ttgamma3Dict.C: ttgamma3.h
 	rootcint -f ttgamma3Dict.C -c ttgamma3.h Linkdef.h
 
 clean:
-	rm ttgamma3.o
+	rm ttgamma3.o ttgamma3Dict.o ttgamma3Dict.h ttgamma3Dict.C
