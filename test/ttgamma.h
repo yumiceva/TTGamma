@@ -27,7 +27,7 @@
 
 class ttgamma : public TSelector {
 
-private:
+public:
   void              ParseInput();
   //void              CreateHistograms();
   TString           fMyOpt;
@@ -38,21 +38,15 @@ private:
   TString           fOutdir;
   TProofOutputFile *fProofFile; // For optimized merging of the ntuple
   TH1F             *h1test;
-  TH1F             *h2test;
-  TH1F             *h3test;
-  TH1F             *h4test;
-  TH1F             *h5test;
-  TH1F             *h6test;
-  TH1F             *h7test;
-  TH1F             *h8test;
-  TH1F             *h9test;
-  TH1F             *h10test;
-  TH1F             *h11test;
-  TH1F             *h12test;
-  TH1F             *h13test;  
-  TH1F             *h14test; 
-
-public :
+  TH1F             *hcutflow;
+  map< string, TH1*> hmuons;
+  map< string, TH1*> helectrons;
+  map< string, TH1*> hphotons;
+  map< string, TH1*> hjets;
+  map< string, TH1*> hPVs;
+  map< string, TH1*> hMET;
+  vector< string >  fCutLabels;
+  map< string, double > cutmap;
 
    TFile          *fFile;
 
@@ -201,7 +195,7 @@ public :
     fOutdir  = "";
   }
 
-   virtual ~ttgamma() { }
+  virtual ~ttgamma();
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
