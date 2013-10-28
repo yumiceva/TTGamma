@@ -1,221 +1,226 @@
-void runttgamma(TString sample="all", bool getLogs=false)  
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
+//#include "getProof.C"
+//#include "TDSet.h"
+//#include "TProof.h"
+#include "TChain.h"
+#include "TList.h"
+#include "TH1F.h"
+#include "TString.h"
+#include "ttgamma3.h"
+
+using namespace std;
+
+#ifdef __MAKECINT__
+#pragma link C++ class std::map<std::string,std::string>+;
+#pragma link C++ class std::pair<std::string,std::string>+;
+#pragma link C++ class std::vector<std::string>+;
+#pragma link C++ class std::map<std::string,std::vector<std::string>>+;
+#pragma link C++ class std::pair<std::string,std::vector<std::string>>+;
+#pragma link C++ class std::map<std::string,TH1*>+;
+#endif
+
+//typedef std::map<std::string, std::string> TStrStrMap;
+//typedef std::pair<std::string, std::string> StrPair;
+typedef std::vector<std::string> StrVector;
+typedef std::map<std::string, StrVector> StrVecMap;
+typedef std::pair<std::string, StrVector> StrVecPair;
+
+
+void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)  
 {
 
-  TString desdir = "/uscms/home/yumiceva/lpc1/4tops2013_templates/";
+  //TStrStrMap msamples;
+  StrVecMap vsamples;
+  StrVector vec;
 
-  TProof *p = TProof::Open("lite://");
+  std::string prefixData="/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/";
+  std::string prefixMC = "/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/GGNtuMC/";
 
-  //p->AddDynamicPath("");
-  //p->Exec("gSystem->Load(\"/uscms/home/yumiceva/work/CMSSW_5_3_3/lib/slc5_amd64_gcc462/libYumicevaTop7TeV.so\")");
-  //p->AddIncludePath("/uscms/home/yumiceva/work/CMSSW_5_3_3/src/");
-  //p->AddIncludePath("-I/uscmst1/prod/sw/cms/slc5_amd64_gcc462/external/boost/1.47.0/include/");
+  //WW_2l2nu
+  vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
+  vsamples.insert(StrVecPair("WW_2l2nu",vec));
+  vec.clear();
+  //WWg
+  vec.push_back(prefixMC+"job_summer12_WWg.root");
+  vsamples.insert(StrVecPair("WWg",vec));
+  vec.clear();
+  //WZ_2l2q
+  vec.push_back(prefixMC+"job_summer12_WZ_2l2q.root");
+  vsamples.insert(StrVecPair("WZ_2l2q",vec));
+  vec.clear();
+  //WZ_3lnu
+  vec.push_back(prefixMC+"job_summer12_WZ_3lnu.root");
+  vsamples.insert(StrVecPair("WZ_3lnu",vec));
+  vec.clear();
+  //Wg
+  vec.push_back(prefixMC+"job_summer12_Wg.root");
+  vsamples.insert(StrVecPair("Wg",vec));
+  vec.clear();
+  //ZZ_2e2mu
+  vec.push_back(prefixMC+"job_summer12_ZZ_2e2mu.root");
+  vsamples.insert(StrVecPair("ZZ_2e2mu",vec));
+  vec.clear();
+  //ZZ_2e2tau
+  vec.push_back(prefixMC+"job_summer12_ZZ_2e2tau.root");
+  vsamples.insert(StrVecPair("ZZ_2e2tau",vec));
+  vec.clear();
+  //ZZ_2mu2tau
+  vec.push_back(prefixMC+"job_summer12_ZZ_2mu2tau.root");
+  vsamples.insert(StrVecPair("ZZ_2mu2tau",vec));
+  vec.clear();
+  //ZZ_4e
+  vec.push_back(prefixMC+"job_summer12_ZZ_4e.root");
+  vsamples.insert(StrVecPair("ZZ_4e",vec));
+  vec.clear();
+  //ZZ_4mu
+  vec.push_back(prefixMC+"job_summer12_ZZ_4mu.root");
+  vsamples.insert(StrVecPair("ZZ_4mu",vec));
+  vec.clear();
+  //ZZ_4tau
+  vec.push_back(prefixMC+"job_summer12_ZZ_4tau.root");
+  vsamples.insert(StrVecPair("WWg",vec));
+  vec.clear();
+  //Zg
+  vec.push_back(prefixMC+"job_summer12_Zg.root");
+  vsamples.insert(StrVecPair("Zg",vec));
+  vec.clear();
+  //diphoton_box_10to25
+  vec.push_back(prefixMC+"job_summer12_diphoton_box_10to25.root");
+  vsamples.insert(StrVecPair("diphoton_box_10to25",vec));
+  vec.clear();
+  //diphoton_box_25to250
+  vec.push_back(prefixMC+"job_summer12_diphoton_box_25to250.root");
+  vsamples.insert(StrVecPair("diphoton_box_25to250",vec));
+  vec.clear();
+  //t_s
+  vec.push_back(prefixMC+"job_summer12_t_s.root");
+  vsamples.insert(StrVecPair("t_s",vec));
+  vec.clear();
+  //t_t
+  vec.push_back(prefixMC+"job_summer12_t_t.root");
+  vsamples.insert(StrVecPair("t_t",vec));
+  vec.clear();
+  //t_tW
+  vec.push_back(prefixMC+"job_summer12_t_tW.root");
+  vsamples.insert(StrVecPair("t_tW",vec));
+  vec.clear();
+  //tbar_s
+  vec.push_back(prefixMC+"job_summer12_tbar_s.root");
+  vsamples.insert(StrVecPair("tbar_s",vec));
+  vec.clear();
+  //tbar_t
+  vec.push_back(prefixMC+"job_summer12_tbar_t.root");
+  vsamples.insert(StrVecPair("tbar_t",vec));
+  vec.clear();
+  //tbar_tW
+  vec.push_back(prefixMC+"job_summer12_tbar_tW.root");
+  vsamples.insert(StrVecPair("tbar_tW",vec));
+  vec.clear();
+  //ttW
+  vec.push_back(prefixMC+"job_summer12_ttW.root");
+  vsamples.insert(StrVecPair("ttW",vec));
+  vec.clear();
+  //ttZ
+  vec.push_back(prefixMC+"job_summer12_ttZ.root");
+  vsamples.insert(StrVecPair("ttZ",vec));
+  vec.clear();
+  //ttg
+  vec.push_back(prefixMC+"job_summer12_ttg.root");
+  vsamples.insert(StrVecPair("ttg",vec));
+  vec.clear();
+  //ttgWz
+  vec.push_back(prefixMC+"job_summer12_ttg_WHIZARD_v11.root");
+  vsamples.insert(StrVecPair("ttgWz",vec));
+  vec.clear();
 
-  p->Archive(" ",desdir);
+  //DATA
+  vec.push_back(prefixData+"job_1electron_2012a_Aug6rereco_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012a_Jul13rereco_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012b_Jul13rereco_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012c_Aug24rereco_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012c_Dec11rereco_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012c_PRv2_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part1_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part2_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part3_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part4_skim.root");
+  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part5_skim.root");
+  vsamples.insert(StrVecPair("data",vec));
+  vec.clear();
 
-  //p->AddInput(new TNamed("PROOF_OUTPUTFILE_LOCATION", "LOCAL"));
+  //TProof *proof = getProof("lite://",nwrks);
+  TString proofOpt(Form("workers=%i",workers));
+  //TProof *proof = TProof::Open(proofOpt);
+  //if (!proof) {
+  //  Printf("runProof: could not start/attach a PROOF session");
+  //  return;
+  //}
 
-  if (sample=="MC"||sample=="2w2l"||sample=="all")
-    {
-      TDSet *mc_2w2l = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_2w2l->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_WW_2l2nu.root"); 
-      mc_2w2l->Process("ttgamma.C+","sample=2w2l");
+  //proof->SetLogLevel(2); // verbose
+
+  TChain *chain = new TChain("ggNtuplizer/EventTree");
+  StrVecMap::iterator ite;//
+  for ( ite = vsamples.begin(); ite != vsamples.end(); ++ite) {//
+    
+    std::string name(sample.Data());
+    std::string tmpname = (*ite).first;
+    if ( name != "all" && name != tmpname ) continue;
+    if ( name == "all" ) name = tmpname;
+    StrVector location = vsamples[name];
+    cout<< "Input sample: "<< name << endl;
+    //StrVecMap::iterator ite;
+    //for (ite = location.begin(); ite != location.end(); ++ite) {
+    for ( size_t i=0; i < location.size(); ++i ) {
+    
+      //chain->Add(location.c_str());
+      chain->Add( location[i].c_str() );
     }
-    
-  if (sample=="MC"||sample=="wwg"||sample=="all")
-    {
-      TDSet *mc_wwg = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_wwg->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_WWg.root"); 
-      mc_wwg->Process("ttgamma.C+","sample=wwg");
-    }    
-    
-  if (sample=="MC"||sample=="wz2l2q"||sample=="all")
-    {
-      TDSet *mc_wz2l2q = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_wz2l2q->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_WZ_2l2q.root"); 
-      mc_wz2l2q->Process("ttgamma.C+","sample=wz2l2q");
-    }
-    
-  if (sample=="MC"||sample=="wz3l"||sample=="all")
-    {
-      TDSet *mc_wz3l = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_wz3l->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_WZ_3lnu.root"); 
-      mc_wz3l->Process("ttgamma.C+","sample=wz3l");
-    }      
-    
-  if (sample=="MC"||sample=="wg"||sample=="all")
-    {
-      TDSet *mc_wg = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_wg->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_Wg.root"); 
-      mc_wg->Process("ttgamma.C+","sample=wg");
-    }       
-    
-  if (sample=="MC"||sample=="zz2e2mu"||sample=="all")
-    {
-      TDSet *mc_zz2e2mu = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zz2e2mu->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_2e2mu.root"); 
-      mc_zz2e2mu->Process("ttgamma.C+","sample=zz2e2mu");
-    }     
-    
-  if (sample=="MC"||sample=="zz2e2tau"||sample=="all")
-    {
-      TDSet *mc_zz2e2tau = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zz2e2tau->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_2e2tau.root"); 
-      mc_zz2e2tau->Process("ttgamma.C+","sample=zz2e2tau");
-    }       
-    
-  if (sample=="MC"||sample=="zz2mu2tau"||sample=="all")
-    {
-      TDSet *mc_zz2mu2tau = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zz2mu2tau->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_2mu2tau.root"); 
-      mc_zz2mu2tau->Process("ttgamma.C+","sample=zz2mu2tau");
-    }       
-    
-  if (sample=="MC"||sample=="zz4e"||sample=="all")
-    {
-      TDSet *mc_zz4e = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zz4e->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_4e.root"); 
-      mc_zz4e->Process("ttgamma.C+","sample=zz4e");
-    }   
-    
-  //  if (sample=="MC"||sample=="zz4mu"||sample=="all")
-  //    {
-  //      TDSet *mc_zz4mu = new TDSet("EventTree","*","/ggNtuplizer");
-  //      mc_zz4mu->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_4mu.root"); 
-  //      mc_zz4mu->Process("ttgamma.C+","sample=zz4mu");
-  //    }   
-    
-  if (sample=="MC"||sample=="zz4tau"||sample=="all")
-    {
-      TDSet *mc_zz4tau = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zz4tau->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ZZ_4tau.root"); 
-      mc_zz4tau->Process("ttgamma.C+","sample=zz4tau");
-    }   
-    
-  if (sample=="MC"||sample=="zg"||sample=="all")
-    {
-      TDSet *mc_zg = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_zg->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_Zg.root"); 
-      mc_zg->Process("ttgamma.C+","sample=zg");
-    }     
-    
-  if (sample=="MC"||sample=="diphoton1"||sample=="all")
-    {
-      TDSet *mc_diphoton1 = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_diphoton1->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_diphoton_box_10to25.root"); 
-      mc_diphoton1->Process("ttgamma.C+","sample=diphoton1");
-    }        
-    
- if (sample=="MC"||sample=="diphoton2"||sample=="all")
-    {
-      TDSet *mc_diphoton2 = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_diphoton2->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_diphoton_box_25to250.root"); 
-      mc_diphoton2->Process("ttgamma.C+","sample=diphoton2");
-    }     
-    
- if (sample=="MC"||sample=="ts"||sample=="all")
-    {
-      TDSet *mc_ts = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ts->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_t_s.root"); 
-      mc_ts->Process("ttgamma.C+","sample=ts");
-    }    
-    
- if (sample=="MC"||sample=="tt"||sample=="all")
-    {
-      TDSet *mc_tt = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_tt->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_t_t.root"); 
-      mc_tt->Process("ttgamma.C+","sample=tt");
-    } 
-    
- if (sample=="MC"||sample=="2tw"||sample=="all")
-    {
-      TDSet *mc_2tw = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_2tw->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_t_tW.root"); 
-      mc_2tw->Process("ttgamma.C+","sample=2tw");
-    }    
-    
- if (sample=="MC"||sample=="tbars"||sample=="all")
-    {
-      TDSet *mc_tbars = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_tbars->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_tbar_s.root"); 
-      mc_tbars->Process("ttgamma.C+","sample=tbars");
-    }     
-    
- if (sample=="MC"||sample=="tbart"||sample=="all")
-    {
-      TDSet *mc_tbart = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_tbart->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_tbar_t.root"); 
-      mc_tbart->Process("ttgamma.C+","sample=tbart");
-    }        
-    
- if (sample=="MC"||sample=="tbartw"||sample=="all")
-    {
-      TDSet *mc_tbartw = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_tbartw->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_tbar_tW.root"); 
-      mc_tbartw->Process("ttgamma.C+","sample=tbartw");
-    }   
-    
- if (sample=="MC"||sample=="ttw"||sample=="all")
-    {
-      TDSet *mc_ttw = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ttw->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ttW.root"); 
-      mc_ttw->Process("ttgamma.C+","sample=ttw");
-    }    
-    
- if (sample=="MC"||sample=="ttz"||sample=="all")
-    {
-      TDSet *mc_ttz = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ttz->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ttZ.root"); 
-      mc_ttz->Process("ttgamma.C+","sample=ttz");
-    }     
-    
- if (sample=="MC"||sample=="ttg"||sample=="all")
-    {
-      TDSet *mc_ttg = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ttg->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ttg.root"); 
-      mc_ttg->Process("ttgamma.C+","sample=ttg");
-    }  
-    
- if (sample=="MC"||sample=="ttjets1"||sample=="all")
-    {
-      TDSet *mc_ttjets1 = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ttjets1->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ttjets_1l.root"); 
-      mc_ttjets1->Process("ttgamma.C+","sample=ttjets1");
-    }   
-    
- if (sample=="MC"||sample=="ttjets2"||sample=="all")
-    {
-      TDSet *mc_ttjets2 = new TDSet("EventTree","*","/ggNtuplizer");
-      mc_ttjets2->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/GGNtuMC/job_summer12_ttjets_2l.root"); 
-      mc_ttjets2->Process("ttgamma.C+","sample=ttjets2");
-    }    
-    
+    cout << "List of files:" << endl;
+    chain->ls();
+    //chain->SetProof(); // to run in PROOF mode
+    TString opts(Form("sample=%s",name.c_str()));
+    if (ExtraOpts != "" ) opts = ExtraOpts + " " + opts;
+
+    ttgamma3 *myselector = new ttgamma3();
+
+    //chain->Process("ttgamma3.C",opts.Data() );
+    chain->Process(myselector, opts.Data() );
+    cout << "Process: ttgamma.C done" << endl;
+  }
+  // logs
   
-  if (sample=="data"||sample=="all")
-    {
-      TDSet *data = new TDSet("EventTree","*","/ggNtuplizer");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012a_Jul13rereco_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012b_Jul13rereco_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012a_Aug6rereco_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012c_Aug24rereco_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012c_Dec11rereco_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012c_PRv2_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012d_PRv1_part1_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012d_PRv1_part2_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012d_PRv1_part3_skim.root");
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012d_PRv1_part4_skim.root"); 
-      data->Add("/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim/job_1electron_2012d_PRv1_part5_skim.root"); 
-      
-      data->Process("ttgamma.C+","verbose sample=data");
-      // get log files
-      if (getLogs)
-	{
-	  logList = p->GetManager()->GetSessionLogs()->GetListOfLogs();
-	  for (int i=1; i< logList->GetSize(); ++i)
-	    {
-	      logElem = ( TProofLogElem* ) logList->At( i );
-	      macro = logElem->GetMacro();
-	      macro->SaveSource("data_ttgamma_"+TString(Form("%i",i))+".stdout");
-	    }
-	}
-    }
+  //TList *logList = proof->GetManager()->GetSessionLogs()->GetListOfLogs();
+  //for (int i=1; i< logList->GetSize(); ++i)
+  //  {
+  //    TProffLogElem *logElem = ( TProofLogElem* ) logList->At( i );
+  //    macro = logElem->GetMacro();
+  //    macro->SaveSource("data_muons_"+TString(Form("%i",i))+".stdout");
+  //  }
+  
+
+  //chain->SetProof(0);
+  //chain->Delete();
+  //delete chain;
+  //proof->ClearInput();
+  //proof->ClearData();
+  //proof->ClearInputData();
+  //delete proof;
+  cout << "done"<<endl;
 }
+
+# ifndef __CINT__
+int main(int argc, char** argv)
+{
+
+  TString sample = "all";
+  TString options = "";
+  if ( argc > 0 ) sample = argv[1];
+  if ( argc > 1 ) options = argv[2];
+
+  runttgamma(sample, options);
+  return 0;
+}
+# endif
