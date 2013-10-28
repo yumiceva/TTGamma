@@ -124,9 +124,15 @@ void ttgamma3::SlaveBegin(TTree * tree)
 
   // get PU weights
   if (fPUreweighting) {
-    TFile *PU_data_file     = new TFile( "MyDataPileupHistogram.root" );
+    TFile *PU_data_file     = new TFile( "HelperFiles/MyDataPileupHistogram.root" );
+    if ( PU_data_file->IsZombie() ) {
+      Info("SlaveBegin","Error opening file: %s", PU_data_file->GetName() );
+    }
     hPU_weights = new TH1F( *(static_cast<TH1F*>(PU_data_file->Get( "pileup" )->Clone() )) );
-    TFile *PU_MC_file = new TFile( "MyMCPileupHistogram.root");
+    TFile *PU_MC_file = new TFile( "HelperFiles/MyMCPileupHistogram.root");
+    if ( PU_MC_file->IsZombie() ) {
+      Info("SlaveBegin","Error opening file: %s", PU_MC_file->GetName() );
+    }
     TString hmc_name = "hPUTrue_";
     hmc_name += fSample;
     TH1F* hPU_mc = new TH1F( *(static_cast<TH1F*>(PU_MC_file->Get( hmc_name )->Clone() )) );
