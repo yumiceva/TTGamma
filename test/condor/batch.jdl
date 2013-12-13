@@ -13,4 +13,4 @@ Error  = $(myPath)/batch_$(cluster)_$(process).stderr
 Log    = $(myPath)/batch_$(cluster)_$(process).condor
 Requirements          = (Memory >= 499 && OpSys == "LINUX" && (Arch != "DUMMY"))
 Arguments = $(process)
-Queue 25
+Queue 27

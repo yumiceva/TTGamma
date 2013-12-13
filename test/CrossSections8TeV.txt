@@ -1,0 +1,30 @@
+# The content of this file is used
+# to compute the scale factors (SFs) to
+# normalize MC distributions. The
+# SF is defined as SF = xsection/N_generated_events
+# First column is the name of the sample.
+# Second column is the cross section in pb units
+# Third column is the number of generated events.
+#
+# DATA
+data            1.0             1.0
+# MC
+# signal
+ttg             1.816           71598
+#
+# 227*0.676*(1-0.676)*2
+ttjets_1l       99.44           10629902
+# 227*(1-0.676)*(1-0.676)
+ttjets_2l       23.83           12019013
+t_s             3.79            259961
+tbar_s          1.76            139974
+t_t             56.4            99876
+tbar_t          30.7            1935072
+ttW             0.232           196046
+ttZ             0.2057          210160
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGC
+Wg              461.6           4802358
+Zg              132.6           6588161
+WWg             0.528           304285
+#
+WW              54.838          1933235

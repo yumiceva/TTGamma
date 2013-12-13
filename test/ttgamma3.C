@@ -73,6 +73,7 @@ void ttgamma3::ParseInput()
         }
       else
         {
+          fIsMC = true;
           Info("Begin","This sample is treated as MC");
         }
     }
@@ -106,7 +107,7 @@ void ttgamma3::Begin(TTree * /*tree*/)
    ParseInput();
    //fVerbose = true;
    Info("Begin", "starting with process option: %s", option.Data());
-   if (fPUreweighting) Info("Begin", "Apply PU reweighting");
+   if (fPUreweighting) Info("Begin", "PU reweighting is ON");
 }
 
 void ttgamma3::SlaveBegin(TTree * tree)
@@ -152,21 +153,32 @@ void ttgamma3::SlaveBegin(TTree * tree)
   TString hname = "_"+fSample;
   // vertices
   hPVs["N"] = new TH1F("NPV"+hname,"Number of PVs",35,-0.5,34.5);
+  hPVs["N_fin"] = new TH1F("NPV_fin"+hname,"Number of PVs",35,-0.5,34.5);
   // muons
   hmuons["pt"] = new TH1F("muon_pt"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
   hmuons["eta"] = new TH1F("muon_eta"+hname,"#eta^{#mu}", 20, -2.1, 2.1);
   hmuons["phi"] = new TH1F("muon_phi"+hname,"#phi^{#mu}", 30, -3.15, 3.15);
+  hmuons["reliso"] = new TH1F("muon_reliso"+hname,"I_{rel}", 40, 0, 0.2);
+  hmuons["relisocorr"] = new TH1F("muon_relisocorr"+hname,"I_{rel}^{corr}", 40, 0, 0.2);
   // electrons
   helectrons["pt"] = new TH1F("electron_pt"+hname,"p_{T}^{e} [GeV/c]", 50, 20, 500);
   helectrons["eta"] = new TH1F("electron_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
   helectrons["phi"] = new TH1F("electron_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
-  helectrons["reliso"] = new TH1F("electron_reliso"+hname,"Relative Isolation", 40, 0, 0.2);
+  helectrons["reliso"] = new TH1F("electron_reliso"+hname,"I_{rel}", 40, 0, 0.2);
+  helectrons["relisocorr"] = new TH1F("electron_relisocorr"+hname,"I_{rel}^{corr}", 40, 0, 0.2);
+
   // jets
   hjets["pt"] = new TH1F("jet_pt"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
+  hjets["pt1"] = new TH1F("jet_pt1"+hname,"1st jet p_{T} [GeV/c]", 60, 30, 800);
+  hjets["pt2"] = new TH1F("jet_pt2"+hname,"2nd jet p_{T} [GeV/c]", 60, 30, 800);
+  hjets["pt3"] = new TH1F("jet_pt3"+hname,"3rd jet p_{T} [GeV/c]", 60, 30, 800);
+  hjets["pt4"] = new TH1F("jet_pt4"+hname,"4th jet p_{T} [GeV/c]", 60, 30, 800);
   // MET
   hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
   // photons
   hphotons["pt"] = new TH1F("photon_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20, 500);
+  hphotons["eta"] = new TH1F("photon_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
+  hphotons["phi"] = new TH1F("photon_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
 
   map<string,TH1* > allhistos = hmuons;
   allhistos.insert( helectrons.begin(), helectrons.end() );
@@ -193,11 +205,13 @@ void ttgamma3::SlaveBegin(TTree * tree)
        fCutLabels.push_back("GoodPV");
        fCutLabels.push_back("OneIsoMuon");
        fCutLabels.push_back("LooseMuVeto");
-       fCutLabels.push_back("LooseEleVeto");
+       fCutLabels.push_back("DileptonVeto");
+       fCutLabels.push_back("1Jets");
+       fCutLabels.push_back("2Jets");
        fCutLabels.push_back("3Jets");
        fCutLabels.push_back("4Jets");
-       fCutLabels.push_back("1bJet");
-       fCutLabels.push_back("1Photon");
+       fCutLabels.push_back("Onebtag");
+       fCutLabels.push_back("OnePhoton");
      }
    else
      { //electron+jets
@@ -206,11 +220,14 @@ void ttgamma3::SlaveBegin(TTree * tree)
        fCutLabels.push_back("GoodPV");
        fCutLabels.push_back("OneIsoEle");
        fCutLabels.push_back("LooseMuVeto");
-       fCutLabels.push_back("LooseEleVeto");
+       fCutLabels.push_back("DileptonVeto");
+       fCutLabels.push_back("ConvRejection");
+       fCutLabels.push_back("1Jets");
+       fCutLabels.push_back("2Jets");
        fCutLabels.push_back("3Jets");
        fCutLabels.push_back("4Jets");
-       fCutLabels.push_back("1bJet");
-       fCutLabels.push_back("1Photon");
+       fCutLabels.push_back("Onebtag");
+       fCutLabels.push_back("OnePhoton");
      }
 
    hcutflow = new TH1F("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
@@ -276,24 +293,33 @@ Bool_t ttgamma3::Process(Long64_t entry)
   // PRIMARY VERTICES
   ///////////////////////////////////
   // check if first vertex is a good vtx
+  // required NDF > 4 && fabs(PVz)<= 24 && rho <= 2 
   if ( IsVtxGood != 0 ) return kTRUE;
   cutmap["GoodPV"] += EvtWeight;
   hPVs["N"]->Fill( nVtx , EvtWeight );
 
   if (fVerbose) cout << "Pass good vertex" << endl;
+
   //////////////////////////////////
   // ELECTRONS
   //////////////////////////////////
   if (fVerbose) cout << "Total number of electrons nEle = "<< nEle << endl;
 
+  int Ngood_Ele = 0;
+  int Nloose_Ele = 0;
+  float relIso_Ele = -1;
+  float relIsocorr_Ele = -1;
+  bool passconversionveto = false;
+
   for(int ie = 0; ie < nEle; ++ie)		//Loop over the electrons in a event
     {
-      p4ele.SetPtEtaPhiE( elePt[ie],
+      TLorentzVector tmpp4;
+      tmpp4.SetPtEtaPhiE( elePt[ie],
                           eleSCEta[ie],
                           elePhi[ie],
                           eleEcalEn[ie] );
 
-      h1test->Fill( p4ele.Pt() );
+      h1test->Fill( tmpp4.Pt() );
 
       float AEff03 = 0.00;
 
@@ -304,22 +330,169 @@ Bool_t ttgamma3::Process(Long64_t entry)
       AEff03 = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, eleSCEta[ie], ElectronEffectiveArea::kEleEAFall11MC);
       }
 
-      double relIso = (elePFChIso03[ie] + elePFNeuIso03[ie] + elePFPhoIso03[ie])/ p4ele.Pt();
-      double relIsorho = ( elePFChIso03[ie] + fmax(0.0, elePFNeuIso03[ie] + elePFPhoIso03[ie] - rho25_elePFiso*AEff03) )/ p4ele.Pt();
+      float relIso = (elePFChIso03[ie] + elePFNeuIso03[ie] + elePFPhoIso03[ie])/ tmpp4.Pt();
+      float relIsocorr = ( elePFChIso03[ie] + fmax(0.0, elePFNeuIso03[ie] + elePFPhoIso03[ie] - rho25_elePFiso*AEff03) )/ tmpp4.Pt();
 
-      if ( p4ele.Pt() > 35.0 &&
-           fabs(p4ele.Eta()) < 2.5 &&
-           !( (1.4442 < fabs( eleSCEta[ie] )) && fabs( eleSCEta[ie]) < 1.5660) &&
-           eleD0[ie] < 0.02 &&
-           eleIDMVATrig[ie] > 0.5 &&
-           eleMissHits[ie] <= 0 )
+      // loose electrons
+      if ( tmpp4.Pt() > 20.0 &&
+           fabs(tmpp4.Eta()) < 2.5 &&
+           eleIDMVATrig[ie] > 0.0 && eleIDMVATrig[ie] < 1.0 &&
+           relIsocorr < 0.15 )
         {
+          Nloose_Ele++;
 
+          // good tight electrons
+          if ( tmpp4.Pt() > 30.0 &&
+               fabs(tmpp4.Eta()) < 2.5 &&
+               !( (1.4442 < fabs( eleSCEta[ie] )) && fabs( eleSCEta[ie]) < 1.5660) &&
+               eleD0[ie] < 0.02 &&
+               eleIDMVATrig[ie] > 0.5 && eleIDMVATrig[ie] < 1.0 &&
+               eleMissHits[ie] <= 0 &&
+               relIsocorr < 0.1 )
+            {
+              // leading electron
+              if ( Ngood_Ele == 0 )
+                {
+                  p4ele.SetPtEtaPhiE( tmpp4.Pt(), tmpp4.Eta(), tmpp4.Phi(), tmpp4.E() );
+                  relIso_Ele = relIso;
+                  relIsocorr_Ele = relIsocorr;
+                  passconversionveto = (eleConvVtxFit[ie] == 0);
+                }
+              Ngood_Ele++;
+          //helectrons["pt"]->Fill( tmpp4.Pt() );
+            }
+        } //loose
 
-          helectrons["pt"]->Fill( p4ele.Pt() );
-        }
-    } // electrons
+    } // end electrons
     
+  //////////////////////////
+  // MUONS
+  /////////////////////////
+  if (fVerbose) cout << "Total number of muons nMu = "<< nMu << endl;
+
+  int Ngood_Mu = 0;
+  int Nloose_Mu = 0;
+  float relIso_Mu = -1;
+  float relIsocorr_Mu = -1;
+
+  for(int imu = 0; imu < nMu; ++imu)             //Loop over the muons in a event
+    {
+      TLorentzVector tmpp4;
+      tmpp4.SetPtEtaPhiE( muPt[imu],
+                          muEta[imu],
+                          muPhi[imu],
+                          sqrt(muPt[imu]*muPt[imu] + muPz[imu]*muPz[imu]) );
+
+      float relIso = (muPFIsoR04_CH[imu] + muPFIsoR04_NH[imu])/ tmpp4.Pt();
+      // delta beta corrections
+      //  I = [sumChargedHadronPt+ max(0.,sumNeutralHadronPt+sumPhotonPt-0.5sumPUPt]/pt
+      float relIsocorr = ( muPFIsoR04_CH[imu] + fmax(0.0, muPFIsoR04_NH[imu] + muPFIsoR04_Pho[imu] -0.5*muPFIsoR04_PU[imu]) )/ tmpp4.Pt();
+      // loose muon selection
+      if ( tmpp4.Pt() > 10.0 &&
+           fabs(tmpp4.Eta()) < 2.5 &&
+           relIsocorr < 0.2 )
+        {
+          Nloose_Mu++;
+          // good muons
+          if ( tmpp4.Pt() > 26.0 &&
+               fabs(tmpp4.Eta()) < 2.1 &&
+               muChi2NDF[imu] < 10 &&
+               muNumberOfValidTrkLayers[imu] > 5 &&
+               muNumberOfValidMuonHits[imu] > 0 &&
+               muD0[imu] < 0.2 &&
+               fabs( muDz[imu] ) < 0.5 && //check this
+               muNumberOfValidPixelHits[imu] > 0 &&
+               muStations[imu] > 1 &&
+               relIsocorr < 0.12 )
+            {
+              // leading muon
+              if ( Ngood_Mu == 0 )
+                {
+                  p4muon.SetPtEtaPhiE( tmpp4.Pt(), tmpp4.Eta(), tmpp4.Phi(), tmpp4.E() );
+                  relIso_Mu = relIso;
+                  relIsocorr_Mu = relIsocorr;
+                }
+              
+              Ngood_Mu++;
+            }
+        }
+    } // end muons
+
+  ////////////////////////////////
+  // JETS
+  ///////////////////////////////
+  if (fVerbose) cout << "Total number of jets nJet = "<< nJet << endl;
+
+  int Ngood_Jets = 0;
+  float met_x = 0.0;
+  float met_y = 0.0;
+
+  for (int ij= 0; ij < nJet; ++ij)
+    {
+      TLorentzVector tmpp4;
+      tmpp4.SetPtEtaPhiE( jetPt[ij], jetEta[ij], jetPhi[ij], jetEn[ij] );
+
+      float uncorr_jet_pt = jetRawPt[ij];
+      met_x += uncorr_jet_pt*TMath::Cos( jetPhi[ij] );
+      met_y += uncorr_jet_pt*TMath::Sin( jetPhi[ij] );
+
+      // Apply JER smearing in MC
+      if ( fIsMC && jetPt[ij] > 10 )
+        {
+          float gen_pt = jetGenJetPt[ij];
+          if ( gen_pt < 0 ) continue;
+          float jet_pt = jetPt[ij];
+          float jet_eta = jetEta[ij];
+          // factor is (c - 1), where c are the eta-dependent scale factors, to be taken from the official twiki
+          float c = 0;
+          // from https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution
+          if ( fabs(jet_eta) > 0 && fabs(jet_eta) < 0.5 )  c = 1.052;
+          if ( fabs(jet_eta) > 0.5 && fabs(jet_eta) < 1.1) c = 1.057;
+          if ( fabs(jet_eta) > 1.1 && fabs(jet_eta) < 1.7) c = 1.096;
+          if ( fabs(jet_eta) > 1.7 && fabs(jet_eta) < 2.3) c = 1.134;
+          if ( fabs(jet_eta) > 2.3 && fabs(jet_eta) < 5.0) c = 1.288;
+          float factor = (c-1);
+          float deltapt = (jet_pt - gen_pt) * factor;
+          float ptscale = fmax(0.0, (jet_pt + deltapt) / jet_pt);
+          tmpp4 *= ptscale;
+          met_x -= uncorr_jet_pt*TMath::Cos( jetPhi[ij] ) * ptscale;
+          met_y -= uncorr_jet_pt*TMath::Sin( jetPhi[ij] ) * ptscale;
+        }
+
+      if ( tmpp4.Pt() > 30 &&
+           fabs( tmpp4.Eta() ) < 2.5 &&
+           jetPFLooseId[ij] == true )
+        {
+          if (Ngood_Jets == 0 && tmpp4.Pt() > 55 )
+            {
+              p4jets.push_back( tmpp4 );
+            }
+          if (Ngood_Jets == 1 && tmpp4.Pt() > 45 )
+            {
+              p4jets.push_back( tmpp4 );
+            }
+          if (Ngood_Jets == 2 && tmpp4.Pt() > 35 )
+            {
+              p4jets.push_back( tmpp4 );
+            }
+          if (Ngood_Jets == 3 && tmpp4.Pt() > 20 )
+            {
+              p4jets.push_back( tmpp4 );
+            }
+          Ngood_Jets++;
+        }
+
+    } // end jets
+
+  if ( p4jets.size() >= 1 )
+    cutmap["1Jets"] += EvtWeight;
+  if ( p4jets.size() >= 2 )
+    cutmap["2Jets"] += EvtWeight;
+  if ( p4jets.size() >=3 )
+    cutmap["3Jets"] += EvtWeight;
+  if ( p4jets.size() >=4 )
+    cutmap["4Jets"] += EvtWeight;
+
   /*  
     for(int ip = 0; ip < nPho; ++ip)		//Loop over the photons in a event
     {  

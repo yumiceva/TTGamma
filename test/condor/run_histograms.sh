@@ -6,6 +6,7 @@ job=$1
 cmsswDir="/uscms/home/yumiceva/work/sframe/CMSSW_5_3_3/src"
 sourceDir="/uscms/home/yumiceva/work/sframe/CMSSW_5_3_3/src/TTGamma/test"
 outputDir="/eos/uscms/store/user/yumiceva/ttgamma/histos/v0/"
+#outputDir="/uscms/home/yumiceva/work/sframe/CMSSW_5_3_3/src/TTGamma/test/histos"
 
 cd ${cmsswDir}
 echo "Current directory is: `pwd`"
@@ -45,12 +46,18 @@ samples=("WW_2l2nu" \
 "ttZ" \
 "ttg" \
 "ttgWz" \
+"ttjets_1l" \
+"ttjets_2l" \
 "data")
 
 # change to scratch area
-cd ${_CONDOR_SCRATCH_DIR}
+#cd ${_CONDOR_SCRATCH_DIR}
+
+# change to source directory to access helper files
+cd ${sourceDir}
+echo "Current directory is: `pwd`"
 
 options="outdir=${outputDir}"
 
-echo "${sourceDir}/ttgamma ${samples[job]} ${options}"
-${sourceDir}/ttgamma ${samples[job]} ${options}
+echo "./ttgamma ${samples[job]} ${options}"
+./ttgamma ${samples[job]} ${options}

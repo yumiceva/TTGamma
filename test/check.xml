@@ -1,0 +1,101 @@
+<cuy>
+
+  <validation type="data" file="./histos/results_data.root" weight="CrossSections8TeV.txt:data">
+    <TH1 name="electron_pt_data" source="electrons/electron_pt_data"/>
+    <TH1 name="N_PV_data" source="PV/NPV_data"/>
+  </validation>
+
+  <validation type="ttg" file="./histos/results_ttg.root" weight="CrossSections8TeV.txt:ttg">
+    <TH1 name="electron_pt_ttg" source="electrons/electron_pt_ttg"/>
+    <TH1 name="N_PV_ttg" source="PV/NPV_ttg"/>
+  </validation>
+
+  <validation type="t_s" file="./histos/results_t_s.root" weight="CrossSections8TeV.txt:t_s">
+    <TH1 name="electron_pt_t_s" source="electrons/electron_pt_t_s"/>
+    <TH1 name="N_PV_t_s" source="PV/NPV_t_s"/>
+  </validation>
+
+  <validation type="t_t" file="./histos/results_t_t.root" weight="CrossSections8TeV.txt:t_t">
+    <TH1 name="electron_pt_t_t" source="electrons/electron_pt_t_t"/>
+    <TH1 name="N_PV_t_t" source="PV/NPV_t_t"/>
+  </validation>
+
+  <validation type="t_tW" file="./histos/results_t_tW.root" weight="CrossSections8TeV.txt:t_tW">
+    <TH1 name="electron_pt_t_tW" source="electrons/electron_pt_t_tW"/>
+    <TH1 name="N_PV_t_tW" source="PV/NPV_t_tW"/>
+  </validation>
+
+  <validation type="tbar_s" file="./histos/results_tbar_s.root" weight="CrossSections8TeV.txt:tbar_s">
+    <TH1 name="electron_pt_tbar_s" source="electrons/electron_pt_tbar_s"/>
+    <TH1 name="N_PV_tbar_s" source="PV/NPV_tbar_s"/>
+  </validation>
+
+  <validation type="tbar_t" file="./histos/results_tbar_t.root" weight="CrossSections8TeV.txt:tbar_t">
+    <TH1 name="electron_pt_tbar_t" source="electrons/electron_pt_tbar_t"/>
+    <TH1 name="N_PV_tbar_t" source="PV/NPV_tbar_t"/>
+  </validation>
+
+  <validation type="tbar_tW" file="./histos/results_tbar_tW.root" weight="CrossSections8TeV.txt:tbar_tW">
+    <TH1 name="electron_pt_tbar_tW" source="electrons/electron_pt_tbar_tW"/>
+    <TH1 name="N_PV_tbar_tW" source="PV/NPV_tbar_tW"/>
+  </validation>
+
+  <validation type="ttjets_1l" file="./histos/results_ttjets_1l.root" weight="CrossSections8TeV.txt:ttjets_1l">
+    <TH1 name="electron_pt_ttjets_1l" source="electrons/electron_pt_ttjets_1l"/>
+    <TH1 name="N_PV_ttjets_1l" source="PV/NPV_ttjets_1l"/>
+  </validation>
+
+  <validation type="ttjets_2l" file="./histos/results_ttjets_2l.root" weight="CrossSections8TeV.txt:ttjets_2l">
+    <TH1 name="electron_pt_ttjets_2l" source="electrons/electron_pt_ttjets_2l"/>
+    <TH1 name="N_PV_ttjets_2l" source="PV/NPV_ttjets_2l"/>
+  </validation>
+
+  <validation type="ttW" file="./histos/results_ttW.root" weight="CrossSections8TeV.txt:ttW">
+    <TH1 name="electron_pt_ttW" source="electrons/electron_pt_ttW"/>
+    <TH1 name="N_PV_ttW" source="PV/NPV_ttW"/>
+  </validation>
+
+  <validation type="ttZ" file="./histos/results_ttZ.root" weight="CrossSections8TeV.txt:ttZ">
+    <TH1 name="electron_pt_ttZ" source="electrons/electron_pt_ttZ"/>
+    <TH1 name="N_PV_ttZ" source="PV/NPV_ttZ"/>
+  </validation>
+
+  <validation type="Wg" file="./histos/results_Wg.root" weight="CrossSections8TeV.txt:Wg">
+    <TH1 name="electron_pt_Wg" source="electrons/electron_pt_Wg"/>
+    <TH1 name="N_PV_Wg" source="PV/NPV_Wg"/>
+  </validation>
+
+  <validation type="Zg" file="./histos/results_Zg.root" weight="CrossSections8TeV.txt:Zg">
+    <TH1 name="electron_pt_Zg" source="electrons/electron_pt_Zg"/>
+    <TH1 name="N_PV_Zg" source="PV/NPV_Zg"/>
+  </validation>
+
+  <validation type="WWg" file="./histos/results_WWg.root" weight="CrossSections8TeV.txt:WWg">
+    <TH1 name="electron_pt_WWg" source="electrons/electron_pt_WWg"/>
+    <TH1 name="N_PV_WWg" source="PV/NPV_WWg"/>
+  </validation>
+
+<!-- add all the single top samples into one called ST -->
+  <additionArray name="ST" title="ST">
+    <additionArrayItem array="t_s"/>
+    <additionArrayItem array="t_t"/>
+    <additionArrayItem array="tbar_s"/>
+    <additionArrayItem array="tbar_t"/>
+  </additionArray>
+
+  <additionArray name="TTjets" title="TTjets">
+    <additionArrayItem array="ttjets_1l"/>
+    <additionArrayItem array="ttjets_2l"/>
+  </additionArray>
+
+  <superimpose name="electron_pt" title="electron_pt" YTitle="Events" Fill="true" Weight="true" Lumi="19630" Stack="true" SubBanner="" PlotDiff="true">
+    <superimposeItem name="electron_pt_data" color="1" legend="Data"/>
+    <superimposeItem name="electron_pt_ttg" color="2" legend="Whizard"/>
+    <superimposeItem name="electron_pt_ST" color="3" legend="Single top"/>
+    <superimposeItem name="electron_pt_Wg" color="4" legend="Wg"/>
+    <superimposeItem name="electron_pt_Zg" color="5" legend="Zg"/>
+    <superimposeItem name="electron_pt_WWg" color="6" legend="WWg"/>
+    <superimposeItem name="electron_pt_TTjets" color="7" legend="ttjets"/>
+  </superimpose>
+
+</cuy>
