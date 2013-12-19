@@ -47,6 +47,11 @@ public :
   bool              fPUreweighting;
   TString           fSample;
   TString           fOutdir;
+  bool              fdoSync;
+  bool              fdoJER;
+  bool              fdoJERdown;
+  bool              fdoJERup;
+  bool              fdoHLT;
   TProofOutputFile *fProofFile; // For optimized merging of the ntuple
   TH1F             *h1test;
   TH1F             *hcutflow;
@@ -934,12 +939,18 @@ public :
 
   ttgamma3(TTree * /*tree*/ =0) : fProofFile(0),h1test(0),hPU_weights(0),fFile(0),fChain(0) 
   { 
-    fChannel = 2; //default e+jets
-    fVerbose = false;
-    fIsMC    = false;
+    fChannel =       2; //default 2=e+jets, 1=mu+jets
+    fVerbose =       false;
+    fIsMC    =       false;
     fPUreweighting = false;
-    fSample  = "";
-    fOutdir  = "";
+    fSample  =       "";
+    fOutdir  =       "";
+    fdoSync  =       false;
+    fdoJER   =       true;
+    fdoJERdown =     false;
+    fdoJERup =       false;
+    fdoHLT   =       true;
+    
   }
    virtual ~ttgamma3() { }
    virtual Int_t   Version() const { return 2; }

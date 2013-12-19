@@ -39,13 +39,15 @@
 void ttgamma3::ParseInput()
 {
 
-  if (fMyOpt.Contains("muon"))
+  if (fMyOpt.Contains("muon") || fChannel == 1)
     {
       fChannel = 1;
+      Info("Begin","Apply selection for MUON+jets events");
     }
-  if (fMyOpt.Contains("electron"))
+  if (fMyOpt.Contains("electron") || fChannel == 2)
     {
       fChannel = 2;
+      Info("Begin","Apply selection for ELECTRON+jets events");
     }
   if (fMyOpt.Contains("verbose"))
     {
@@ -80,6 +82,14 @@ void ttgamma3::ParseInput()
 
   if (fIsMC) fPUreweighting = true;
   else fPUreweighting = false;
+
+  if (fMyOpt.Contains("sync"))
+    {
+      fdoSync = true;
+      fdoJER = false;
+      fdoHLT = false;
+      fPUreweighting = false;
+    }
 
 }
 
@@ -166,7 +176,6 @@ void ttgamma3::SlaveBegin(TTree * tree)
   helectrons["phi"] = new TH1F("electron_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
   helectrons["reliso"] = new TH1F("electron_reliso"+hname,"I_{rel}", 40, 0, 0.2);
   helectrons["relisocorr"] = new TH1F("electron_relisocorr"+hname,"I_{rel}^{corr}", 40, 0, 0.2);
-
   // jets
   hjets["pt"] = new TH1F("jet_pt"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
   hjets["pt1"] = new TH1F("jet_pt1"+hname,"1st jet p_{T} [GeV/c]", 60, 30, 800);
@@ -176,9 +185,17 @@ void ttgamma3::SlaveBegin(TTree * tree)
   // MET
   hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
   // photons
-  hphotons["pt"] = new TH1F("photon_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20, 500);
-  hphotons["eta"] = new TH1F("photon_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
-  hphotons["phi"] = new TH1F("photon_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
+  hphotons["cut0_pt"] = new TH1F("photon_cut0_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20, 500);
+  hphotons["cut0_eta"] = new TH1F("photon_cut0_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
+  hphotons["cut0_phi"] = new TH1F("photon_cut0_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
+  hphotons["cut1_pt"] = new TH1F("photon_cut1_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20, 500);
+  hphotons["cut1_eta"] = new TH1F("photon_cut1_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
+  hphotons["cut1_phi"] = new TH1F("photon_cut1_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
+  hphotons["cut2_pt"] = new TH1F("photon_cut2_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20, 500);
+  hphotons["cut2_eta"] = new TH1F("photon_cut2_eta"+hname,"#eta^{e}", 20, -2.1, 2.1);
+  hphotons["cut2_phi"] = new TH1F("photon_cut2_phi"+hname,"#phi^{#mu}", 20, 0, 3.15);
+  hphotons["HoverE"] = new TH1F("photon_HoverE"+hname,"H/E",20,0,1);
+  hphotons["chHadIso"] = new TH1F("photon_chHadIso"+hname,"Charged Hadron Isolation",20,0,10);
 
   map<string,TH1* > allhistos = hmuons;
   allhistos.insert( helectrons.begin(), helectrons.end() );
@@ -205,7 +222,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
        fCutLabels.push_back("GoodPV");
        fCutLabels.push_back("OneIsoMuon");
        fCutLabels.push_back("LooseMuVeto");
-       fCutLabels.push_back("DileptonVeto");
+       fCutLabels.push_back("LooseEleVeto");
        fCutLabels.push_back("1Jets");
        fCutLabels.push_back("2Jets");
        fCutLabels.push_back("3Jets");
@@ -213,7 +230,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
        fCutLabels.push_back("Onebtag");
        fCutLabels.push_back("OnePhoton");
      }
-   else
+   else if (fChannel==2)
      { //electron+jets
        fCutLabels.push_back("Skim");
        fCutLabels.push_back("HLT");
@@ -264,6 +281,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   TLorentzVector p4photon;
   TLorentzVector p4Nu, p4OtherNu;
   vector< TLorentzVector > p4jets;
+  vector< bool > vec_btags;
 
   if (fVerbose) cout << "Processing entry: " << entry << endl;
 
@@ -284,7 +302,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
   /////////////////////////////////////////
   //  HLT
   /////////////////////////////////////////
-  if ( HLTIndex[17] == 0 )
+  
+  if ( fdoHLT && HLTIndex[17] == 0 )
     { return kTRUE; } // 17 --> HLT_Ele27_WP80_v Trigger
   
   cutmap["HLT"] += EvtWeight;
@@ -418,6 +437,55 @@ Bool_t ttgamma3::Process(Long64_t entry)
         }
     } // end muons
 
+  ////////////////////////////
+  // muon+jets selection
+  ///////////////////////////
+  if ( fChannel==1 ) 
+    {
+
+      if ( Ngood_Mu == 1 )
+        cutmap["OneIsoMuon"] += EvtWeight;
+      else 
+        return kTRUE;
+
+      if ( Nloose_Mu >= 2 )
+        return kTRUE;
+      else
+        cutmap["LooseMuVeto"] += EvtWeight;
+        
+      if ( Nloose_Ele >= 1 )
+        return kTRUE;
+      else
+        cutmap["LooseEleVeto"] += EvtWeight;
+    }
+  ////////////////////////////
+  // electron+jets selection
+  ///////////////////////////
+  if ( fChannel==2 )
+    {
+
+      if ( Ngood_Ele == 1 )
+        cutmap["OneIsoEle"] += EvtWeight;
+      else
+        return kTRUE;
+
+      if ( Nloose_Mu >= 1 )
+        return kTRUE;
+      else
+        cutmap["LooseMuVeto"] += EvtWeight;
+
+      if ( Nloose_Ele >= 2 )
+        return kTRUE;
+      else
+        cutmap["DileptonVeto"] += EvtWeight;
+
+      if ( passconversionveto )
+        cutmap["ConvRejection"] += EvtWeight;
+      else
+        return kTRUE;
+    }
+
+
   ////////////////////////////////
   // JETS
   ///////////////////////////////
@@ -426,6 +494,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   int Ngood_Jets = 0;
   float met_x = 0.0;
   float met_y = 0.0;
+  float CSVM = 0.679;
 
   for (int ij= 0; ij < nJet; ++ij)
     {
@@ -437,7 +506,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
       met_y += uncorr_jet_pt*TMath::Sin( jetPhi[ij] );
 
       // Apply JER smearing in MC
-      if ( fIsMC && jetPt[ij] > 10 )
+      if ( fIsMC && fdoJER && jetPt[ij] > 10 )
         {
           float gen_pt = jetGenJetPt[ij];
           if ( gen_pt < 0 ) continue;
@@ -446,11 +515,28 @@ Bool_t ttgamma3::Process(Long64_t entry)
           // factor is (c - 1), where c are the eta-dependent scale factors, to be taken from the official twiki
           float c = 0;
           // from https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution
+          // nominal
           if ( fabs(jet_eta) > 0 && fabs(jet_eta) < 0.5 )  c = 1.052;
           if ( fabs(jet_eta) > 0.5 && fabs(jet_eta) < 1.1) c = 1.057;
           if ( fabs(jet_eta) > 1.1 && fabs(jet_eta) < 1.7) c = 1.096;
           if ( fabs(jet_eta) > 1.7 && fabs(jet_eta) < 2.3) c = 1.134;
           if ( fabs(jet_eta) > 2.3 && fabs(jet_eta) < 5.0) c = 1.288;
+          // minus sigma
+          if ( fdoJERdown) {
+            if ( fabs(jet_eta) > 0 && fabs(jet_eta) < 0.5 )  c = 0.990;
+            if ( fabs(jet_eta) > 0.5 && fabs(jet_eta) < 1.1) c = 1.001;
+            if ( fabs(jet_eta) > 1.1 && fabs(jet_eta) < 1.7) c = 1.032;
+            if ( fabs(jet_eta) > 1.7 && fabs(jet_eta) < 2.3) c = 1.042;
+            if ( fabs(jet_eta) > 2.3 && fabs(jet_eta) < 5.0) c = 1.089;
+          }
+          // plus sigma
+          else if (fdoJERup) {
+            if ( fabs(jet_eta) > 0 && fabs(jet_eta) < 0.5 )  c = 1.115;
+            if ( fabs(jet_eta) > 0.5 && fabs(jet_eta) < 1.1) c = 1.114;
+            if ( fabs(jet_eta) > 1.1 && fabs(jet_eta) < 1.7) c = 1.161;
+            if ( fabs(jet_eta) > 1.7 && fabs(jet_eta) < 2.3) c = 1.228;
+            if ( fabs(jet_eta) > 2.3 && fabs(jet_eta) < 5.0) c = 1.488;
+          }
           float factor = (c-1);
           float deltapt = (jet_pt - gen_pt) * factor;
           float ptscale = fmax(0.0, (jet_pt + deltapt) / jet_pt);
@@ -466,18 +552,34 @@ Bool_t ttgamma3::Process(Long64_t entry)
           if (Ngood_Jets == 0 && tmpp4.Pt() > 55 )
             {
               p4jets.push_back( tmpp4 );
+              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
+                vec_btags.push_back( true );
+              else
+                vec_btags.push_back( false );
             }
           if (Ngood_Jets == 1 && tmpp4.Pt() > 45 )
             {
               p4jets.push_back( tmpp4 );
+              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
+                vec_btags.push_back( true );
+              else
+                vec_btags.push_back( false );
             }
           if (Ngood_Jets == 2 && tmpp4.Pt() > 35 )
             {
               p4jets.push_back( tmpp4 );
+              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
+                vec_btags.push_back( true );
+              else
+                vec_btags.push_back( false );
             }
           if (Ngood_Jets == 3 && tmpp4.Pt() > 20 )
             {
               p4jets.push_back( tmpp4 );
+              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
+                vec_btags.push_back( true );
+              else
+                vec_btags.push_back( false );
             }
           Ngood_Jets++;
         }
@@ -492,31 +594,42 @@ Bool_t ttgamma3::Process(Long64_t entry)
     cutmap["3Jets"] += EvtWeight;
   if ( p4jets.size() >=4 )
     cutmap["4Jets"] += EvtWeight;
+  else
+    return kTRUE; 
 
-  /*  
-    for(int ip = 0; ip < nPho; ++ip)		//Loop over the photons in a event
-    {  
-      if(nPho >= 1 && phoEt[ip] > 25)
+  ////////////////////////
+  // b-tagging selection
+  ///////////////////////
+
+  if ( vec_btags.size() >= 1 )
+    cutmap["Onebtag"] += EvtWeight;
+  else
+    return kTRUE;
+
+  ///////////////////////////////////
+  // PHOTONS
+  ///////////////////////////////////
+  int Nloose_gamma = 0;
+  int Ngood_gamma = 0;
+
+  for(int ip = 0; ip < nPho; ++ip)		//Loop over the photons in a event
+    {
+  
+      if( phoEt[ip] > 25 &&
+          fabs( phoEta[ip] ) < 1.44 )
       {
-	double highet = phoEt[0];
-    
-	double gammaphi = phoPhi[0];
-    
-	double gammaeta = phoEta[0];
+        hphotons["cut0_pt"]->Fill( phoEt[ip] );
+        hphotons["cut0_eta"]->Fill( phoEta[ip] );
+        
+        bool passelectronveto = phoEleVeto[ip];
+        
+        if ( passelectronveto )
+          {
+
+          }
 
       }
-    }
-  
-    if(nJet >= 3)		//Cut for Jets
-    {
-      double leadjet = jetPt[0];
-    
-      double leadjetphi = jetPhi[0];
-    
-      double leadjeteta = jetEta[0];
-    
-    }
-  */
+    } // end photons
   
   if (fVerbose) cout << "analysis done." << endl;
    return kTRUE;
@@ -530,11 +643,13 @@ void ttgamma3::SlaveTerminate()
   Info("SlaveTerminate","begin");
 
   // fill cutflow histogram
+  cout << "Cutflow table" << endl;
   int ibin = 1;
   for ( vector<string>::const_iterator ivec= fCutLabels.begin(); ivec != fCutLabels.end(); ++ivec )
     //  for ( map<string, int >::const_iterator imap=cutmap.begin(); imap!=cutmap.end(); ++imap )
     {
       hcutflow->SetBinContent( ibin, cutmap[ *ivec ] );
+      cout << ibin << " cut: " << *ivec << " entries: " << cutmap[ *ivec ] << endl;
       ibin++;
     }
 

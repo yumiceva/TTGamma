@@ -39,6 +39,11 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   std::string prefixData="/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/";
   std::string prefixMC = "/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/GGNtuMC/";
 
+  //sync exercise
+  vec.push_back("/uscmst1b_scratch/lpc1/cmsroc/yumiceva/TTGamma/ggtree_mc.root");
+  vsamples.insert(StrVecPair("sync",vec));
+  vec.clear();
+
   //WW_2l2nu
   vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
   vsamples.insert(StrVecPair("WW_2l2nu",vec));
