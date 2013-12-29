@@ -218,6 +218,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
    if (fChannel==1)
      { //muon +jets
        fCutLabels.push_back("Skim");
+       fCutLabels.push_back("Cleaning");
        fCutLabels.push_back("HLT");
        fCutLabels.push_back("GoodPV");
        fCutLabels.push_back("OneIsoMuon");
@@ -233,6 +234,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
    else if (fChannel==2)
      { //electron+jets
        fCutLabels.push_back("Skim");
+       fCutLabels.push_back("Cleaning");
        fCutLabels.push_back("HLT");
        fCutLabels.push_back("GoodPV");
        fCutLabels.push_back("OneIsoEle");
@@ -284,15 +286,18 @@ Bool_t ttgamma3::Process(Long64_t entry)
   vector< bool > vec_btags;
 
   if (fVerbose) cout << "Processing entry: " << entry << endl;
+  else if ( entry%1000 == 0 )
+    Info("Process","Entries read: %i", entry);
 
-  fChain->GetEntry(entry);
+  //fChain->GetEntry(entry);
+  fReader->GetEntry(entry);
 
   ////////////////////////////////////////
   // get PU weight for MC samples
   ///////////////////////////////////////
   if (fPUreweighting) {
     // for BX 0 only
-    float numInter = puTrue[1];
+    float numInter = fReader->puTrue->at(1);
     EvtWeight = EvtWeight*hPU_weights->GetBinContent( hPU_weights->FindBin( numInter )  );
     if (fVerbose) cout << " PU weight = " << EvtWeight << endl;
   }
@@ -300,10 +305,42 @@ Bool_t ttgamma3::Process(Long64_t entry)
   cutmap["Skim"] += EvtWeight;
 
   /////////////////////////////////////////
+  // Event Clean up
+  ////////////////////////////////////////
+
+  int HBHENoiseFilter = fReader->metFilters[1];
+  int HcalLaserFilter = fReader->metFilters[2];
+  int EcalDeadCellFilter=fReader->metFilters[3];
+  int TrackingFailureFilter=fReader->metFilters[4];
+  int EEBadScFilter=fReader->metFilters[5];
+  int EcalLaserFilter=fReader->metFilters[6];
+  int Manystripclus53X=fReader->metFilters[7];
+  int Toomanystripclus53X=fReader->metFilters[8];
+  int LogErrorTooManyClusters=fReader->metFilters[9];
+
+  if (fVerbose) {
+    cout << "Filters:" <<endl;
+    cout << "HBHENoiseFilter= "<< HBHENoiseFilter << endl;
+    cout << "HcalLaserFilter= "<< HcalLaserFilter << endl;
+    cout << "EcalDeadCellFilter= "<< EcalDeadCellFilter << endl;
+    cout << "TrackingFailureFilter= "<< TrackingFailureFilter << endl;
+    cout << "EEBadScFilter= "<< EEBadScFilter << endl;
+    cout << "EcalLaserFilter= "<< EcalLaserFilter<< endl;
+    cout << "Manystripclus53X= "<< Manystripclus53X << endl;
+    cout << "Toomanystripclus53X= "<< Toomanystripclus53X << endl;
+    cout << "LogErrorTooManyClusters= "<< LogErrorTooManyClusters << endl;
+  }
+  if ( HBHENoiseFilter && HcalLaserFilter && EcalDeadCellFilter && TrackingFailureFilter && EEBadScFilter )
+       //EcalLaserFilter ) //&& Manystripclus53X && Toomanystripclus53X && LogErrorTooManyClusters )
+    cutmap["Cleaning"] += EvtWeight;
+  else
+    return kTRUE;
+
+  /////////////////////////////////////////
   //  HLT
   /////////////////////////////////////////
   
-  if ( fdoHLT && HLTIndex[17] == 0 )
+  if ( fdoHLT && fReader->HLTIndex[17] == 0 )
     { return kTRUE; } // 17 --> HLT_Ele27_WP80_v Trigger
   
   cutmap["HLT"] += EvtWeight;
@@ -312,17 +349,21 @@ Bool_t ttgamma3::Process(Long64_t entry)
   // PRIMARY VERTICES
   ///////////////////////////////////
   // check if first vertex is a good vtx
-  // required NDF > 4 && fabs(PVz)<= 24 && rho <= 2 
-  if ( IsVtxGood != 0 ) return kTRUE;
+  // required NDF >= 4 && fabs(PVz) <= 24 && fabs(rho) <= 2 
+  if ( fReader->IsVtxGood != 0 ) return kTRUE;
+  //if ( fReader->vtxNTrk->at(0) >= 4 &&
+  //fabs( fReader->vtx_z->at(0) ) <= 24 &&
+  //     fabs( fReader->vtxD0->at(0) ) <= 2 )
+  //  {
   cutmap["GoodPV"] += EvtWeight;
-  hPVs["N"]->Fill( nVtx , EvtWeight );
-
+  hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
+  
   if (fVerbose) cout << "Pass good vertex" << endl;
 
   //////////////////////////////////
   // ELECTRONS
   //////////////////////////////////
-  if (fVerbose) cout << "Total number of electrons nEle = "<< nEle << endl;
+  if (fVerbose) cout << "Total number of electrons nEle = "<< fReader->nEle << endl;
 
   int Ngood_Ele = 0;
   int Nloose_Ele = 0;
@@ -330,32 +371,32 @@ Bool_t ttgamma3::Process(Long64_t entry)
   float relIsocorr_Ele = -1;
   bool passconversionveto = false;
 
-  for(int ie = 0; ie < nEle; ++ie)		//Loop over the electrons in a event
+  for(int ie = 0; ie < fReader->nEle; ++ie)		//Loop over the electrons in a event
     {
       TLorentzVector tmpp4;
-      tmpp4.SetPtEtaPhiE( elePt[ie],
-                          eleSCEta[ie],
-                          elePhi[ie],
-                          eleEcalEn[ie] );
+      tmpp4.SetPtEtaPhiE( fReader->elePt->at(ie),
+                          fReader->eleSCEta->at(ie),
+                          fReader->elePhi->at(ie),
+                          fReader->eleEcalEn->at(ie) );
 
       h1test->Fill( tmpp4.Pt() );
 
       float AEff03 = 0.00;
 
       if (!fIsMC) {
-        AEff03 = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, eleSCEta[ie], ElectronEffectiveArea::kEleEAData2011);
+        AEff03 = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, fReader->eleSCEta->at(ie), ElectronEffectiveArea::kEleEAData2011);
       } 
       else {
-      AEff03 = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, eleSCEta[ie], ElectronEffectiveArea::kEleEAFall11MC);
+        AEff03 = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, fReader->eleSCEta->at(ie), ElectronEffectiveArea::kEleEAFall11MC);
       }
 
-      float relIso = (elePFChIso03[ie] + elePFNeuIso03[ie] + elePFPhoIso03[ie])/ tmpp4.Pt();
-      float relIsocorr = ( elePFChIso03[ie] + fmax(0.0, elePFNeuIso03[ie] + elePFPhoIso03[ie] - rho25_elePFiso*AEff03) )/ tmpp4.Pt();
+      float relIso = (fReader->elePFChIso03->at(ie) + fReader->elePFNeuIso03->at(ie) + fReader->elePFPhoIso03->at(ie))/ tmpp4.Pt();
+      float relIsocorr = ( fReader->elePFChIso03->at(ie) + fmax(0.0, fReader->elePFNeuIso03->at(ie) + fReader->elePFPhoIso03->at(ie) - fReader->rho25_elePFiso*AEff03) )/ tmpp4.Pt();
 
       // loose electrons
       if ( tmpp4.Pt() > 20.0 &&
            fabs(tmpp4.Eta()) < 2.5 &&
-           eleIDMVATrig[ie] > 0.0 && eleIDMVATrig[ie] < 1.0 &&
+           fReader->eleIDMVATrig->at(ie) > 0.0 && fReader->eleIDMVATrig->at(ie) < 1.0 &&
            relIsocorr < 0.15 )
         {
           Nloose_Ele++;
@@ -363,10 +404,10 @@ Bool_t ttgamma3::Process(Long64_t entry)
           // good tight electrons
           if ( tmpp4.Pt() > 30.0 &&
                fabs(tmpp4.Eta()) < 2.5 &&
-               !( (1.4442 < fabs( eleSCEta[ie] )) && fabs( eleSCEta[ie]) < 1.5660) &&
-               eleD0[ie] < 0.02 &&
-               eleIDMVATrig[ie] > 0.5 && eleIDMVATrig[ie] < 1.0 &&
-               eleMissHits[ie] <= 0 &&
+               !( (1.4442 < fabs( fReader->eleSCEta->at(ie) )) && fabs( fReader->eleSCEta->at(ie)) < 1.5660) &&
+               fReader->eleD0->at(ie) < 0.02 &&
+               fReader->eleIDMVATrig->at(ie) > 0.5 && fReader->eleIDMVATrig->at(ie) < 1.0 &&
+               fReader->eleMissHits->at(ie) <= 0 &&
                relIsocorr < 0.1 )
             {
               // leading electron
@@ -375,7 +416,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
                   p4ele.SetPtEtaPhiE( tmpp4.Pt(), tmpp4.Eta(), tmpp4.Phi(), tmpp4.E() );
                   relIso_Ele = relIso;
                   relIsocorr_Ele = relIsocorr;
-                  passconversionveto = (eleConvVtxFit[ie] == 0);
+                  passconversionveto = (fReader->eleConvVtxFit->at(ie) == 0);
                 }
               Ngood_Ele++;
           //helectrons["pt"]->Fill( tmpp4.Pt() );
@@ -387,42 +428,52 @@ Bool_t ttgamma3::Process(Long64_t entry)
   //////////////////////////
   // MUONS
   /////////////////////////
-  if (fVerbose) cout << "Total number of muons nMu = "<< nMu << endl;
+  if (fVerbose) cout << "Total number of muons nMu = "<< fReader->nMu << endl;
 
   int Ngood_Mu = 0;
   int Nloose_Mu = 0;
   float relIso_Mu = -1;
   float relIsocorr_Mu = -1;
 
-  for(int imu = 0; imu < nMu; ++imu)             //Loop over the muons in a event
+  for(int imu = 0; imu < fReader->nMu; ++imu)             //Loop over the muons in a event
     {
       TLorentzVector tmpp4;
-      tmpp4.SetPtEtaPhiE( muPt[imu],
-                          muEta[imu],
-                          muPhi[imu],
-                          sqrt(muPt[imu]*muPt[imu] + muPz[imu]*muPz[imu]) );
+      tmpp4.SetPtEtaPhiE( fReader->muPt->at(imu),
+                          fReader->muEta->at(imu),
+                          fReader->muPhi->at(imu),
+                          sqrt(fReader->muPt->at(imu)*fReader->muPt->at(imu) + fReader->muPz->at(imu)*fReader->muPz->at(imu)) );
 
-      float relIso = (muPFIsoR04_CH[imu] + muPFIsoR04_NH[imu])/ tmpp4.Pt();
+      float relIso = (fReader->muPFIsoR04_CH->at(imu) + fReader->muPFIsoR04_NH->at(imu))/ tmpp4.Pt();
       // delta beta corrections
       //  I = [sumChargedHadronPt+ max(0.,sumNeutralHadronPt+sumPhotonPt-0.5sumPUPt]/pt
-      float relIsocorr = ( muPFIsoR04_CH[imu] + fmax(0.0, muPFIsoR04_NH[imu] + muPFIsoR04_Pho[imu] -0.5*muPFIsoR04_PU[imu]) )/ tmpp4.Pt();
+      float relIsocorr = ( fReader->muPFIsoR04_CH->at(imu) + fmax(0.0, fReader->muPFIsoR04_NH->at(imu) + fReader->muPFIsoR04_Pho->at(imu) -0.5*fReader->muPFIsoR04_PU->at(imu)) )/ tmpp4.Pt();
+      // check muon type
+      static const unsigned int GlobalMuon     =  1<<1;
+      static const unsigned int TrackerMuon    =  1<<2;
+      static const unsigned int PFMuon =  1<<5;
+      bool isGlobalMuon  = fReader->muType->at(imu) & GlobalMuon;
+      bool isTrackerMuon = fReader->muType->at(imu) & TrackerMuon;
+      bool isPFMuon      = fReader->muType->at(imu) & PFMuon;
+
       // loose muon selection
       if ( tmpp4.Pt() > 10.0 &&
            fabs(tmpp4.Eta()) < 2.5 &&
-           relIsocorr < 0.2 )
+           relIsocorr < 0.2 &&
+           isPFMuon && ( isGlobalMuon || isTrackerMuon) )
         {
           Nloose_Mu++;
           // good muons
           if ( tmpp4.Pt() > 26.0 &&
                fabs(tmpp4.Eta()) < 2.1 &&
-               muChi2NDF[imu] < 10 &&
-               muNumberOfValidTrkLayers[imu] > 5 &&
-               muNumberOfValidMuonHits[imu] > 0 &&
-               muD0[imu] < 0.2 &&
-               fabs( muDz[imu] ) < 0.5 && //check this
-               muNumberOfValidPixelHits[imu] > 0 &&
-               muStations[imu] > 1 &&
-               relIsocorr < 0.12 )
+               fReader->muChi2NDF->at(imu) < 10 &&
+               fReader->muNumberOfValidTrkLayers->at(imu) > 5 &&
+               fReader->muNumberOfValidMuonHits->at(imu) > 0 &&
+               fReader->muD0->at(imu) < 0.2 &&
+               fabs( fReader->muDz->at(imu) ) < 0.5 && //check this
+               fReader->muNumberOfValidPixelHits->at(imu) > 0 &&
+               fReader->muStations->at(imu) > 1 &&
+               relIsocorr < 0.12 &&
+               isPFMuon && isGlobalMuon && isTrackerMuon )
             {
               // leading muon
               if ( Ngood_Mu == 0 )
@@ -489,29 +540,32 @@ Bool_t ttgamma3::Process(Long64_t entry)
   ////////////////////////////////
   // JETS
   ///////////////////////////////
-  if (fVerbose) cout << "Total number of jets nJet = "<< nJet << endl;
+  if (fVerbose) cout << "Total number of jets nJet = "<< fReader->nJet << endl;
 
   int Ngood_Jets = 0;
   float met_x = 0.0;
   float met_y = 0.0;
   float CSVM = 0.679;
+  int Nbtags = 0;
+  bool pass1stJet, pass2ndJet, pass3rdJet, pass4thJet;
+  pass1stJet = pass2ndJet = pass3rdJet = pass4thJet = false;
 
-  for (int ij= 0; ij < nJet; ++ij)
+  for (int ij= 0; ij < fReader->nJet; ++ij)
     {
       TLorentzVector tmpp4;
-      tmpp4.SetPtEtaPhiE( jetPt[ij], jetEta[ij], jetPhi[ij], jetEn[ij] );
+      tmpp4.SetPtEtaPhiE( fReader->jetPt->at(ij), fReader->jetEta->at(ij), fReader->jetPhi->at(ij), fReader->jetEn->at(ij) );
 
-      float uncorr_jet_pt = jetRawPt[ij];
-      met_x += uncorr_jet_pt*TMath::Cos( jetPhi[ij] );
-      met_y += uncorr_jet_pt*TMath::Sin( jetPhi[ij] );
+      float uncorr_jet_pt = fReader->jetRawPt->at(ij);
+      met_x += uncorr_jet_pt*TMath::Cos( fReader->jetPhi->at(ij) );
+      met_y += uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) );
 
       // Apply JER smearing in MC
-      if ( fIsMC && fdoJER && jetPt[ij] > 10 )
+      if ( fIsMC && fdoJER && fReader->jetPt->at(ij) > 10 )
         {
-          float gen_pt = jetGenJetPt[ij];
+          float gen_pt = fReader->jetGenJetPt->at(ij);
           if ( gen_pt < 0 ) continue;
-          float jet_pt = jetPt[ij];
-          float jet_eta = jetEta[ij];
+          float jet_pt = fReader->jetPt->at(ij);
+          float jet_eta = fReader->jetEta->at(ij);
           // factor is (c - 1), where c are the eta-dependent scale factors, to be taken from the official twiki
           float c = 0;
           // from https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution
@@ -541,67 +595,98 @@ Bool_t ttgamma3::Process(Long64_t entry)
           float deltapt = (jet_pt - gen_pt) * factor;
           float ptscale = fmax(0.0, (jet_pt + deltapt) / jet_pt);
           tmpp4 *= ptscale;
-          met_x -= uncorr_jet_pt*TMath::Cos( jetPhi[ij] ) * ptscale;
-          met_y -= uncorr_jet_pt*TMath::Sin( jetPhi[ij] ) * ptscale;
+          met_x -= uncorr_jet_pt*TMath::Cos( fReader->jetPhi->at(ij) ) * ptscale;
+          met_y -= uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) ) * ptscale;
         }
 
-      if ( tmpp4.Pt() > 30 &&
+      if ( tmpp4.Pt() > 10 &&
            fabs( tmpp4.Eta() ) < 2.5 &&
-           jetPFLooseId[ij] == true )
+           fReader->jetPFLooseId->at(ij) == true )
         {
-          if (Ngood_Jets == 0 && tmpp4.Pt() > 55 )
+          if (fVerbose) cout << "Ngood_Jets = " << Ngood_Jets << " Pt = " << tmpp4.Pt() << endl;
+ 
+          if (Ngood_Jets == 0 && tmpp4.Pt() > 55.0 )
             {
               p4jets.push_back( tmpp4 );
-              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
-                vec_btags.push_back( true );
+              pass1stJet = true;
+              if ( fReader->jetCombinedSecondaryVtxBJetTags->at(ij) > CSVM )
+                {
+                  vec_btags.push_back( true );
+                  Nbtags++;
+                }
               else
                 vec_btags.push_back( false );
             }
-          if (Ngood_Jets == 1 && tmpp4.Pt() > 45 )
+
+          if (Ngood_Jets == 1 && tmpp4.Pt() > 45.0 )
             {
               p4jets.push_back( tmpp4 );
-              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
-                vec_btags.push_back( true );
+              pass2ndJet = true;
+              if ( fReader->jetCombinedSecondaryVtxBJetTags->at(ij) > CSVM )
+                {
+                  vec_btags.push_back( true );
+                  Nbtags++;
+                }
               else
                 vec_btags.push_back( false );
             }
-          if (Ngood_Jets == 2 && tmpp4.Pt() > 35 )
+
+          if (Ngood_Jets == 2 && tmpp4.Pt() > 35.0 )
             {
               p4jets.push_back( tmpp4 );
-              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
-                vec_btags.push_back( true );
+              pass3rdJet = true;
+              if ( fReader->jetCombinedSecondaryVtxBJetTags->at(ij) > CSVM )
+                {
+                  vec_btags.push_back( true );
+                  Nbtags++;
+                }
               else
                 vec_btags.push_back( false );
             }
-          if (Ngood_Jets == 3 && tmpp4.Pt() > 20 )
+
+          if (Ngood_Jets == 3 && tmpp4.Pt() > 20.0 )
             {
               p4jets.push_back( tmpp4 );
-              if ( jetCombinedSecondaryVtxBJetTags[ij] > CSVM )
-                vec_btags.push_back( true );
+              pass4thJet = true;
+              if ( fReader->jetCombinedSecondaryVtxBJetTags->at(ij) > CSVM )
+                {
+                  vec_btags.push_back( true );
+                  Nbtags++;
+                }
               else
                 vec_btags.push_back( false );
             }
+          
           Ngood_Jets++;
         }
 
     } // end jets
 
-  if ( p4jets.size() >= 1 )
-    cutmap["1Jets"] += EvtWeight;
-  if ( p4jets.size() >= 2 )
-    cutmap["2Jets"] += EvtWeight;
-  if ( p4jets.size() >=3 )
-    cutmap["3Jets"] += EvtWeight;
-  if ( p4jets.size() >=4 )
-    cutmap["4Jets"] += EvtWeight;
-  else
-    return kTRUE; 
+  if (fVerbose) cout << "Pass jets = " << pass1stJet << " " << pass2ndJet << " " << pass3rdJet << " " << pass4thJet << endl;
+
+  if ( pass1stJet  )
+    {
+      cutmap["1Jets"] += EvtWeight;
+      if ( pass2ndJet )
+        {
+          cutmap["2Jets"] += EvtWeight;
+          if ( pass3rdJet )
+            {
+              cutmap["3Jets"] += EvtWeight;
+              if ( pass4thJet )
+                {
+                cutmap["4Jets"] += EvtWeight;
+                }
+            } else kTRUE;
+        } else kTRUE;
+    } else kTRUE;
+
 
   ////////////////////////
   // b-tagging selection
   ///////////////////////
 
-  if ( vec_btags.size() >= 1 )
+  if ( Nbtags >= 1 )
     cutmap["Onebtag"] += EvtWeight;
   else
     return kTRUE;
@@ -612,16 +697,16 @@ Bool_t ttgamma3::Process(Long64_t entry)
   int Nloose_gamma = 0;
   int Ngood_gamma = 0;
 
-  for(int ip = 0; ip < nPho; ++ip)		//Loop over the photons in a event
+  for(int ip = 0; ip < fReader->nPho; ++ip)		//Loop over the photons in a event
     {
   
-      if( phoEt[ip] > 25 &&
-          fabs( phoEta[ip] ) < 1.44 )
+      if( fReader->phoEt->at(ip) > 25 &&
+          fabs( fReader->phoEta->at(ip) ) < 1.44 )
       {
-        hphotons["cut0_pt"]->Fill( phoEt[ip] );
-        hphotons["cut0_eta"]->Fill( phoEta[ip] );
+        hphotons["cut0_pt"]->Fill( fReader->phoEt->at(ip) );
+        hphotons["cut0_eta"]->Fill( fReader->phoEta->at(ip) );
         
-        bool passelectronveto = phoEleVeto[ip];
+        bool passelectronveto = fReader->phoEleVeto->at(ip);
         
         if ( passelectronveto )
           {

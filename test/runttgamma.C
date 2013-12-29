@@ -40,7 +40,7 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   std::string prefixMC = "/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/GGNtuMC/";
 
   //sync exercise
-  vec.push_back("/uscmst1b_scratch/lpc1/cmsroc/yumiceva/TTGamma/ggtree_mc.root");
+  vec.push_back("/eos/uscms/store/user/yumiceva/ttgamma/sync/sync.root");
   vsamples.insert(StrVecPair("sync",vec));
   vec.clear();
 

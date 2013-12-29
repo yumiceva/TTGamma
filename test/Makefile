@@ -1,10 +1,10 @@
 all: ttgamma
 
-ttgamma: ttgamma3Dict.o ttgamma3.o runttgamma.C
-	g++ -o ttgamma `root-config --libs` -I`root-config --incdir` ttgamma3Dict.o ttgamma3.o runttgamma.C
+ttgamma: ttgamma3Dict.o EventTree.o ttgamma3.o runttgamma.C
+	g++ -o ttgamma `root-config --libs` -I`root-config --incdir` ttgamma3Dict.o EventTree.o ttgamma3.o runttgamma.C
 
-EventTree.o: EventTree.cpp EventTree.h
-	g++ -c -I`root-config --incdir` EventTree.cpp
+EventTree.o: EventTree.C EventTree.h
+	g++ -c -I`root-config --incdir` EventTree.C
 
 Selector.o: Selector.cpp Selector.h
 	g++ -c -I`root-config --incdir` Selector.cpp
