@@ -26,6 +26,7 @@
 #include "ttgamma3.h"
 #include "EvtCleaning.h"
 #include "ElectronSelector.h"
+#include "MuonSelector.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TSystem.h>
@@ -36,7 +37,6 @@
 #include <stdlib.h>
 #include <algorithm>
 
-#include "../../EGamma/EGammaAnalysisTools/interface/ElectronEffectiveArea.h"
 
 void ttgamma3::ParseInput()
 {
@@ -402,6 +402,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
   int Nloose_Mu = 0;
   float relIso_Mu = -1;
   float relIsocorr_Mu = -1;
+  MuonSelector muSelector = MuonSelector();
+  muSelector.Init(fReader, fVerbose, fIsMC );
 
   for(int imu = 0; imu < fReader->nMu; ++imu)             //Loop over the muons in a event
     {
@@ -411,37 +413,17 @@ Bool_t ttgamma3::Process(Long64_t entry)
                           fReader->muPhi->at(imu),
                           sqrt(fReader->muPt->at(imu)*fReader->muPt->at(imu) + fReader->muPz->at(imu)*fReader->muPz->at(imu)) );
 
-      float relIso = (fReader->muPFIsoR04_CH->at(imu) + fReader->muPFIsoR04_NH->at(imu))/ tmpp4.Pt();
-      // delta beta corrections
-      //  I = [sumChargedHadronPt+ max(0.,sumNeutralHadronPt+sumPhotonPt-0.5sumPUPt]/pt
-      float relIsocorr = ( fReader->muPFIsoR04_CH->at(imu) + fmax(0.0, fReader->muPFIsoR04_NH->at(imu) + fReader->muPFIsoR04_Pho->at(imu) -0.5*fReader->muPFIsoR04_PU->at(imu)) )/ tmpp4.Pt();
-      // check muon type
-      static const unsigned int GlobalMuon     =  1<<1;
-      static const unsigned int TrackerMuon    =  1<<2;
-      static const unsigned int PFMuon =  1<<5;
-      bool isGlobalMuon  = fReader->muType->at(imu) & GlobalMuon;
-      bool isTrackerMuon = fReader->muType->at(imu) & TrackerMuon;
-      bool isPFMuon      = fReader->muType->at(imu) & PFMuon;
-
-      // loose muon selection
-      if ( tmpp4.Pt() > 10.0 &&
-           fabs(tmpp4.Eta()) < 2.5 &&
-           relIsocorr < 0.2 &&
-           isPFMuon && ( isGlobalMuon || isTrackerMuon) )
+      // loose muon
+      if ( muSelector.PassLoose(imu) ) 
         {
+
+          float relIso = muSelector.get_relIso();
+          float relIsocorr = eSelector.get_relIsocorr(); 
+
           Nloose_Mu++;
-          // good muons
-          if ( tmpp4.Pt() > 26.0 &&
-               fabs(tmpp4.Eta()) < 2.1 &&
-               fReader->muChi2NDF->at(imu) < 10 &&
-               fReader->muNumberOfValidTrkLayers->at(imu) > 5 &&
-               fReader->muNumberOfValidMuonHits->at(imu) > 0 &&
-               fReader->muD0->at(imu) < 0.2 &&
-               fabs( fReader->muDz->at(imu) ) < 0.5 && //check this
-               fReader->muNumberOfValidPixelHits->at(imu) > 0 &&
-               fReader->muStations->at(imu) > 1 &&
-               relIsocorr < 0.12 &&
-               isPFMuon && isGlobalMuon && isTrackerMuon )
+
+          // tight muons
+          if ( muSelector.PassTight(imu) )
             {
               // leading muon
               if ( Ngood_Mu == 0 )
