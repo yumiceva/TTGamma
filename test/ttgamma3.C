@@ -92,7 +92,12 @@ void ttgamma3::ParseInput()
       fdoHLT = false;
       fPUreweighting = false;
     }
-
+  
+  if (fMyOpt.Contains("skim"))
+    {
+      fdoSkim = true;
+      Info("Begin","Running in SKIM mode");
+    }
 }
 
 void ttgamma3::WriteHistograms(const char* name, map<string, TH1*> hcontainer)
@@ -116,9 +121,10 @@ void ttgamma3::Begin(TTree * /*tree*/)
 
    TString option = GetOption();
    fMyOpt = option;
+   Info("Begin", "Processing with options: %s", option.Data());
+
    ParseInput();
    //fVerbose = true;
-   Info("Begin", "starting with process option: %s", option.Data());
    if (fPUreweighting) Info("Begin", "PU reweighting is ON");
 }
 
@@ -130,7 +136,9 @@ void ttgamma3::SlaveBegin(TTree * tree)
 
   TString option = GetOption();
   fMyOpt = option;
-  ParseInput();
+  Info("SlaveBegin","Processing with options: %s", option.Data() );
+
+  //ParseInput(); // Do we need this?
 
   //initialize the Tree branch addresses
   Init(tree);
@@ -220,7 +228,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
    // cut flow
    if (fChannel==1)
      { //muon +jets
-       fCutLabels.push_back("Skim");
+       fCutLabels.push_back("Processeed");
        fCutLabels.push_back("Cleaning");
        fCutLabels.push_back("HLT");
        fCutLabels.push_back("GoodPV");
@@ -236,7 +244,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
      }
    else if (fChannel==2)
      { //electron+jets
-       fCutLabels.push_back("Skim");
+       fCutLabels.push_back("Processed");
        fCutLabels.push_back("Cleaning");
        fCutLabels.push_back("HLT");
        fCutLabels.push_back("GoodPV");
@@ -259,6 +267,8 @@ void ttgamma3::SlaveBegin(TTree * tree)
        cutmap[ *ivec ] = 0;
      }
 
+   //SKIM
+   fReader->SetDirectory( fFile );
 }
 
 Bool_t ttgamma3::Process(Long64_t entry)
@@ -288,7 +298,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   vector< TLorentzVector > p4jets;
   vector< bool > vec_btags;
 
-  if (fVerbose) cout << "Processing entry: " << entry << endl;
+  if (fVerbose) cout << "Processing entry: " << entry << "  ====================="<<endl;
   else if ( entry%1000 == 0 )
     Info("Process","Entries read: %i", entry);
 
@@ -305,7 +315,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
     if (fVerbose) cout << " PU weight = " << EvtWeight << endl;
   }
 
-  cutmap["Skim"] += EvtWeight;
+  cutmap["Processed"] += EvtWeight;
 
   /////////////////////////////////////////
   // Event Clean up
@@ -640,13 +650,23 @@ Bool_t ttgamma3::Process(Long64_t entry)
         } else return kTRUE;
     } else return kTRUE;
 
+  ////////////////////////
+  // SKIM
+  ////////////////////////
 
+  if (fdoSkim) 
+    {
+      fReader->FillSkim( fFile );
+      if (entry%2000 == 1) fReader->AutoSave();
+    }
   ////////////////////////
   // b-tagging selection
   ///////////////////////
 
   if ( Nbtags >= 1 )
-    cutmap["Onebtag"] += EvtWeight;
+    {
+      cutmap["Onebtag"] += EvtWeight;
+    }
   else
     return kTRUE;
 
@@ -710,14 +730,26 @@ void ttgamma3::SlaveTerminate()
       hcutflow->Write();
       hcutflow->SetDirectory(0);
 
-      WriteHistograms("electrons", helectrons);
-      WriteHistograms("muons", hmuons);
-      WriteHistograms("jets", hjets);
-      WriteHistograms("photons", hphotons);
-      WriteHistograms("MET", hMET);
-      WriteHistograms("PV", hPVs);
-
+      if (! fdoSkim )
+        {
+          WriteHistograms("electrons", helectrons);
+          WriteHistograms("muons", hmuons);
+          WriteHistograms("jets", hjets);
+          WriteHistograms("photons", hphotons);
+          WriteHistograms("MET", hMET);
+          WriteHistograms("PV", hPVs);
+        }
       fFile->cd();
+      
+      //// SKIM
+      //if (fdoSkim)
+      //  {
+          //fFile->mkdir("ggNtuplizer");
+          //fFile->cd("ggNtuplizer");
+          //TTree *ChainSkim = fReader->GetSkim();
+          //ChainSkim->Print();
+          //ChainSkim->AutoSave();
+      //}
       //fProofFile->Print();
       //fOutput->Add(fProofFile);
 

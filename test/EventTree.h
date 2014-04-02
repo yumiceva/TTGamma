@@ -20,6 +20,12 @@ using namespace std;
 class EventTree {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   TTree          *fChainSkim;
+   void            InitSkim();
+   void            SetDirectory( TFile *fSkimFile);
+   void            FillSkim( TFile *fSkimFile);
+   void            AutoSave();
+   TTree*          GetSkim() { return fChainSkim;}
    Int_t           fCurrent; //!current Tree number in a TChain
 
    // Declaration of leaf types
@@ -1234,7 +1240,7 @@ public :
 #endif
 
 #ifdef EventTree_cxx
-EventTree::EventTree(TTree *tree) : fChain(0) 
+EventTree::EventTree(TTree *tree) : fChain(0), fChainSkim(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -1247,7 +1253,7 @@ EventTree::EventTree(TTree *tree) : fChain(0)
       dir->GetObject("EventTree",tree);
 
    }
-   Init(tree);
+   Init(tree);   
 }
 
 EventTree::~EventTree()
@@ -2459,5 +2465,24 @@ Int_t EventTree::Cut(Long64_t entry)
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
+}
+void EventTree::InitSkim()
+{
+  fChainSkim = fChain->CloneTree(0);
+}
+void EventTree::SetDirectory( TFile *fSkimFile )
+{
+  fSkimFile->mkdir("ggNtuplizer");
+  fSkimFile->cd("ggNtuplizer");
+  fChainSkim->SetDirectory( fSkimFile );
+}
+void EventTree::FillSkim( TFile *fSkimFile)
+{
+  //fSkimFile->cd("ggNtuplizer");
+  fChainSkim->Fill();
+}
+void EventTree::AutoSave()
+{
+  fChainSkim->AutoSave();
 }
 #endif // #ifdef EventTree_cxx

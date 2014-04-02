@@ -44,6 +44,7 @@ public :
   bool              fdoJERdown;
   bool              fdoJERup;
   bool              fdoHLT;
+  bool              fdoSkim;
   TProofOutputFile *fProofFile; // For optimized merging of the ntuple
   TH1F             *h1test;
   TH1F             *hcutflow;
@@ -60,7 +61,6 @@ public :
   TFile          *fFile;
 
   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-  
   EventTree      *fReader;
   
   ttgamma3(TTree * /*tree*/ =0) : fProofFile(0),h1test(0),hPU_weights(0),fFile(0),fChain(0) 
@@ -76,6 +76,7 @@ public :
     fdoJERdown =     false;
     fdoJERup =       false;
     fdoHLT   =       true;
+    fdoSkim  =       false;
     
   }
    virtual ~ttgamma3() { }
@@ -112,7 +113,7 @@ void ttgamma3::Init(TTree *tree)
    // Set branch addresses and branch pointers
    if (!tree) return;
    fReader = new EventTree( tree );
-
+   fReader->InitSkim();
    //fChain = tree;
    //fChain->SetMakeClass(1);
    //fChain->SetBranchAddress("convTk2Pin", convTk2Pin, &b_convTk2Pin);

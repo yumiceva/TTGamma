@@ -36,14 +36,18 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   StrVecMap vsamples;
   StrVector vec;
 
-  std::string prefixData="/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/";
-  std::string prefixMC = "/eos/uscms/store/user/makouski/ggNtupleElePhoJetSkim2/GGNtuMC/";
+  std::string prefixData="/eos/uscms/store/user/iraklis/ggNtuples/";
+  std::string prefixMC = "/eos/uscms/store/user/iraklis/ggNtuples/";
 
   //sync exercise
   vec.push_back("/eos/uscms/store/user/yumiceva/ttgamma/sync/sync.root");
   vsamples.insert(StrVecPair("sync",vec));
   vec.clear();
 
+  //Wjets
+  vec.push_back("/eos/uscms/store/user/makouski/job_summer12_Wjets.root");
+  vsamples.insert(StrVecPair("Wjets",vec));
+  vec.clear();
   //WW_2l2nu
   vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
   vsamples.insert(StrVecPair("WW_2l2nu",vec));
@@ -63,6 +67,10 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   //Wg
   vec.push_back(prefixMC+"job_summer12_Wg.root");
   vsamples.insert(StrVecPair("Wg",vec));
+  vec.clear();
+  //Wgg_FSR
+  vec.push_back(prefixMC+"job_summer12_Wgg_FSR.root");
+  vsamples.insert(StrVecPair("Wgg_FSR",vec));
   vec.clear();
   //ZZ_2e2mu
   vec.push_back(prefixMC+"job_summer12_ZZ_2e2mu.root");
@@ -99,6 +107,10 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   //diphoton_box_25to250
   vec.push_back(prefixMC+"job_summer12_diphoton_box_25to250.root");
   vsamples.insert(StrVecPair("diphoton_box_25to250",vec));
+  vec.clear();
+  //diphoton_box_250toInf
+  vec.push_back(prefixMC+"job_summer12_diphoton_box_250toInf.root");
+  vsamples.insert(StrVecPair("diphoton_box_250toInf",vec));
   vec.clear();
   //t_s
   vec.push_back(prefixMC+"job_summer12_t_s.root");
@@ -145,21 +157,19 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vsamples.insert(StrVecPair("ttjets_1l",vec));
   vec.clear();
   //ttjers_2l
-  vec.push_back(prefixMC+"job_summer12_ttjets_2l.root");
-  vsamples.insert(StrVecPair("ttjets_2l",vec));
-  vec.clear();
+  //vec.push_back(prefixMC+"job_summer12_ttjets_2l.root");
+  //vsamples.insert(StrVecPair("ttjets_2l",vec));
+  //vec.clear();
   //DATA
-  vec.push_back(prefixData+"job_1electron_2012a_Aug6rereco_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012a_Jul13rereco_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012b_Jul13rereco_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012c_Aug24rereco_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012c_Dec11rereco_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012c_PRv2_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part1_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part2_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part3_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part4_skim.root");
-  vec.push_back(prefixData+"job_1electron_2012d_PRv1_part5_skim.root");
+  // electrons
+  vec.push_back(prefixData+"job_electron_2012a_Jan22rereco.root");
+  vec.push_back(prefixData+"job_electron_2012b_Jan22rereco.root");
+  vec.push_back(prefixData+"job_electron_2012c_Jan2012rereco.root");
+  vec.push_back("/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/iraklis/Makouski/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/job_electron_2012d.root");
+  // muons
+  //vec.push_back(prefixData+"job_muon_2012a_Jan22rereco.root");
+  //vec.push_back(prefixData+"job_muon_2012c_Jan22rereco.root");
+
   vsamples.insert(StrVecPair("data",vec));
   vec.clear();
 
@@ -230,8 +240,12 @@ int main(int argc, char** argv)
   TString sample = "all";
   TString options = "";
   if ( argc > 0 ) sample = argv[1];
-  if ( argc > 1 ) options = argv[2];
-
+  if ( argc > 1 ) 
+    {
+      for (int i=2; i<= argc; ++i)
+        options += argv[i];
+    }
+  
   runttgamma(sample, options);
   return 0;
 }
