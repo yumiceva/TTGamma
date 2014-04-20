@@ -152,9 +152,9 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vec.push_back(prefixMC+"job_summer12_ttg_WHIZARD_v11.root");
   vsamples.insert(StrVecPair("ttgWz",vec));
   vec.clear();
-  //ttjets_1l
-  vec.push_back(prefixMC+"job_summer12_ttjets_1l.root");
-  vsamples.insert(StrVecPair("ttjets_1l",vec));
+  //ttjets
+  vec.push_back(prefixMC+"job_summer12_ttinclusive.root");
+  vsamples.insert(StrVecPair("ttjets",vec));
   vec.clear();
   //ttjers_2l
   //vec.push_back(prefixMC+"job_summer12_ttjets_2l.root");

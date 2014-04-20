@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <algorithm>
-
+#include <assert.h>
 
 void ttgamma3::ParseInput()
 {
@@ -156,6 +156,11 @@ void ttgamma3::SlaveBegin(TTree * tree)
     }
     TString hmc_name = "hPUTrue_";
     hmc_name += fSample;
+    if (! PU_MC_file->GetListOfKeys()->Contains( hmc_name ) ) {
+      Info("SlaveBegin","Error: Histogram name "+hmc_name+" does not exist in file "+PU_MC_file->GetName());
+      assert("SlaveBegin STOP");
+      
+    }      
     TH1F* hPU_mc = new TH1F( *(static_cast<TH1F*>(PU_MC_file->Get( hmc_name )->Clone() )) );
     hPU_weights->Scale(1./(hPU_weights->Integral()));
     hPU_mc->Scale(1./(hPU_mc->Integral()));

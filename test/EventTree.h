@@ -170,11 +170,11 @@ public :
    vector<float>   *elePhoRegrE;
    vector<float>   *elePhoRegrEerr;
    vector<float>   *eleSeedTime;
-   vector<vector<float> > *eleGSFPt;
-   vector<vector<float> > *eleGSFEta;
-   vector<vector<float> > *eleGSFPhi;
-   vector<vector<float> > *eleGSFCharge;
-   vector<vector<float> > *eleGSFChi2NDF;
+  //vector<vector<float> > *eleGSFPt;
+  //vector<vector<float> > *eleGSFEta;
+  //vector<vector<float> > *eleGSFPhi;
+  //vector<vector<float> > *eleGSFCharge;
+  //vector<vector<float> > *eleGSFChi2NDF;
    vector<int>     *eleRecoFlag;
    vector<int>     *elePos;
    vector<int>     *eleGenIndex;
@@ -769,11 +769,11 @@ public :
    TBranch        *b_elePhoRegrE;   //!
    TBranch        *b_elePhoRegrEerr;   //!
    TBranch        *b_eleSeedTime;   //!
-   TBranch        *b_eleGSFPt;   //!
-   TBranch        *b_eleGSFEta;   //!
-   TBranch        *b_eleGSFPhi;   //!
-   TBranch        *b_eleGSFCharge;   //!
-   TBranch        *b_eleGSFChi2NDF;   //!
+  //TBranch        *b_eleGSFPt;   //!
+  //TBranch        *b_eleGSFEta;   //!
+  //TBranch        *b_eleGSFPhi;   //!
+  //TBranch        *b_eleGSFCharge;   //!
+  //TBranch        *b_eleGSFChi2NDF;   //!
    TBranch        *b_eleRecoFlag;   //!
    TBranch        *b_elePos;   //!
    TBranch        *b_eleGenIndex;   //!
@@ -1393,11 +1393,11 @@ void EventTree::Init(TTree *tree)
    elePhoRegrE = 0;
    elePhoRegrEerr = 0;
    eleSeedTime = 0;
-   eleGSFPt = 0;
-   eleGSFEta = 0;
-   eleGSFPhi = 0;
-   eleGSFCharge = 0;
-   eleGSFChi2NDF = 0;
+   //eleGSFPt = 0;
+   //eleGSFEta = 0;
+   //eleGSFPhi = 0;
+   //eleGSFCharge = 0;
+   //eleGSFChi2NDF = 0;
    eleRecoFlag = 0;
    elePos = 0;
    eleGenIndex = 0;
@@ -1982,11 +1982,11 @@ void EventTree::Init(TTree *tree)
    fChain->SetBranchAddress("elePhoRegrE", &elePhoRegrE, &b_elePhoRegrE);
    fChain->SetBranchAddress("elePhoRegrEerr", &elePhoRegrEerr, &b_elePhoRegrEerr);
    fChain->SetBranchAddress("eleSeedTime", &eleSeedTime, &b_eleSeedTime);
-   fChain->SetBranchAddress("eleGSFPt", &eleGSFPt, &b_eleGSFPt);
-   fChain->SetBranchAddress("eleGSFEta", &eleGSFEta, &b_eleGSFEta);
-   fChain->SetBranchAddress("eleGSFPhi", &eleGSFPhi, &b_eleGSFPhi);
-   fChain->SetBranchAddress("eleGSFCharge", &eleGSFCharge, &b_eleGSFCharge);
-   fChain->SetBranchAddress("eleGSFChi2NDF", &eleGSFChi2NDF, &b_eleGSFChi2NDF);
+   //fChain->SetBranchAddress("eleGSFPt", &eleGSFPt, &b_eleGSFPt);
+   //fChain->SetBranchAddress("eleGSFEta", &eleGSFEta, &b_eleGSFEta);
+   //fChain->SetBranchAddress("eleGSFPhi", &eleGSFPhi, &b_eleGSFPhi);
+   //fChain->SetBranchAddress("eleGSFCharge", &eleGSFCharge, &b_eleGSFCharge);
+   //fChain->SetBranchAddress("eleGSFChi2NDF", &eleGSFChi2NDF, &b_eleGSFChi2NDF);
    fChain->SetBranchAddress("eleRecoFlag", &eleRecoFlag, &b_eleRecoFlag);
    fChain->SetBranchAddress("elePos", &elePos, &b_elePos);
    fChain->SetBranchAddress("eleGenIndex", &eleGenIndex, &b_eleGenIndex);
