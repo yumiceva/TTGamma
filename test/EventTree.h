@@ -25,6 +25,7 @@ public :
    void            SetDirectory( TFile *fSkimFile);
    void            FillSkim( TFile *fSkimFile);
    void            AutoSave();
+   void            Write();
    TTree*          GetSkim() { return fChainSkim;}
    Int_t           fCurrent; //!current Tree number in a TChain
 
@@ -2484,5 +2485,9 @@ void EventTree::FillSkim( TFile *fSkimFile)
 void EventTree::AutoSave()
 {
   fChainSkim->AutoSave();
+}
+void EventTree::Write()
+{
+  fChainSkim->Write();
 }
 #endif // #ifdef EventTree_cxx

@@ -1,9 +1,6 @@
 universe = vanilla
-#Executable = run_skimmer_ttjets.sh
-Executable = run_histograms.sh
-#Executable = run_skimmer_vgamma.sh
-#Executable = run_histograms_overlap.sh
-#Executable = run_raw_histograms.sh
+Executable = run_skim_e.sh
+#Executable = run_histograms.sh
 should_transfer_files = YES
 WhenTOTransferOutput  = ON_EXIT
 notification = never
@@ -13,4 +10,5 @@ Error  = $(myPath)/batch_$(cluster)_$(process).stderr
 Log    = $(myPath)/batch_$(cluster)_$(process).condor
 Requirements          = (Memory >= 499 && OpSys == "LINUX" && (Arch != "DUMMY"))
 Arguments = $(process)
-Queue 27
+# important, number of instances (jobs) of script
+Queue 32

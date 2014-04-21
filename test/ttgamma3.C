@@ -97,6 +97,8 @@ void ttgamma3::ParseInput()
     {
       fdoSkim = true;
       Info("Begin","Running in SKIM mode");
+      fPUreweighting = false;
+      fdoJER = false;
     }
 }
 
@@ -170,8 +172,12 @@ void ttgamma3::SlaveBegin(TTree * tree)
 
   // Create Output file
   TString tmpfilename = "results";
-  if ( fSample != "" ) tmpfilename = fOutdir+"results_"+fSample+".root";
-  else tmpfilename = fOutdir + "results_data.root";
+  TString outprefixfile = "results_";
+  if ( fdoSkim ) {
+    outprefixfile = "skim_";
+  }
+  if ( fSample != "" ) tmpfilename = fOutdir+outprefixfile+fSample+".root";
+  else tmpfilename = fOutdir + outprefixfile+"data.root";
   fFile = new TFile( tmpfilename, "RECREATE");
   //Info("SlaveBegin", "Output filename: %s", tmpfilename );
 
@@ -656,13 +662,13 @@ Bool_t ttgamma3::Process(Long64_t entry)
     } else return kTRUE;
 
   ////////////////////////
-  // SKIM
+  // SKIM Output
   ////////////////////////
 
   if (fdoSkim) 
     {
       fReader->FillSkim( fFile );
-      if (entry%2000 == 1) fReader->AutoSave();
+      if (entry%1000 == 1) fReader->AutoSave();
     }
   ////////////////////////
   // b-tagging selection
@@ -744,6 +750,11 @@ void ttgamma3::SlaveTerminate()
           WriteHistograms("MET", hMET);
           WriteHistograms("PV", hPVs);
         }
+      else
+        {
+          fReader->AutoSave();
+        }
+
       fFile->cd();
       
       //// SKIM

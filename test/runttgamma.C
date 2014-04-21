@@ -94,7 +94,7 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vec.clear();
   //ZZ_4tau
   vec.push_back(prefixMC+"job_summer12_ZZ_4tau.root");
-  vsamples.insert(StrVecPair("WWg",vec));
+  vsamples.insert(StrVecPair("ZZ_4tau",vec));
   vec.clear();
   //Zg
   vec.push_back(prefixMC+"job_summer12_Zg.root");
@@ -163,14 +163,23 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   //DATA
   // electrons
   vec.push_back(prefixData+"job_electron_2012a_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_ele_a",vec));
+  vec.clear();
   vec.push_back(prefixData+"job_electron_2012b_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_ele_b",vec));
+  vec.clear();
   vec.push_back(prefixData+"job_electron_2012c_Jan2012rereco.root");
+  vsamples.insert(StrVecPair("data_ele_c",vec));
+  vec.clear();
   vec.push_back("/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/iraklis/Makouski/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/job_electron_2012d.root");
+  vsamples.insert(StrVecPair("data_ele_d",vec));
+  vec.clear();
   // muons
-  //vec.push_back(prefixData+"job_muon_2012a_Jan22rereco.root");
-  //vec.push_back(prefixData+"job_muon_2012c_Jan22rereco.root");
-
-  vsamples.insert(StrVecPair("data",vec));
+  vec.push_back(prefixData+"job_muon_2012a_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_mu_a",vec));
+  vec.clear();
+  vec.push_back(prefixData+"job_muon_2012c_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_mu_c",vec));
   vec.clear();
 
   //TProof *proof = getProof("lite://",nwrks);
