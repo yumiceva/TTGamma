@@ -1,19 +1,28 @@
-all: ttgamma
+all: ttgamma libttgamma.so
 
 ttgamma: ttgamma3Dict.o EventTree.o BaseSelector.h EvtCleaning.h ElectronSelector.h MuonSelector.h ttgamma3.o runttgamma.C
-	g++ -o ttgamma `root-config --libs` -I`root-config --incdir` ttgamma3Dict.o EventTree.o ttgamma3.o runttgamma.C
+	g++ -fPIC -o ttgamma `root-config --libs` -I`root-config --incdir` ttgamma3Dict.o EventTree.o ttgamma3.o runttgamma.C
+
+libttgamma.so: EventTreeDict.C EventTreeDict.o
+	g++ -fPIC -o libttgamma.so `root-config --libs` -I`root-config --incdir` EventTreeDict.o EventTree.o -shared
+
+EventTreeDict.o:
+	g++ -fPIC -c -I`root-config --incdir` EventTreeDict.C
+
+EventTreeDict.C:
+	rootcint -f EventTreeDict.C -c EventTree.h LinkdefEventTree.h
 
 EventTree.o: EventTree.C EventTree.h
-	g++ -c -I`root-config --incdir` EventTree.C
+	g++ -fPIC -c -I`root-config --incdir` EventTree.C
 
 ttgamma3.o: ttgamma3.C ttgamma3.h
-	g++ -c -I`root-config --incdir` ttgamma3.C
+	g++ -fPIC -c -I`root-config --incdir` ttgamma3.C
 
 ttgamma3Dict.o: ttgamma3Dict.C ttgamma3Dict.h
-	g++ -c -I`root-config --incdir` ttgamma3Dict.C
+	g++ -fPIC -c -I`root-config --incdir` ttgamma3Dict.C
 
 ttgamma3Dict.C: ttgamma3.h
 	rootcint -f ttgamma3Dict.C -c ttgamma3.h Linkdef.h
 
 clean:
-	rm -f ttgamma3.o ttgamma3Dict.o ttgamma3Dict.h ttgamma3Dict.C
+	rm -f EventTree.o ttgamma3.o ttgamma3Dict.o ttgamma3Dict.h ttgamma3Dict.C ttgamma libttgamma.so EventTreeDict.o EventTreeDict.h EventTreeDict.C
