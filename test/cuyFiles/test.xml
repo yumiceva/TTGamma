@@ -1,0 +1,62 @@
+<cuy>
+
+
+<!-- define location of files, histogram names and SFs -->
+  <validation type="data" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_data_ele_all.root" weight="1">
+    <TH1 name="h1test_data" source="h1test"/>
+  </validation>
+
+  <validation type="ttjets" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_ttjets.root" weight="CrossSections8TeV.txt:ttjets">
+    <TH1 name="h1test_ttjets" source="h1test"/>
+  </validation>
+
+  <validation type="t_s" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_t_s.root" weight="CrossSections8TeV.txt:t_s">
+    <TH1 name="h1test_t_s" source="h1test"/>
+  </validation>
+
+  <validation type="t_t" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_t_t.root" weight="CrossSections8TeV.txt:t_t">
+    <TH1 name="h1test_t_t" source="h1test"/>
+  </validation>
+
+  <validation type="t_tW" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_t_tW.root" weight="CrossSections8TeV.txt:t_tW">
+    <TH1 name="h1test_t_tW" source="h1test"/>
+  </validation>
+
+  <validation type="tbar_s" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_tbar_s.root" weight="CrossSections8TeV.txt:tbar_s">
+    <TH1 name="h1test_tbar_s" source="h1test"/>
+  </validation>
+
+  <validation type="tbar_t" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_tbar_t.root" weight="CrossSections8TeV.txt:tbar_t">
+    <TH1 name="h1test_tbar_t" source="h1test"/>
+  </validation>
+
+  <validation type="tbar_tW" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_tbar_tW.root" weight="CrossSections8TeV.txt:tbar_tW">
+    <TH1 name="h1test_tbar_tW" source="h1test"/>
+  </validation>
+
+  <validation type="Wjets" file="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/skim_Wjets.root" weight="CrossSections8TeV.txt:Wjets">
+    <TH1 name="h1test_Wjets" source="h1test"/>
+  </validation>
+
+
+<!-- done loading histograms -->
+
+<!-- add all the single top samples into one called ST -->
+  <additionArray name="ST" title="ST">
+    <additionArrayItem array="t_s"/>
+    <additionArrayItem array="t_t"/>
+    <additionArrayItem array="t_tW"/>
+    <additionArrayItem array="tbar_s"/>
+    <additionArrayItem array="tbar_t"/>
+    <additionArrayItem array="tbar_tW"/>
+  </additionArray>
+
+  <superimpose name="h1test" title="All Electrons p_{T} [GeV]" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" PlotDiff="true">
+    <superimposeItem name="h1test_data" color="1" legend="Data"/>
+    <superimposeItem name="h1test_ST" color="3" legend="Single top"/>
+    <superimposeItem name="h1test_Wjets" color="4" legend="W+jets"/>
+  </superimpose>
+
+
+
+</cuy>

@@ -22,7 +22,8 @@ eval `scram runtime -sh`
 
 #samples=("GGNtuMC/ttg_WHIZARD_v11.root ${inputDir}ggtree_mc_*" \
 #"job_1electron_2012a_Aug6rereco_skim.root ${inputDir}job_1electron_2012a_Aug6rereco_skim.root" \
-samples=("Wjets" \
+samples=("DYJets" \
+"Wjets" \
 "WW_2l2nu" \
 "WWg" \
 "WZ_2l2q" \
@@ -49,7 +50,8 @@ samples=("Wjets" \
 "ttZ" \
 "ttg" \
 "ttgWz" \
-"ttjets" \
+"ttjets_1l" \
+"ttjets_2l" \
 "data_ele_a" \
 "data_ele_b" \
 "data_ele_c" \

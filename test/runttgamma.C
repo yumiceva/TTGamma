@@ -43,7 +43,10 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vec.push_back("/eos/uscms/store/user/yumiceva/ttgamma/sync/sync.root");
   vsamples.insert(StrVecPair("sync",vec));
   vec.clear();
-
+  //DYJetsToLL
+  vec.push_back("/eos/uscms/store/user/makouski/job_summer12_DYJetsToLL.root");
+  vsamples.insert(StrVecPair("DYJets",vec));
+  vec.clear();
   //Wjets
   vec.push_back("/eos/uscms/store/user/makouski/job_summer12_Wjets.root");
   vsamples.insert(StrVecPair("Wjets",vec));
@@ -153,13 +156,18 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vsamples.insert(StrVecPair("ttgWz",vec));
   vec.clear();
   //ttjets
-  vec.push_back(prefixMC+"job_summer12_ttinclusive.root");
-  vsamples.insert(StrVecPair("ttjets",vec));
+  //vec.push_back(prefixMC+"job_summer12_ttinclusive.root");
+  //vsamples.insert(StrVecPair("ttjets",vec));
+  //vec.clear();
+  //ttjets_1l
+  vec.push_back(prefixMC+"job_summer12_ttjets_1l.root");
+  vsamples.insert(StrVecPair("ttjets_1l",vec));
   vec.clear();
   //ttjers_2l
-  //vec.push_back(prefixMC+"job_summer12_ttjets_2l.root");
-  //vsamples.insert(StrVecPair("ttjets_2l",vec));
-  //vec.clear();
+  vec.push_back("/eos/uscms/store/user/makouski/job_summer12_ttjets_2l.root");
+  vsamples.insert(StrVecPair("ttjets_2l",vec));
+  vec.clear();
+
   //DATA
   // electrons
   vec.push_back(prefixData+"job_electron_2012a_Jan22rereco.root");
@@ -178,8 +186,14 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   vec.push_back(prefixData+"job_muon_2012a_Jan22rereco.root");
   vsamples.insert(StrVecPair("data_mu_a",vec));
   vec.clear();
+  vec.push_back("/eos/uscms/store/user/troy2012/TTGamma/job_muon_2012a_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_mu_b",vec));
+  vec.clear();
   vec.push_back(prefixData+"job_muon_2012c_Jan22rereco.root");
   vsamples.insert(StrVecPair("data_mu_c",vec));
+  vec.clear();
+  vec.push_back("/eos/uscms/store/user/troy2012/TTGamma/job_muon_2012d_Jan22rereco.root");
+  vsamples.insert(StrVecPair("data_mu_d",vec));
   vec.clear();
 
   //TProof *proof = getProof("lite://",nwrks);

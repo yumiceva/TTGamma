@@ -344,9 +344,15 @@ Bool_t ttgamma3::Process(Long64_t entry)
   //  HLT
   /////////////////////////////////////////
   
-  if ( fdoHLT && fReader->HLTIndex[17] == 0 )
-    { return kTRUE; } // 17 --> HLT_Ele27_WP80_v Trigger
-  
+  if ( fdoHLT )
+    {
+
+      if ( fChannel==1 && fReader->HLTIndex[18] == 0 ) //HLT_IsoMu24_eta2p1_v
+        { return kTRUE; }
+      if ( fChannel==2 && fReader->HLTIndex[17] == 0 )
+        { return kTRUE; } // 17 --> HLT_Ele27_WP80_v Trigger
+    }
+
   cutmap["HLT"] += EvtWeight;
   if (fVerbose) cout << "Pass HLT" << endl;
   ////////////////////////////////////
@@ -360,7 +366,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   //     fabs( fReader->vtxD0->at(0) ) <= 2 )
   //  {
   cutmap["GoodPV"] += EvtWeight;
-  hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
+  //hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
   
   if (fVerbose) cout << "Pass good vertex" << endl;
 
@@ -660,6 +666,9 @@ Bool_t ttgamma3::Process(Long64_t entry)
             } else return kTRUE;
         } else return kTRUE;
     } else return kTRUE;
+
+  //hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
+  h1test->Fill( p4lepton.Pt() ); // leading pT lepton
 
   ////////////////////////
   // SKIM Output

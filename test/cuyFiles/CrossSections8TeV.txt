@@ -16,15 +16,28 @@ ttg             1.816           71598
 ttjets_1l       99.44           10629902
 # 227*(1-0.676)*(1-0.676)
 ttjets_2l       23.83           12019013
+# m_top = 172.5
+#ttjets         252.89
+# /WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM
+Wjets        36703.2            57709905
 t_s             3.79            259961
 tbar_s          1.76            139974
 t_t             56.4            99876
 tbar_t          30.7            1935072
+t_tW            11.1            497658
+tbar_tW         11.1            493460
 ttW             0.232           196046
 ttZ             0.2057          210160
+#DYJetsToLL      4393.0           
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGC
 Wg              461.6           4802358
 Zg              132.6           6588161
 WWg             0.528           304285
 #
 WW              54.838          1933235
+#WZ             33.2
+#ZZ             17.7
+#
+diphoton_box_10to25   1         500400
+diphoton_box_25to250  1         832275
+diphoton_box_250toInf 1         966976

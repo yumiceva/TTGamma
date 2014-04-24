@@ -94,6 +94,7 @@ if __name__ == '__main__':
     
     if options.sample == "madgraph":
         chain.Add("/eos/uscms/store/user/iraklis/ggNtuples/job_summer12_ttinclusive.root")
+        maxEntries = 1000
         #chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part2.root")
     ##chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part3.root")
     ##chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part4.root")
@@ -160,16 +161,123 @@ if __name__ == '__main__':
         if entry%2000 == 0:
             print "entry=",entry
             #### 
-            if maxEntries!=-1 and maxEntries < entry:
-                print cTerm.GREEN+"This sample has a maximum number of entries to process. Stop now."+cTerm.END
-                break
+        if maxEntries!=-1 and maxEntries < entry:
+            print cTerm.GREEN+"This sample has a maximum number of entries to process. Stop now."+cTerm.END
+            break
         
 
         # loop over gen particles
-        print "number of gen particles "+str(treeReader.nMC)
+        #print "number of gen particles "+str(treeReader.nMC)
+        p4Electron = ROOT.TLorentzVector()
+        p4Muon = ROOT.TLorentzVector()
+        p4Photon = ROOT.TLorentzVector()
+        p4Lepton = ROOT.TLorentzVector()
+        p4Nu = ROOT.TLorentzVector()
+        
+        numElectrons = 0
+        numMuons = 0
+        numTaus = 0
+        numPhotons =0
+        
         for p in range(0,treeReader.nMC):
             h_nocut['PID'].Fill( treeReader.mcPID[p] )
-    
+
+            # Electrons
+            if math.fabs(treeReader.mcPID[p]) == 11 and treeReader.mcStatus[p] == 1:
+                if numElectrons == 0:
+                    p4Electron.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                    p4Lepton.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                numElectrons += 1
+            # Muons
+            if math.fabs(treeReader.mcPID[p]) == 13 and treeReader.mcStatus[p] == 1:
+                if numMuons == 0:
+                    p4Muon.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                    p4Lepton.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                numMuons += 1
+            # Taus
+            if math.fabs(treeReader.mcPID[p]) == 15 and treeReader.mcStatus[p] == 1:
+                #p4Muon.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                numTaus += 1
+            # Photons
+            if treeReader.mcPID[p] == 22 and treeReader.mcStatus[p] == 1:
+                if numPhotons==0:
+                    p4Photon.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p])
+                numPhotons += 1
+                #motherIndex = p.Mother1 - 1
+                #pMom = Particles[motherIndex]
+                h_nocut['photon_mom'].Fill( treeReader.mcMomPID[p] )
+            # top
+            if math.fabs(treeReader.mcPID[p]) == 6:
+                h_nocut['top_m'].Fill( treeReader.mcMass[p] )
+                h_nocut['top_pt'].Fill( treeReader.mcPt[p] )
+                h_nocut['top_eta'].Fill( treeReader.mcEta[p] )
+                h_nocut['top_phi'].Fill( treeReader.mcPhi[p] )
+            # W
+            if math.fabs(treeReader.mcPID[p]) == 24:
+                h_nocut['W_m'].Fill( treeReader.mcMass[p] )
+            # b quark
+            if math.fabs(treeReader.mcPID[p]) == 5:
+                h_nocut['b_m'].Fill( treeReader.mcMass[p] )
+                h_nocut['b_pt'].Fill( treeReader.mcPt[p] )
+                h_nocut['b_eta'].Fill( treeReader.mcEta[p] )
+                h_nocut['b_phi'].Fill( treeReader.mcPhi[p] )
+            # light quarks
+            if math.fabs(treeReader.mcPID[p]) > 0 and math.fabs(treeReader.mcPID[p]) < 5:
+                h_nocut['q_pt'].Fill( treeReader.mcPt[p] )
+                h_nocut['q_eta'].Fill( treeReader.mcEta[p] )
+                h_nocut['q_phi'].Fill( treeReader.mcPhi[p] )
+            # neutrino
+            if (math.fabs(treeReader.mcPID[p]) == 12 or math.fabs(treeReader.mcPID[p]) == 14) and treeReader.mcStatus[p] == 1:
+                p4Nu.SetPtEtaPhiE( treeReader.mcPt[p], treeReader.mcEta[p], treeReader.mcPhi[p], treeReader.mcE[p] )
+                                
+            # test histogram
+            h_nocut['pt'].Fill( treeReader.mcPt[p] )
+            #print treeReader.mcPt[p]
+        # end loop over Particles
+
+        # Check BR
+        BR_code = 0
+        if (numElectrons > 1 and numMuons ==0 and numTaus ==0) or \
+               (numElectrons ==0 and numMuons > 1 and numTaus ==0) or \
+               (numElectrons == 1 and numMuons == 1 and numTaus==0) or \
+               (numElectrons ==0 and numMuons ==0 and numTaus > 1) or \
+               (numElectrons ==1 and numMuons ==0 and numTaus==1) or \
+               (numElectrons ==0 and numMuons==1 and numTaus ==1):
+            # Dileptons
+            BR_code = 1
+        elif numElectrons == 1 and numMuons == 0 and numTaus ==0:
+            # e+jets
+            BR_code = 2
+        elif numElectrons == 0 and numMuons == 1 and numTaus ==0:
+            # mu+jets
+            BR_code = 3
+        elif numElectrons == 0 and numMuons == 0 and numTaus ==0:
+            # All jets
+            BR_code = 5
+        else:
+            # tau+jets
+            BR_code = 4
+
+        h_nocut['ttbar_BR'].Fill( BR_code )
+
+        h_nocut['N_photons'].Fill(numPhotons)
+        if numPhotons > 0 and (BR_code == 2 or BR_code == 3):
+            h_nocut['photon_pt'].Fill(p4Photon.Pt())
+            h_nocut['photon_eta'].Fill(p4Photon.Eta())
+            h_nocut['photon_phi'].Fill(p4Photon.Phi())
+            # DeltaR
+            deltaRwLep = p4Photon.DeltaR( p4Lepton )
+            h_nocut['photon_deltaRLep'].Fill( deltaRwLep )
+
+            h_nocut['lep_pt'].Fill( p4Lepton.Pt() )
+            h_nocut['lep_eta'].Fill( p4Lepton.Eta() )
+            h_nocut['lep_phi'].Fill( p4Lepton.Phi() )
+
+            h_nocut['nu_pt'].Fill( treeReader.mcPt[p] )
+            h_nocut['nu_eta'].Fill( treeReader.mcEta[p] )
+            h_nocut['nu_phi'].Fill( treeReader.mcPhi[p] )
+            
+                
     outFile.cd()
     for key in h_nocut.keys():
         
