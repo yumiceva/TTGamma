@@ -5,7 +5,7 @@ job=$1
 
 cmsswDir="/uscms/home/yumiceva/work/CMSSW_5_3_14_patch1/src/"
 sourceDir="/uscms/home/yumiceva/work/CMSSW_5_3_14_patch1/src/TTGamma/test"
-outputDir="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/"
+outputDir="/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/muon/"
 #outputDir="/uscms/home/yumiceva/work/sframe/CMSSW_5_3_3/src/TTGamma/test/histos"
 
 cd ${cmsswDir}
@@ -52,10 +52,10 @@ samples=("DYJets" \
 "ttgWz" \
 "ttjets_1l" \
 "ttjets_2l" \
-"data_ele_a" \
-"data_ele_b" \
-"data_ele_c" \
-"data_ele_d")
+"data_mu_a" \
+"data_mu_b" \
+"data_mu_c" \
+"data_mu_d")
 
 # change to scratch area
 #cd ${_CONDOR_SCRATCH_DIR}
