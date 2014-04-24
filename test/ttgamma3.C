@@ -184,7 +184,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
   TString hname = "_"+fSample;
   // vertices
   hPVs["N"] = new TH1F("NPV"+hname,"Number of PVs",35,-0.5,34.5);
-  hPVs["N_fin"] = new TH1F("NPV_fin"+hname,"Number of PVs",35,-0.5,34.5);
+  hPVs["N_pre"] = new TH1F("NPV_pre"+hname,"Number of PVs",35,-0.5,34.5);
   // muons
   hmuons["pt"] = new TH1F("muon_pt"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
   hmuons["eta"] = new TH1F("muon_eta"+hname,"#eta^{#mu}", 20, -2.1, 2.1);
@@ -198,6 +198,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
   helectrons["reliso"] = new TH1F("electron_reliso"+hname,"I_{rel}", 40, 0, 0.2);
   helectrons["relisocorr"] = new TH1F("electron_relisocorr"+hname,"I_{rel}^{corr}", 40, 0, 0.2);
   // jets
+  hjets["N"] = new TH1F("jet_N"+hname,"Number of jets",8,-0.5,7.5);
   hjets["pt"] = new TH1F("jet_pt"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
   hjets["pt1"] = new TH1F("jet_pt1"+hname,"1st jet p_{T} [GeV/c]", 60, 30, 800);
   hjets["pt2"] = new TH1F("jet_pt2"+hname,"2nd jet p_{T} [GeV/c]", 60, 30, 800);
@@ -366,7 +367,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   //     fabs( fReader->vtxD0->at(0) ) <= 2 )
   //  {
   cutmap["GoodPV"] += EvtWeight;
-  //hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
+  hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
   
   if (fVerbose) cout << "Pass good vertex" << endl;
 
@@ -689,6 +690,27 @@ Bool_t ttgamma3::Process(Long64_t entry)
     }
   else
     return kTRUE;
+
+  ////////////////////////
+  // pre-selection plots
+  ///////////////////////
+  hPVs["N_pre"]->Fill( fReader->nVtx , EvtWeight );
+  if (fChannel==1)
+    {
+      hmuons["pt"]->Fill( p4lepton.Pt(), EvtWeight );
+      hmuons["eta"]->Fill( p4lepton.Eta(), EvtWeight );
+      hmuons["phi"]->Fill( p4lepton.Phi(), EvtWeight );
+      hmuons["relisocorr"]->Fill( relIsocorr_Mu, EvtWeight );
+    }
+  else
+    {
+      helectrons["pt"]->Fill( p4lepton.Pt(), EvtWeight );
+      helectrons["eta"]->Fill( p4lepton.Eta(), EvtWeight );
+      helectrons["phi"]->Fill( p4lepton.Phi(), EvtWeight );
+      helectrons["relisocorr"]->Fill( relIsocorr_Ele, EvtWeight );
+    }
+  hjets["N"]->Fill( Ngood_Jets, EvtWeight );
+  hjets["pt1"]->Fill( p4jets[0].Pt() );
 
   ///////////////////////////////////
   // PHOTONS

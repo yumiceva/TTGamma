@@ -12,10 +12,10 @@ data            1.0             1.0
 # signal
 ttg             1.816           71598
 #
-# 227*0.676*(1-0.676)*2
-ttjets_1l       99.44           10629902
-# 227*(1-0.676)*(1-0.676)
-ttjets_2l       23.83           12019013
+# 252.89*0.676*(1-0.676)*2
+ttjets_1l       11.08           10629902
+# 252.89*(1-0.676)*(1-0.676)
+ttjets_2l       26.55           12019013
 # m_top = 172.5
 #ttjets         252.89
 # /WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM
