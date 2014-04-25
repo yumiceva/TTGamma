@@ -93,7 +93,7 @@ void ttgamma3::ParseInput()
       fPUreweighting = false;
     }
   
-  if (fMyOpt.Contains("skim"))
+  if (fMyOpt.Contains("skim") && !(fMyOpt.Contains("inputskim")) )
     {
       fdoSkim = true;
       Info("Begin","Running in SKIM mode");

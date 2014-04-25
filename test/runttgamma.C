@@ -370,6 +370,7 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
     }
     cout << "List of files:" << endl;
     chain->ls();
+    cout << endl;
     //chain->SetProof(); // to run in PROOF mode
     TString opts(Form("sample=%s",name.c_str()));
     if (ExtraOpts != "" ) opts = ExtraOpts + " " + opts;
