@@ -22,7 +22,7 @@ eval `scram runtime -sh`
 
 #samples=("GGNtuMC/ttg_WHIZARD_v11.root ${inputDir}ggtree_mc_*" \
 #"job_1electron_2012a_Aug6rereco_skim.root ${inputDir}job_1electron_2012a_Aug6rereco_skim.root" \
-samples=("DYJets" \
+samples=("DYJetsToLL" \
 "Wjets" \
 "WW_2l2nu" \
 "WWg" \

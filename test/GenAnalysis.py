@@ -93,8 +93,8 @@ if __name__ == '__main__':
     print "Use dataset: "+options.sample
     
     if options.sample == "madgraph":
-        chain.Add("/eos/uscms/store/user/iraklis/ggNtuples/job_summer12_ttinclusive.root")
-        maxEntries = 1000
+        chain.Add("/eos/uscms/store/user/iraklis/ggNtuples/job_summer12_ttjets_1l.root")
+        maxEntries = 2000
         #chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part2.root")
     ##chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part3.root")
     ##chain.Add("/uscms_data/d2/maravin/TTG_MG5/Two2Seven/ROOT/ttgamma_27_part4.root")

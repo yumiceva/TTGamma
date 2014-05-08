@@ -240,7 +240,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
    // cut flow
    if (fChannel==1)
      { //muon +jets
-       fCutLabels.push_back("Processeed");
+       fCutLabels.push_back("Processed");
        fCutLabels.push_back("Cleaning");
        fCutLabels.push_back("HLT");
        fCutLabels.push_back("GoodPV");
@@ -672,15 +672,6 @@ Bool_t ttgamma3::Process(Long64_t entry)
   h1test->Fill( p4lepton.Pt() ); // leading pT lepton
 
   ////////////////////////
-  // SKIM Output
-  ////////////////////////
-
-  if (fdoSkim) 
-    {
-      fReader->FillSkim( fFile );
-      if (entry%1000 == 1) fReader->AutoSave();
-    }
-  ////////////////////////
   // b-tagging selection
   ///////////////////////
 
@@ -688,12 +679,33 @@ Bool_t ttgamma3::Process(Long64_t entry)
     {
       cutmap["Onebtag"] += EvtWeight;
     }
-  else
-    return kTRUE;
+  //else
+  //  return kTRUE;
+
+  ////////////////////////
+  // SKIM Output
+  ////////////////////////
+
+  if (fdoSkim) 
+    {
+      // skim with at least 4 good jets
+      if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet )
+        {
+          fReader->FillSkim( fFile );
+          if (entry%1000 == 1) fReader->AutoSave();
+        }
+    }
 
   ////////////////////////
   // pre-selection plots
   ///////////////////////
+  bool passPreSel = false;
+  if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet &&
+       Nbtags >= 1 )
+    passPreSel = true;
+
+  if ( ! passPreSel ) return kTRUE;
+
   hPVs["N_pre"]->Fill( fReader->nVtx , EvtWeight );
   if (fChannel==1)
     {
@@ -710,7 +722,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
       helectrons["relisocorr"]->Fill( relIsocorr_Ele, EvtWeight );
     }
   hjets["N"]->Fill( Ngood_Jets, EvtWeight );
-  hjets["pt1"]->Fill( p4jets[0].Pt() );
+  hjets["pt1"]->Fill( p4jets[0].Pt(), EvtWeight );
 
   ///////////////////////////////////
   // PHOTONS

@@ -26,29 +26,50 @@ def get_list_files(directory,pattern = ""):
 
 def main():
     
-    prefix = "/eos/uscms/store/user/iraklis/ggNtuples/"
-    prefix2= "/eos/uscms/store/user/makouski/"
+    prefix = "root://cmsxrootd-site.fnal.gov//eos/uscms/store/user/iraklis/ggNtuples/"
+    prefix2= "root://cmsxrootd-site.fnal.gov//eos/uscms/store/user/makouski/"
     
     #files = get_list_files( prefix, "job_summer12_t" )
     #print files
-    files = ["job_summer12_WWg.root","job_summer12_Wg.root","job_summer12_Wgg_FSR.root","job_summer12_Zg.root","job_summer12_diphoton_box_10to25.root","job_summer12_diphoton_box_250toInf.root","job_summer12_diphoton_box_25to250.root","job_summer12_t_s.root","job_summer12_t_t.root","job_summer12_t_tW.root","job_summer12_tbar_s.root","job_summer12_tbar_t.root","job_summer12_tbar_tW.root","job_summer12_ttW.root","job_summer12_ttZ.root","job_summer12_ttg.root","job_summer12_ttinclusive.root","job_summer12_DiPhotonBorn_Pt-10To25.root"]
+    #files = [#"job_summer12_WWg.root",
+             #"job_summer12_Wg.root",
+             #"job_summer12_Wgg_FSR.root",
+             #"job_summer12_Zg.root",
+             #"job_summer12_diphoton_box_10to25.root",
+             #"job_summer12_diphoton_box_250toInf.root",
+             #"job_summer12_diphoton_box_25to250.root",
+             #"job_summer12_t_s.root",
+             #"job_summer12_t_t.root",
+             #"job_summer12_t_tW.root",
+             #"job_summer12_tbar_s.root",
+             #"job_summer12_tbar_t.root",
+             ##"job_summer12_tbar_tW.root",
+             #"job_summer12_ttW.root",
+             #"job_summer12_ttZ.root",
+             #"job_summer12_ttg.root",
+             #"job_summer12_ttjets_1l.root",
+             #"job_summer12_DiPhotonBorn_Pt-10To25.root"]
 
     files_tmp = []
-    for f in files:
-        files_tmp.append( prefix + f)
+    #for f in files:
+    #    files_tmp.append( prefix + f)
 
     files_tmp.append (prefix2 + "job_summer12_Wjets.root")
-    files = files_tmp
+    files_tmp.append (prefix2 + "job_summer12_DYJetsToLL.root")
+    files_tmp.append (prefix2 + "job_summer12_ttjets_2l.root")
+    
+    #files = files_tmp
+    files = [ prefix2 + "job_summer12_ttjets_2l.root" ]
     
     outname = "MyMCPileupHistogram.root"
-    tf_out = TFile( outname, "RECREATE")
+    tf_out = TFile( outname, "UPDATE")
     
     for f in files:
 
         print "Open: "+f
         tfile = TFile( f )
         MC_sample = string.replace( f, prefix, "" )
-        MC_sample = string.replace( f, prefix2, "" )
+        MC_sample = string.replace( MC_sample, prefix2, "" )
         MC_sample = string.replace( MC_sample, "/", "")
         MC_sample = string.replace( MC_sample, "job_summer12_", "")
         MC_sample = string.replace( MC_sample, ".root", "")

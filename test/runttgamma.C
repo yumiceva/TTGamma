@@ -36,40 +36,43 @@ void InitSamples( TString ExtraOpts= "")
   //StrVecMap vsamples;
   StrVector vec;
 
+  // root://cmseos.fnal.gov:1094/
+  string xroo_prefix = "root://cmsxrootd-site.fnal.gov/";
+
   if (! ExtraOpts.Contains("inputskim") )
     {
 
-      std::string prefixData="/eos/uscms/store/user/iraklis/ggNtuples/";
-      std::string prefixMC = "/eos/uscms/store/user/iraklis/ggNtuples/";
+      string prefixData= xroo_prefix + "/eos/uscms/store/user/iraklis/ggNtuples/";
+      string prefixMC = xroo_prefix + "/eos/uscms/store/user/iraklis/ggNtuples/";
 
       //sync exercise
-      vec.push_back("/eos/uscms/store/user/yumiceva/ttgamma/sync/sync.root");
+      vec.push_back(xroo_prefix + "/store/user/yumiceva/ttgamma/sync/sync.root");
       vsamples.insert(StrVecPair("sync",vec));
       vec.clear();
       //DYJetsToLL
-      vec.push_back("/eos/uscms/store/user/makouski/job_summer12_DYJetsToLL.root");
-      vsamples.insert(StrVecPair("DYJets",vec));
+      vec.push_back(xroo_prefix + "/store/user/makouski/job_summer12_DYJetsToLL.root");
+      vsamples.insert(StrVecPair("DYJetsToLL",vec));
       vec.clear();
       //Wjets
-      vec.push_back("/eos/uscms/store/user/makouski/job_summer12_Wjets.root");
+      vec.push_back(xroo_prefix + "/store/user/makouski/job_summer12_Wjets.root");
       vsamples.insert(StrVecPair("Wjets",vec));
       vec.clear();
       //WW_2l2nu
-      vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
-      vsamples.insert(StrVecPair("WW_2l2nu",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
+      //vsamples.insert(StrVecPair("WW_2l2nu",vec));
+      //vec.clear();
       //WWg
       vec.push_back(prefixMC+"job_summer12_WWg.root");
       vsamples.insert(StrVecPair("WWg",vec));
       vec.clear();
       //WZ_2l2q
-      vec.push_back(prefixMC+"job_summer12_WZ_2l2q.root");
-      vsamples.insert(StrVecPair("WZ_2l2q",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_WZ_2l2q.root");
+      //vsamples.insert(StrVecPair("WZ_2l2q",vec));
+      //vec.clear();
       //WZ_3lnu
-      vec.push_back(prefixMC+"job_summer12_WZ_3lnu.root");
-      vsamples.insert(StrVecPair("WZ_3lnu",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_WZ_3lnu.root");
+      //vsamples.insert(StrVecPair("WZ_3lnu",vec));
+      //vec.clear();
       //Wg
       vec.push_back(prefixMC+"job_summer12_Wg.root");
       vsamples.insert(StrVecPair("Wg",vec));
@@ -79,29 +82,29 @@ void InitSamples( TString ExtraOpts= "")
       vsamples.insert(StrVecPair("Wgg_FSR",vec));
       vec.clear();
       //ZZ_2e2mu
-      vec.push_back(prefixMC+"job_summer12_ZZ_2e2mu.root");
-      vsamples.insert(StrVecPair("ZZ_2e2mu",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_2e2mu.root");
+      //vsamples.insert(StrVecPair("ZZ_2e2mu",vec));
+      //vec.clear();
       //ZZ_2e2tau
-      vec.push_back(prefixMC+"job_summer12_ZZ_2e2tau.root");
-      vsamples.insert(StrVecPair("ZZ_2e2tau",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_2e2tau.root");
+      //vsamples.insert(StrVecPair("ZZ_2e2tau",vec));
+      //vec.clear();
       //ZZ_2mu2tau
-      vec.push_back(prefixMC+"job_summer12_ZZ_2mu2tau.root");
-      vsamples.insert(StrVecPair("ZZ_2mu2tau",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_2mu2tau.root");
+      //vsamples.insert(StrVecPair("ZZ_2mu2tau",vec));
+      //vec.clear();
       //ZZ_4e
-      vec.push_back(prefixMC+"job_summer12_ZZ_4e.root");
-      vsamples.insert(StrVecPair("ZZ_4e",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_4e.root");
+      //vsamples.insert(StrVecPair("ZZ_4e",vec));
+      //vec.clear();
       //ZZ_4mu
-      vec.push_back(prefixMC+"job_summer12_ZZ_4mu.root");
-      vsamples.insert(StrVecPair("ZZ_4mu",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_4mu.root");
+      //vsamples.insert(StrVecPair("ZZ_4mu",vec));
+      //vec.clear();
       //ZZ_4tau
-      vec.push_back(prefixMC+"job_summer12_ZZ_4tau.root");
-      vsamples.insert(StrVecPair("ZZ_4tau",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ZZ_4tau.root");
+      //vsamples.insert(StrVecPair("ZZ_4tau",vec));
+      //vec.clear();
       //Zg
       vec.push_back(prefixMC+"job_summer12_Zg.root");
       vsamples.insert(StrVecPair("Zg",vec));
@@ -155,9 +158,9 @@ void InitSamples( TString ExtraOpts= "")
       vsamples.insert(StrVecPair("ttg",vec));
       vec.clear();
       //ttgWz
-      vec.push_back(prefixMC+"job_summer12_ttg_WHIZARD_v11.root");
-      vsamples.insert(StrVecPair("ttgWz",vec));
-      vec.clear();
+      //vec.push_back(prefixMC+"job_summer12_ttg_WHIZARD_v11.root");
+      //vsamples.insert(StrVecPair("ttgWz",vec));
+      //vec.clear();
       //ttjets
       //vec.push_back(prefixMC+"job_summer12_ttinclusive.root");
       //vsamples.insert(StrVecPair("ttjets",vec));
@@ -166,9 +169,13 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixMC+"job_summer12_ttjets_1l.root");
       vsamples.insert(StrVecPair("ttjets_1l",vec));
       vec.clear();
-      //ttjers_2l
-      vec.push_back("/eos/uscms/store/user/makouski/job_summer12_ttjets_2l.root");
+      //ttjets_2l
+      vec.push_back(xroo_prefix + "/store/user/makouski/job_summer12_ttjets_2l.root");
       vsamples.insert(StrVecPair("ttjets_2l",vec));
+      vec.clear();
+      //ttjets_had
+      vec.push_back("/uscms_data/d3/troy2012/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/TTJets_had_1.root");
+      vsamples.insert(StrVecPair("ttjets_had",vec));
       vec.clear();
       
       //DATA
@@ -189,13 +196,13 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixData+"job_muon_2012a_Jan22rereco.root");
       vsamples.insert(StrVecPair("data_mu_a",vec));
       vec.clear();
-      vec.push_back("/eos/uscms/store/user/troy2012/TTGamma/job_muon_2012a_Jan22rereco.root");
+      vec.push_back(xroo_prefix + "/store/user/troy2012/TTGamma/job_muon_2012b_Jan22rereco.root");
       vsamples.insert(StrVecPair("data_mu_b",vec));
       vec.clear();
       vec.push_back(prefixData+"job_muon_2012c_Jan22rereco.root");
       vsamples.insert(StrVecPair("data_mu_c",vec));
       vec.clear();
-      vec.push_back("/eos/uscms/store/user/troy2012/TTGamma/job_muon_2012d_Jan22rereco.root");
+      vec.push_back(xroo_prefix + "/store/user/troy2012/TTGamma/job_muon_2012d_Jan22rereco.root");
       vsamples.insert(StrVecPair("data_mu_d",vec));
       vec.clear();
       
@@ -203,34 +210,34 @@ void InitSamples( TString ExtraOpts= "")
   else
     {
       // SKIMS
-      std::string prefixSkim = "/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/electron/";
+      string prefixSkim = xroo_prefix + "/store/user/yumiceva/ttgamma/skim/v0/electron/";
       if ( ExtraOpts.Contains("muon") ) 
-        prefixSkim = "/eos/uscms/store/user/yumiceva/ttgamma/skim/v0/muon/";
+        prefixSkim = xroo_prefix + "/store/user/yumiceva/ttgamma/skim/v0/muon/";
 
       //DYJetsToLL
       vec.push_back(prefixSkim+"skim_DYJetsToLL.root");
-      vsamples.insert(StrVecPair("DYJets",vec));
+      vsamples.insert(StrVecPair("DYJetsToLL",vec));
       vec.clear();
       //Wjets
       vec.push_back(prefixSkim+"skim_Wjets.root");
       vsamples.insert(StrVecPair("Wjets",vec));
       vec.clear();
       //WW_2l2nu
-      vec.push_back(prefixSkim+"skim_WW_2l2nu.root");
-      vsamples.insert(StrVecPair("WW_2l2nu",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_WW_2l2nu.root");
+      //vsamples.insert(StrVecPair("WW_2l2nu",vec));
+      //vec.clear();
       //WWg
       vec.push_back(prefixSkim+"skim_WWg.root");
       vsamples.insert(StrVecPair("WWg",vec));
       vec.clear();
       //WZ_2l2q
-      vec.push_back(prefixSkim+"skim_WZ_2l2q.root");
-      vsamples.insert(StrVecPair("WZ_2l2q",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_WZ_2l2q.root");
+      //vsamples.insert(StrVecPair("WZ_2l2q",vec));
+      //vec.clear();
       //WZ_3lnu
-      vec.push_back(prefixSkim+"skim_WZ_3lnu.root");
-      vsamples.insert(StrVecPair("WZ_3lnu",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_WZ_3lnu.root");
+      //vsamples.insert(StrVecPair("WZ_3lnu",vec));
+      //vec.clear();
       //Wg
       vec.push_back(prefixSkim+"skim_Wg.root");
       vsamples.insert(StrVecPair("Wg",vec));
@@ -240,29 +247,29 @@ void InitSamples( TString ExtraOpts= "")
       vsamples.insert(StrVecPair("Wgg_FSR",vec));
       vec.clear();
       //ZZ_2e2mu
-      vec.push_back(prefixSkim+"skim_ZZ_2e2mu.root");
-      vsamples.insert(StrVecPair("ZZ_2e2mu",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_2e2mu.root");
+      //vsamples.insert(StrVecPair("ZZ_2e2mu",vec));
+      //vec.clear();
       //ZZ_2e2tau
-      vec.push_back(prefixSkim+"skim_ZZ_2e2tau.root");
-      vsamples.insert(StrVecPair("ZZ_2e2tau",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_2e2tau.root");
+      //vsamples.insert(StrVecPair("ZZ_2e2tau",vec));
+      //vec.clear();
       //ZZ_2mu2tau
-      vec.push_back(prefixSkim+"skim_ZZ_2mu2tau.root");
-      vsamples.insert(StrVecPair("ZZ_2mu2tau",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_2mu2tau.root");
+      //vsamples.insert(StrVecPair("ZZ_2mu2tau",vec));
+      //vec.clear();
       //ZZ_4e
-      vec.push_back(prefixSkim+"skim_ZZ_4e.root");
-      vsamples.insert(StrVecPair("ZZ_4e",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_4e.root");
+      //vsamples.insert(StrVecPair("ZZ_4e",vec));
+      //vec.clear();
       //ZZ_4mu
-      vec.push_back(prefixSkim+"skim_ZZ_4mu.root");
-      vsamples.insert(StrVecPair("ZZ_4mu",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_4mu.root");
+      //vsamples.insert(StrVecPair("ZZ_4mu",vec));
+      //vec.clear();
       //ZZ_4tau
-      vec.push_back(prefixSkim+"skim_ZZ_4tau.root");
-      vsamples.insert(StrVecPair("ZZ_4tau",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ZZ_4tau.root");
+      //vsamples.insert(StrVecPair("ZZ_4tau",vec));
+      //vec.clear();
       //Zg
       vec.push_back(prefixSkim+"skim_Zg.root");
       vsamples.insert(StrVecPair("Zg",vec));
@@ -316,17 +323,21 @@ void InitSamples( TString ExtraOpts= "")
       vsamples.insert(StrVecPair("ttg",vec));
       vec.clear();
       //ttgWz
-      vec.push_back(prefixSkim+"skim_ttg_WHIZARD_v11.root");
-      vsamples.insert(StrVecPair("ttgWz",vec));
-      vec.clear();
+      //vec.push_back(prefixSkim+"skim_ttg_WHIZARD_v11.root");
+      //vsamples.insert(StrVecPair("ttgWz",vec));
+      //vec.clear();
       //ttjets_1l
       vec.push_back(prefixSkim+"skim_ttjets_1l.root");
       vsamples.insert(StrVecPair("ttjets_1l",vec));
       vec.clear();
-      //ttjers_2l
+      //ttjets_2l
       vec.push_back(prefixSkim+"skim_ttjets_2l.root");
       vsamples.insert(StrVecPair("ttjets_2l",vec));
-      vec.clear();      
+      vec.clear();
+      //ttjets_had
+      vec.push_back(prefixSkim+"skim_ttjets_had.root");
+      vsamples.insert(StrVecPair("ttjets_had",vec));
+      vec.clear();
       //DATA
       if ( ExtraOpts.Contains("muon") )
         vec.push_back(prefixSkim+"skim_data_mu_all.root");
@@ -353,11 +364,13 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
 
   TChain *chain = new TChain("ggNtuplizer/EventTree");
   StrVecMap::iterator ite;//
+  bool foundSample = false;
   for ( ite = vsamples.begin(); ite != vsamples.end(); ++ite) {//
     
     std::string name(sample.Data());
     std::string tmpname = (*ite).first;
     if ( name != "all" && name != tmpname ) continue;
+    foundSample = true;
     if ( name == "all" ) name = tmpname;
     StrVector location = vsamples[name];
     cout<< "Input sample: "<< name << endl;
@@ -399,7 +412,10 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   //proof->ClearData();
   //proof->ClearInputData();
   //delete proof;
-  cout << "done"<<endl;
+  if ( foundSample )
+    cout << "done"<<endl;
+  else
+    cout << "Error: No sample found with name: " << sample.Data() << endl;
 }
 
 # ifndef __CINT__
