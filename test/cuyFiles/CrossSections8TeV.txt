@@ -9,14 +9,14 @@
 # DATA
 data            1.0             1.0
 # MC
-# signal
-ttg             1.816           71598
+# signal Whizard
+ttg             1.816           1719954
 #
 # 252.89*0.676*(1-0.676)*2
 ttjets_1l      110.78           24849110
 # 252.89*(1-0.676)*(1-0.676)
 ttjets_2l       26.55           12019013
-ttjets_had     115.56           0
+ttjets_0l      115.56           6987889
 # m_top = 172.5
 #ttjets         252.89
 # /WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM
@@ -27,9 +27,10 @@ t_t             56.4            99876
 tbar_t          30.7            1935072
 t_tW            11.1            497658
 tbar_tW         11.1            493460
+#
 ttW             0.232           196046
 ttZ             0.2057          210160
-#DYJetsToLL      4393.0           
+DYJetsToLL      4393.0          30458871 
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/QGC
 Wg              461.6           4802358
 Zg              132.6           6588161

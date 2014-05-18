@@ -37,13 +37,13 @@ void InitSamples( TString ExtraOpts= "")
   StrVector vec;
 
   // root://cmseos.fnal.gov:1094/
-  string xroo_prefix = "root://cmsxrootd-site.fnal.gov/";
+  string xroo_prefix = "root://cmseos.fnal.gov:1094/"; //"root://cmsxrootd-site.fnal.gov/";
 
   if (! ExtraOpts.Contains("inputskim") )
     {
 
-      string prefixData= xroo_prefix + "/eos/uscms/store/user/iraklis/ggNtuples/";
-      string prefixMC = xroo_prefix + "/eos/uscms/store/user/iraklis/ggNtuples/";
+      string prefixData= xroo_prefix + "/store/user/iraklis/ggNtuples/";
+      string prefixMC = xroo_prefix + "/store/user/iraklis/ggNtuples/";
 
       //sync exercise
       vec.push_back(xroo_prefix + "/store/user/yumiceva/ttgamma/sync/sync.root");
@@ -173,9 +173,9 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(xroo_prefix + "/store/user/makouski/job_summer12_ttjets_2l.root");
       vsamples.insert(StrVecPair("ttjets_2l",vec));
       vec.clear();
-      //ttjets_had
-      vec.push_back("/uscms_data/d3/troy2012/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/TTJets_had_1.root");
-      vsamples.insert(StrVecPair("ttjets_had",vec));
+      //ttjets_0l
+      vec.push_back(xroo_prefix + "/store/user/troy2012/GG_MC_12/TTJets_Hadronic/TTJets_hadronic.root");
+      vsamples.insert(StrVecPair("ttjets_0l",vec));
       vec.clear();
       
       //DATA
@@ -334,9 +334,9 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixSkim+"skim_ttjets_2l.root");
       vsamples.insert(StrVecPair("ttjets_2l",vec));
       vec.clear();
-      //ttjets_had
-      vec.push_back(prefixSkim+"skim_ttjets_had.root");
-      vsamples.insert(StrVecPair("ttjets_had",vec));
+      //ttjets_0l
+      vec.push_back(prefixSkim+"skim_ttjets_0l.root");
+      vsamples.insert(StrVecPair("ttjets_0l",vec));
       vec.clear();
       //DATA
       if ( ExtraOpts.Contains("muon") )

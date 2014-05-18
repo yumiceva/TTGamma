@@ -9,11 +9,12 @@ sleep 1m
 sleep 1m
 ./ttgamma DYJetsToLL muon inputskim >& histos_DYJetsToLL.log &
 ./ttgamma Wjets muon inputskim >& histos_Wjets.log &
-sleep 2m
-./ttgamma diphoton_box_10to25 muon inputskim >& histos_diphoton_box_10to25.log &
-./ttgamma diphoton_box_25to250 muon inputskim >& histos_diphoton_box_25to250.log &
-./ttgamma diphoton_box_25toInf muon inputskim >& histos_diphoton_box_25toInf.log &
+sleep 1m
+./ttgamma ttg muon inputskim >& histos_ttg.log &
+./ttgamma ttW muon inputskim >& histos_ttW.log &
+./ttgamma ttZ muon inputskim >& histos_ttZ.log &
 sleep 1m
 ./ttgamma ttjets_1l muon inputskim >& histos_ttjets_1l.log &
 ./ttgamma ttjets_2l muon inputskim >& histos_ttjets_2l.log &
+./ttgamma ttjets_0l muon inputskim >& histos_ttjets_0l.log &
 

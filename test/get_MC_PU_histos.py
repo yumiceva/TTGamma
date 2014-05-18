@@ -26,8 +26,8 @@ def get_list_files(directory,pattern = ""):
 
 def main():
     
-    prefix = "root://cmsxrootd-site.fnal.gov//eos/uscms/store/user/iraklis/ggNtuples/"
-    prefix2= "root://cmsxrootd-site.fnal.gov//eos/uscms/store/user/makouski/"
+    prefix = "root://cmsxrootd-site.fnal.gov//store/user/iraklis/ggNtuples/"
+    prefix2= "root://cmsxrootd-site.fnal.gov//store/user/makouski/"
     
     #files = get_list_files( prefix, "job_summer12_t" )
     #print files
@@ -54,15 +54,16 @@ def main():
     #for f in files:
     #    files_tmp.append( prefix + f)
 
-    files_tmp.append (prefix2 + "job_summer12_Wjets.root")
-    files_tmp.append (prefix2 + "job_summer12_DYJetsToLL.root")
-    files_tmp.append (prefix2 + "job_summer12_ttjets_2l.root")
+    #files_tmp.append (prefix2 + "job_summer12_Wjets.root")
+    #files_tmp.append (prefix2 + "job_summer12_DYJetsToLL.root")
+    #files_tmp.append (prefix2 + "job_summer12_ttjets_2l.root")
     
     #files = files_tmp
-    files = [ prefix2 + "job_summer12_ttjets_2l.root" ]
+    #files = [ prefix2 + "job_summer12_ttjets_2l.root" ]
+    files = [ "/eos/uscms/store/user/troy2012/GG_MC_12/TTJets_Hadronic/TTJets_hadronic.root" ]
     
     outname = "MyMCPileupHistogram.root"
-    tf_out = TFile( outname, "UPDATE")
+    tf_out = TFile( outname, "UPDATE") # update will append new histograms
     
     for f in files:
 
@@ -73,6 +74,7 @@ def main():
         MC_sample = string.replace( MC_sample, "/", "")
         MC_sample = string.replace( MC_sample, "job_summer12_", "")
         MC_sample = string.replace( MC_sample, ".root", "")
+        #MC_sample = "ttjets_0l"
         
         h = tfile.Get("//ggNtuplizer/hPUTrue")
         hnew_name = "hPUTrue_"+MC_sample

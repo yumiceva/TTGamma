@@ -1,6 +1,6 @@
 all: ttgamma libttgamma.so
 
-ttgamma: ttgamma3Dict.o EventTree.o BaseSelector.h EvtCleaning.h ElectronSelector.h MuonSelector.h ttgamma3.o runttgamma.C
+ttgamma: ttgamma3Dict.o EventTree.o BaseScaleFactor.h MuonScaleFactor.h BaseSelector.h EvtCleaning.h ElectronSelector.h MuonSelector.h ttgamma3.o runttgamma.C
 	g++ -fPIC -o ttgamma `root-config --libs` -I`root-config --incdir` ttgamma3Dict.o EventTree.o ttgamma3.o runttgamma.C
 
 libttgamma.so: EventTreeDict.C EventTreeDict.o
