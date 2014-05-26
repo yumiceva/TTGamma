@@ -444,8 +444,9 @@ int main(int argc, char** argv)
       cout<<" muon       : Run the muon analysis."<<endl;
       cout<<" electron   : Run the electron analysis."<<endl;
       cout<<" inputskim  : Use as input the skimed ntuples rather than the big ntuples."<<endl;
-      cout<<" verbose    : Output verbosed messages."<<endl;
       cout<<" outdir     : Output path where the output files are saved."<<endl;
+      cout<<" onlyphotons: Filter ttbar MG sample for events with photons."<<endl;
+      cout<<" verbose    : Output verbosed messages."<<endl;
       cout<<" sync       : Apply the top reference selection only. Use it as a sample name."<<endl;
       cout<<" skim       : Run analysis in skim mode. Apply a pre-selection and output a small ntuple."<<endl;
       cout<<endl;

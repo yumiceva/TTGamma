@@ -1,6 +1,6 @@
 <cuy>
 
-  <global location="/uscms/home/yumiceva/work/CMSSW_5_3_14_patch1/src/TTGamma/test/" banner="#splitline{CMS Preliminary}{L=19.6 fb^{-1} at #sqrt{s}=8 TeV}">
+  <global location="/uscms/home/yumiceva/work/CMSSW_5_3_14_patch1/src/TTGamma/test/histos/" banner="CMS Preliminary  L=19.6 fb^{-1} at #sqrt{s}=8 TeV">
   </global>
 
 <!-- define location of files, histogram names and SFs -->
@@ -12,7 +12,8 @@
     <TH1 name="jet_N_data" source="jets/jet_N_data"/>
     <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
     <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="NPV_data" source="PV/NPV_data"/>
+    <TH1 name="muon_relisocorr_data" source="muons/muon_relisocorr_data"/>
   </validation>
 <!-- ttbar -->
   <validation type="ttjets_0l" file="results_ttjets_0l.root" weight="CrossSections8TeV.txt:ttjets_0l">
@@ -21,7 +22,8 @@
     <TH1 name="jet_N_ttjets_0l" source="jets/jet_N_ttjets_0l"/>
     <TH1 name="jet_pt1_ttjets_0l" source="jets/jet_pt1_ttjets_0l"/>
     <TH1 name="MET_ttjets_0l" source="MET/MET_ttjets_0l"/>
-    <TH1 name="N_pre_ttjets_0l" source="PV/N_pre_ttjets_0l"/>
+    <TH1 name="NPV_ttjets_0l" source="PV/NPV_ttjets_0l"/>
+    <TH1 name="muon_relisocorr_ttjets_0l" source="muons/muon_relisocorr_ttjets_0l"/>
   </validation>
 
   <validation type="ttjets_1l" file="results_ttjets_1l.root" weight="CrossSections8TeV.txt:ttjets_1l">
@@ -30,7 +32,8 @@
     <TH1 name="jet_N_ttjets_1l" source="jets/jet_N_ttjets_1l"/>
     <TH1 name="jet_pt1_ttjets_1l" source="jets/jet_pt1_ttjets_1l"/>
     <TH1 name="MET_ttjets_1l" source="MET/MET_ttjets_1l"/>
-    <TH1 name="N_pre_ttjets_1l" source="PV/N_pre_ttjets_1l"/>
+    <TH1 name="NPV_ttjets_1l" source="PV/NPV_ttjets_1l"/>
+    <TH1 name="muon_relisocorr_ttjets_1l" source="muons/muon_relisocorr_ttjets_1l"/>
   </validation>
 
   <validation type="ttjets_2l" file="results_ttjets_2l.root" weight="CrossSections8TeV.txt:ttjets_2l">
@@ -39,7 +42,8 @@
     <TH1 name="jet_N_ttjets_2l" source="jets/jet_N_ttjets_2l"/>
     <TH1 name="jet_pt1_ttjets_2l" source="jets/jet_pt1_ttjets_2l"/>
     <TH1 name="MET_ttjets_2l" source="MET/MET_ttjets_2l"/>
-    <TH1 name="N_pre_ttjets_2l" source="PV/N_pre_ttjets_2l"/>
+    <TH1 name="NPV_ttjets_2l" source="PV/NPV_ttjets_2l"/>
+    <TH1 name="muon_relisocorr_ttjets_2l" source="muons/muon_relisocorr_ttjets_2l"/>
   </validation>
 <!-- single top -->
   <validation type="t_s" file="results_t_s.root" weight="CrossSections8TeV.txt:t_s">
@@ -48,7 +52,8 @@
     <TH1 name="jet_N_t_s" source="jets/jet_N_t_s"/>
     <TH1 name="jet_pt1_t_s" source="jets/jet_pt1_t_s"/>
     <TH1 name="MET_t_s" source="MET/MET_t_s"/>
-    <TH1 name="N_pre_t_s" source="PV/N_pre_t_s"/>
+    <TH1 name="NPV_t_s" source="PV/NPV_t_s"/>
+    <TH1 name="muon_relisocorr_t_s" source="muons/muon_relisocorr_t_s"/>
   </validation>
 
   <validation type="t_t" file="results_t_t.root" weight="CrossSections8TeV.txt:t_t">
@@ -57,89 +62,119 @@
     <TH1 name="jet_N_t_t" source="jets/jet_N_t_t"/>
     <TH1 name="jet_pt1_t_t" source="jets/jet_pt1_t_t"/>
     <TH1 name="MET_t_t" source="MET/MET_t_t"/>
-    <TH1 name="N_pre_t_t" source="PV/N_pre_t_t"/>
+    <TH1 name="NPV_t_t" source="PV/NPV_t_t"/>
+    <TH1 name="muon_relisocorr_t_t" source="muons/muon_relisocorr_t_t"/>
   </validation>
 
   <validation type="t_tW" file="results_t_tW.root" weight="CrossSections8TeV.txt:t_tW">
     <TH1 name="muon_pt_t_tW" source="muons/muon_pt_t_tW"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_t_tW" source="muons/muon_eta_t_tW"/>
+    <TH1 name="jet_N_t_tW" source="jets/jet_N_t_tW"/>
+    <TH1 name="jet_pt1_t_tW" source="jets/jet_pt1_t_tW"/>
+    <TH1 name="MET_t_tW" source="MET/MET_t_tW"/>
+    <TH1 name="NPV_t_tW" source="PV/NPV_t_tW"/>
+    <TH1 name="muon_relisocorr_t_tW" source="muons/muon_relisocorr_t_tW"/>
   </validation>
 
   <validation type="tbar_s" file="results_tbar_s.root" weight="CrossSections8TeV.txt:tbar_s">
     <TH1 name="muon_pt_tbar_s" source="muons/muon_pt_tbar_s"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_tbar_s" source="muons/muon_eta_tbar_s"/>
+    <TH1 name="jet_N_tbar_s" source="jets/jet_N_tbar_s"/>
+    <TH1 name="jet_pt1_tbar_s" source="jets/jet_pt1_tbar_s"/>
+    <TH1 name="MET_tbar_s" source="MET/MET_tbar_s"/>
+    <TH1 name="NPV_tbar_s" source="PV/NPV_tbar_s"/>
+    <TH1 name="muon_relisocorr_tbar_s" source="muons/muon_relisocorr_tbar_s"/>
   </validation>
 
   <validation type="tbar_t" file="results_tbar_t.root" weight="CrossSections8TeV.txt:tbar_t">
     <TH1 name="muon_pt_tbar_t" source="muons/muon_pt_tbar_t"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_tbar_t" source="muons/muon_eta_tbar_t"/>
+    <TH1 name="jet_N_tbar_t" source="jets/jet_N_tbar_t"/>
+    <TH1 name="jet_pt1_tbar_t" source="jets/jet_pt1_tbar_t"/>
+    <TH1 name="MET_tbar_t" source="MET/MET_tbar_t"/>
+    <TH1 name="NPV_tbar_t" source="PV/NPV_tbar_t"/>
+    <TH1 name="muon_relisocorr_tbar_t" source="muons/muon_relisocorr_tbar_t"/>
   </validation>
 
   <validation type="tbar_tW" file="results_tbar_tW.root" weight="CrossSections8TeV.txt:tbar_tW">
     <TH1 name="muon_pt_tbar_tW" source="muons/muon_pt_tbar_tW"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_tbar_tW" source="muons/muon_eta_tbar_tW"/>
+    <TH1 name="jet_N_tbar_tW" source="jets/jet_N_tbar_tW"/>
+    <TH1 name="jet_pt1_tbar_tW" source="jets/jet_pt1_tbar_tW"/>
+    <TH1 name="MET_tbar_tW" source="MET/MET_tbar_tW"/>
+    <TH1 name="NPV_tbar_tW" source="PV/NPV_tbar_tW"/>
+    <TH1 name="muon_relisocorr_tbar_tW" source="muons/muon_relisocorr_tbar_tW"/>
   </validation>
 <!-- associate ttbarX -->
   <validation type="ttW" file="results_ttW.root" weight="CrossSections8TeV.txt:ttW">
     <TH1 name="muon_pt_ttW" source="muons/muon_pt_ttW"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_ttW" source="muons/muon_eta_ttW"/>
+    <TH1 name="jet_N_ttW" source="jets/jet_N_ttW"/>
+    <TH1 name="jet_pt1_ttW" source="jets/jet_pt1_ttW"/>
+    <TH1 name="MET_ttW" source="MET/MET_ttW"/>
+    <TH1 name="NPV_ttW" source="PV/NPV_ttW"/>
+    <TH1 name="muon_relisocorr_ttW" source="muons/muon_relisocorr_ttW"/>
   </validation>
 
   <validation type="ttZ" file="results_ttZ.root" weight="CrossSections8TeV.txt:ttZ">
     <TH1 name="muon_pt_ttZ" source="muons/muon_pt_ttZ"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_ttZ" source="muons/muon_eta_ttZ"/>
+    <TH1 name="jet_N_ttZ" source="jets/jet_N_ttZ"/>
+    <TH1 name="jet_pt1_ttZ" source="jets/jet_pt1_ttZ"/>
+    <TH1 name="MET_ttZ" source="MET/MET_ttZ"/>
+    <TH1 name="NPV_ttZ" source="PV/NPV_ttZ"/>
+    <TH1 name="muon_relisocorr_ttZ" source="muons/muon_relisocorr_ttZ"/>
   </validation>
 
   <validation type="ttg" file="results_ttg.root" weight="CrossSections8TeV.txt:ttg">
     <TH1 name="muon_pt_ttg" source="muons/muon_pt_ttg"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_ttg" source="muons/muon_eta_ttg"/>
+    <TH1 name="jet_N_ttg" source="jets/jet_N_ttg"/>
+    <TH1 name="jet_pt1_ttg" source="jets/jet_pt1_ttg"/>
+    <TH1 name="MET_ttg" source="MET/MET_ttg"/>
+    <TH1 name="NPV_ttg" source="PV/NPV_ttg"/>
+    <TH1 name="muon_relisocorr_ttg" source="muons/muon_relisocorr_ttg"/>
+  </validation>
+
+  <validation type="ttjets_1l_g" file="results_ttjets_1l_g.root" weight="CrossSections8TeV.txt:ttjets_1l">
+    <TH1 name="muon_pt_ttjets_1l_g" source="muons/muon_pt_ttjets_1l_g"/>
+    <TH1 name="muon_eta_ttjets_1l_g" source="muons/muon_eta_ttjets_1l_g"/>
+    <TH1 name="jet_N_ttjets_1l_g" source="jets/jet_N_ttjets_1l_g"/>
+    <TH1 name="jet_pt1_ttjets_1l_g" source="jets/jet_pt1_ttjets_1l_g"/>
+    <TH1 name="MET_ttjets_1l_g" source="MET/MET_ttjets_1l_g"/>
+    <TH1 name="NPV_ttjets_1l_g" source="PV/NPV_ttjets_1l_g"/>
+    <TH1 name="muon_relisocorr_ttjets_1l_g" source="muons/muon_relisocorr_ttjets_1l_g"/>
+  </validation>
+
+  <validation type="ttjets_2l_g" file="results_ttjets_2l_g.root" weight="CrossSections8TeV.txt:ttjets_2l">
+    <TH1 name="muon_pt_ttjets_2l_g" source="muons/muon_pt_ttjets_2l_g"/>
+    <TH1 name="muon_eta_ttjets_2l_g" source="muons/muon_eta_ttjets_2l_g"/>
+    <TH1 name="jet_N_ttjets_2l_g" source="jets/jet_N_ttjets_2l_g"/>
+    <TH1 name="jet_pt1_ttjets_2l_g" source="jets/jet_pt1_ttjets_2l_g"/>
+    <TH1 name="MET_ttjets_2l_g" source="MET/MET_ttjets_2l_g"/>
+    <TH1 name="NPV_ttjets_2l_g" source="PV/NPV_ttjets_2l_g"/>
+    <TH1 name="muon_relisocorr_ttjets_2l_g" source="muons/muon_relisocorr_ttjets_2l_g"/>
   </validation>
 
 <!-- EWK  -->
   <validation type="Wjets" file="results_Wjets.root" weight="CrossSections8TeV.txt:Wjets">
     <TH1 name="muon_pt_Wjets" source="muons/muon_pt_Wjets"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_Wjets" source="muons/muon_eta_Wjets"/>
+    <TH1 name="jet_N_Wjets" source="jets/jet_N_Wjets"/>
+    <TH1 name="jet_pt1_Wjets" source="jets/jet_pt1_Wjets"/>
+    <TH1 name="MET_Wjets" source="MET/MET_Wjets"/>
+    <TH1 name="NPV_Wjets" source="PV/NPV_Wjets"/>
+    <TH1 name="muon_relisocorr_Wjets" source="muons/muon_relisocorr_Wjets"/>
   </validation>
 
   <validation type="DYJetsToLL" file="results_DYJetsToLL.root" weight="CrossSections8TeV.txt:DYJetsToLL">
     <TH1 name="muon_pt_DYJetsToLL" source="muons/muon_pt_DYJetsToLL"/>
-    <TH1 name="muon_eta_data" source="muons/muon_eta_data"/>
-    <TH1 name="jet_N_data" source="jets/jet_N_data"/>
-    <TH1 name="jet_pt1_data" source="jets/jet_pt1_data"/>
-    <TH1 name="MET_data" source="MET/MET_data"/>
-    <TH1 name="N_pre_data" source="PV/N_pre_data"/>
+    <TH1 name="muon_eta_DYJetsToLL" source="muons/muon_eta_DYJetsToLL"/>
+    <TH1 name="jet_N_DYJetsToLL" source="jets/jet_N_DYJetsToLL"/>
+    <TH1 name="jet_pt1_DYJetsToLL" source="jets/jet_pt1_DYJetsToLL"/>
+    <TH1 name="MET_DYJetsToLL" source="MET/MET_DYJetsToLL"/>
+    <TH1 name="NPV_DYJetsToLL" source="PV/NPV_DYJetsToLL"/>
+    <TH1 name="muon_relisocorr_DYJetsToLL" source="muons/muon_relisocorr_DYJetsToLL"/>
   </validation>
 
 <!-- done loading histograms -->
@@ -155,18 +190,60 @@
   </additionArray>
 
   <additionArray name="TTjets" title="TTjets">
+    <additionArrayItem array="ttjets_0l"/>
     <additionArrayItem array="ttjets_1l"/>
     <additionArrayItem array="ttjets_2l"/>
   </additionArray>
 
-  <superimpose name="muon_pt" title="All Muons p_{T} [GeV]" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
-    <superimposeItem name="muon_pt_data" color="1" legend="Data"/>
-    <superimposeItem name="muon_pt_ST" color="801" legend="Single top"/>
-    <superimposeItem name="muon_pt_DYJetsToLL" color="413" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
-    <superimposeItem name="muon_pt_Wjets" color="407" legend="W#rightarrowl#nu"/>
-    <superimposeItem name="muon_pt_TTjets" color="633" legend="t#bar{t}+jets"/>
-    <superimposeItem name="muon_pt_ttg" color="600" legend="t#bar{t}+#gamma"/>
+  <additionArray name="ttV" title="ttV">
+    <additionArrayItem array="ttW"/>
+    <additionArrayItem array="ttZ"/>
+  </additionArray>
+
+  <additionArray name="ttg_all" title="ttg_all">
+    <additionArrayItem array="ttg"/>
+    <additionArrayItem array="ttjets_1l_g"/>
+    <additionArrayItem array="ttjets_2l_g"/>
+  </additionArray>
+
+  <superimpose name="NPV" title="NPV" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="NPV_data" color="1" legend="Data"/>
+    <superimposeItem name="NPV_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="NPV_ST" color="616" legend="Single top"/>
+    <superimposeItem name="NPV_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="NPV_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="NPV_TTjets" color="633" legend="t#bar{t}+jets"/>
+    <superimposeItem name="NPV_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
   </superimpose>
 
+  <superimpose name="muon_pt" title="p_{T} [GeV]" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="muon_pt_data" color="1" legend="Data"/>
+    <superimposeItem name="muon_pt_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="muon_pt_ST" color="616" legend="Single top"/>
+    <superimposeItem name="muon_pt_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="muon_pt_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="muon_pt_TTjets" color="633" legend="t#bar{t}+jets"/>
+    <superimposeItem name="muon_pt_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+  </superimpose>
+
+  <superimpose name="muon_eta" title="muon eta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="false" PlotDiff="true" >
+    <superimposeItem name="muon_eta_data" color="1" legend="Data"/>
+    <superimposeItem name="muon_eta_ttV" color="797" legend="t#bar{t}+V"/> 
+    <superimposeItem name="muon_eta_ST" color="616" legend="Single top"/>
+    <superimposeItem name="muon_eta_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="muon_eta_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="muon_eta_TTjets" color="633" legend="t#bar{t}+jets"/>
+    <superimposeItem name="muon_eta_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+  </superimpose>
+
+  <superimpose name="jet_pt1" title="muon eta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="jet_pt1_data" color="1" legend="Data"/>
+    <superimposeItem name="jet_pt1_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="jet_pt1_ST" color="616" legend="Single top"/>
+    <superimposeItem name="jet_pt1_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="jet_pt1_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="jet_pt1_TTjets" color="633" legend="t#bar{t}+jets"/>
+    <superimposeItem name="jet_pt1_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+  </superimpose>
 
 </cuy>
