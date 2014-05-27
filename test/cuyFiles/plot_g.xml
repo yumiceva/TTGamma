@@ -1,0 +1,279 @@
+<cuy>
+
+  <global location="/uscms/home/yumiceva/work/CMSSW_5_3_14_patch1/src/TTGamma/test/histos/" banner="CMS Preliminary  L=19.6 fb^{-1} at #sqrt{s}=8 TeV">
+  </global>
+
+<!-- define location of files, histogram names and SFs -->
+
+<!-- data -->
+  <validation type="data" file="results_data.root" weight="1">
+    <TH1 name="cut0_et_data" source="photons/photon_cut0_pt_data"/>
+    <TH1 name="cut0_eta_data" source="photons/photon_cut0_eta_data"/>
+    <TH1 name="cut0_phi_data" source="photons/photon_cut0_phi_data"/>
+    <TH1 name="cut1_eVeto_data" source="photons/photon_cut1_eVeto_data"/>
+    <TH1 name="cut2_HoverE_data" source="photons/photon_cut2_HoverE_data"/>
+    <TH1 name="cut3_sigmaietaieta_data" source="photons/photon_cut3_sigmaietaieta_data"/>
+    <TH1 name="cut5_ntHadIso_data" source="photons/photon_cut5_ntHadIso_data"/>
+  </validation>
+<!-- ttbar -->
+  <validation type="ttjets_0l" file="results_ttjets_0l.root" weight="CrossSections8TeV.txt:ttjets_0l">
+    <TH1 name="cut0_et_ttjets_0l" source="photons/photon_cut0_pt_ttjets_0l"/>
+    <TH1 name="cut0_eta_ttjets_0l" source="photons/photon_cut0_eta_ttjets_0l"/>
+    <TH1 name="cut0_phi_ttjets_0l" source="photons/photon_cut0_phi_ttjets_0l"/>
+    <TH1 name="cut1_eVeto_ttjets_0l" source="photons/photon_cut1_eVeto_ttjets_0l"/>
+    <TH1 name="cut2_HoverE_ttjets_0l" source="photons/photon_cut2_HoverE_ttjets_0l"/>
+    <TH1 name="cut3_sigmaietaieta_ttjets_0l" source="photons/photon_cut3_sigmaietaieta_ttjets_0l"/>
+    <TH1 name="cut5_ntHadIso_ttjets_0l" source="photons/photon_cut5_ntHadIso_ttjets_0l"/>
+  </validation>
+
+  <validation type="ttjets_1l" file="results_ttjets_1l.root" weight="CrossSections8TeV.txt:ttjets_1l">
+    <TH1 name="cut0_et_ttjets_1l" source="photons/photon_cut0_pt_ttjets_1l"/>
+    <TH1 name="cut0_eta_ttjets_1l" source="photons/photon_cut0_eta_ttjets_1l"/>
+    <TH1 name="cut0_phi_ttjets_1l" source="photons/photon_cut0_phi_ttjets_1l"/>
+    <TH1 name="cut1_eVeto_ttjets_1l" source="photons/photon_cut1_eVeto_ttjets_1l"/>
+    <TH1 name="cut2_HoverE_ttjets_1l" source="photons/photon_cut2_HoverE_ttjets_1l"/>
+    <TH1 name="cut3_sigmaietaieta_ttjets_1l" source="photons/photon_cut3_sigmaietaieta_ttjets_1l"/>
+    <TH1 name="cut5_ntHadIso_ttjets_1l" source="photons/photon_cut5_ntHadIso_ttjets_1l"/>
+  </validation>
+
+  <validation type="ttjets_2l" file="results_ttjets_2l.root" weight="CrossSections8TeV.txt:ttjets_2l">
+    <TH1 name="cut0_et_ttjets_2l" source="photons/photon_cut0_pt_ttjets_2l"/>
+    <TH1 name="cut0_eta_ttjets_2l" source="photons/photon_cut0_eta_ttjets_2l"/>
+    <TH1 name="cut0_phi_ttjets_2l" source="photons/photon_cut0_phi_ttjets_2l"/>
+    <TH1 name="cut1_eVeto_ttjets_2l" source="photons/photon_cut1_eVeto_ttjets_2l"/>
+    <TH1 name="cut2_HoverE_ttjets_2l" source="photons/photon_cut2_HoverE_ttjets_2l"/>
+    <TH1 name="cut3_sigmaietaieta_ttjets_2l" source="photons/photon_cut3_sigmaietaieta_ttjets_2l"/>
+    <TH1 name="cut5_ntHadIso_ttjets_2l" source="photons/photon_cut5_ntHadIso_ttjets_2l"/>
+  </validation>
+<!-- single top -->
+  <validation type="t_s" file="results_t_s.root" weight="CrossSections8TeV.txt:t_s">
+    <TH1 name="cut0_et_t_s" source="photons/photon_cut0_pt_t_s"/>
+    <TH1 name="cut0_eta_t_s" source="photons/photon_cut0_eta_t_s"/>
+    <TH1 name="cut0_phi_t_s" source="photons/photon_cut0_phi_t_s"/>
+    <TH1 name="cut1_eVeto_t_s" source="photons/photon_cut1_eVeto_t_s"/>
+    <TH1 name="cut2_HoverE_t_s" source="photons/photon_cut2_HoverE_t_s"/>
+    <TH1 name="cut3_sigmaietaieta_t_s" source="photons/photon_cut3_sigmaietaieta_t_s"/>
+    <TH1 name="cut5_ntHadIso_t_s" source="photons/photon_cut5_ntHadIso_t_s"/>
+  </validation>
+
+  <validation type="t_t" file="results_t_t.root" weight="CrossSections8TeV.txt:t_t">
+    <TH1 name="cut0_et_t_t" source="photons/photon_cut0_pt_t_t"/>
+    <TH1 name="cut0_eta_t_t" source="photons/photon_cut0_eta_t_t"/>
+    <TH1 name="cut0_phi_t_t" source="photons/photon_cut0_phi_t_t"/>
+    <TH1 name="cut1_eVeto_t_t" source="photons/photon_cut1_eVeto_t_t"/>
+    <TH1 name="cut2_HoverE_t_t" source="photons/photon_cut2_HoverE_t_t"/>
+    <TH1 name="cut3_sigmaietaieta_t_t" source="photons/photon_cut3_sigmaietaieta_t_t"/>
+    <TH1 name="cut5_ntHadIso_t_t" source="photons/photon_cut5_ntHadIso_t_t"/>
+  </validation>
+
+  <validation type="t_tW" file="results_t_tW.root" weight="CrossSections8TeV.txt:t_tW">
+    <TH1 name="cut0_et_t_tW" source="photons/photon_cut0_pt_t_tW"/>
+    <TH1 name="cut0_eta_t_tW" source="photons/photon_cut0_eta_t_tW"/>
+    <TH1 name="cut0_phi_t_tW" source="photons/photon_cut0_phi_t_tW"/>
+    <TH1 name="cut1_eVeto_t_tW" source="photons/photon_cut1_eVeto_t_tW"/>
+    <TH1 name="cut2_HoverE_t_tW" source="photons/photon_cut2_HoverE_t_tW"/>
+    <TH1 name="cut3_sigmaietaieta_t_tW" source="photons/photon_cut3_sigmaietaieta_t_tW"/>
+    <TH1 name="cut5_ntHadIso_t_tW" source="photons/photon_cut5_ntHadIso_t_tW"/>
+  </validation>
+
+  <validation type="tbar_s" file="results_tbar_s.root" weight="CrossSections8TeV.txt:tbar_s">
+    <TH1 name="cut0_et_tbar_s" source="photons/photon_cut0_pt_tbar_s"/>
+    <TH1 name="cut0_eta_tbar_s" source="photons/photon_cut0_eta_tbar_s"/>
+    <TH1 name="cut0_phi_tbar_s" source="photons/photon_cut0_phi_tbar_s"/>
+    <TH1 name="cut1_eVeto_tbar_s" source="photons/photon_cut1_eVeto_tbar_s"/>
+    <TH1 name="cut2_HoverE_tbar_s" source="photons/photon_cut2_HoverE_tbar_s"/>
+    <TH1 name="cut3_sigmaietaieta_tbar_s" source="photons/photon_cut3_sigmaietaieta_tbar_s"/>
+    <TH1 name="cut5_ntHadIso_tbar_s" source="photons/photon_cut5_ntHadIso_tbar_s"/>
+  </validation>
+
+  <validation type="tbar_t" file="results_tbar_t.root" weight="CrossSections8TeV.txt:tbar_t">
+    <TH1 name="cut0_et_tbar_t" source="photons/photon_cut0_pt_tbar_t"/>
+    <TH1 name="cut0_eta_tbar_t" source="photons/photon_cut0_eta_tbar_t"/>
+    <TH1 name="cut0_phi_tbar_t" source="photons/photon_cut0_phi_tbar_t"/>
+    <TH1 name="cut1_eVeto_tbar_t" source="photons/photon_cut1_eVeto_tbar_t"/>
+    <TH1 name="cut2_HoverE_tbar_t" source="photons/photon_cut2_HoverE_tbar_t"/>
+    <TH1 name="cut3_sigmaietaieta_tbar_t" source="photons/photon_cut3_sigmaietaieta_tbar_t"/>
+    <TH1 name="cut5_ntHadIso_tbar_t" source="photons/photon_cut5_ntHadIso_tbar_t"/>
+  </validation>
+
+  <validation type="tbar_tW" file="results_tbar_tW.root" weight="CrossSections8TeV.txt:tbar_tW">
+    <TH1 name="cut0_et_tbar_tW" source="photons/photon_cut0_pt_tbar_tW"/>
+    <TH1 name="cut0_eta_tbar_tW" source="photons/photon_cut0_eta_tbar_tW"/>
+    <TH1 name="cut0_phi_tbar_tW" source="photons/photon_cut0_phi_tbar_tW"/>
+    <TH1 name="cut1_eVeto_tbar_tW" source="photons/photon_cut1_eVeto_tbar_tW"/>
+    <TH1 name="cut2_HoverE_tbar_tW" source="photons/photon_cut2_HoverE_tbar_tW"/>
+    <TH1 name="cut3_sigmaietaieta_tbar_tW" source="photons/photon_cut3_sigmaietaieta_tbar_tW"/>
+    <TH1 name="cut5_ntHadIso_tbar_tW" source="photons/photon_cut5_ntHadIso_tbar_tW"/>
+  </validation>
+<!-- associate ttbarX -->
+  <validation type="ttW" file="results_ttW.root" weight="CrossSections8TeV.txt:ttW">
+    <TH1 name="cut0_et_ttW" source="photons/photon_cut0_pt_ttW"/>
+    <TH1 name="cut0_eta_ttW" source="photons/photon_cut0_eta_ttW"/>
+    <TH1 name="cut0_phi_ttW" source="photons/photon_cut0_phi_ttW"/>
+    <TH1 name="cut1_eVeto_ttW" source="photons/photon_cut1_eVeto_ttW"/>
+    <TH1 name="cut2_HoverE_ttW" source="photons/photon_cut2_HoverE_ttW"/>
+    <TH1 name="cut3_sigmaietaieta_ttW" source="photons/photon_cut3_sigmaietaieta_ttW"/>
+    <TH1 name="cut5_ntHadIso_ttW" source="photons/photon_cut5_ntHadIso_ttW"/>
+  </validation>
+
+  <validation type="ttZ" file="results_ttZ.root" weight="CrossSections8TeV.txt:ttZ">
+    <TH1 name="cut0_et_ttZ" source="photons/photon_cut0_pt_ttZ"/>
+    <TH1 name="cut0_eta_ttZ" source="photons/photon_cut0_eta_ttZ"/>
+    <TH1 name="cut0_phi_ttZ" source="photons/photon_cut0_phi_ttZ"/>
+    <TH1 name="cut1_eVeto_ttZ" source="photons/photon_cut1_eVeto_ttZ"/>
+    <TH1 name="cut2_HoverE_ttZ" source="photons/photon_cut2_HoverE_ttZ"/>
+    <TH1 name="cut3_sigmaietaieta_ttZ" source="photons/photon_cut3_sigmaietaieta_ttZ"/>
+    <TH1 name="cut5_ntHadIso_ttZ" source="photons/photon_cut5_ntHadIso_ttZ"/>
+  </validation>
+
+  <validation type="ttg" file="results_ttg.root" weight="CrossSections8TeV.txt:ttg">
+    <TH1 name="cut0_et_ttg" source="photons/photon_cut0_pt_ttg"/>
+    <TH1 name="cut0_eta_ttg" source="photons/photon_cut0_eta_ttg"/>
+    <TH1 name="cut0_phi_ttg" source="photons/photon_cut0_phi_ttg"/>
+    <TH1 name="cut1_eVeto_ttg" source="photons/photon_cut1_eVeto_ttg"/>
+    <TH1 name="cut2_HoverE_ttg" source="photons/photon_cut2_HoverE_ttg"/>
+    <TH1 name="cut3_sigmaietaieta_ttg" source="photons/photon_cut3_sigmaietaieta_ttg"/>
+    <TH1 name="cut5_ntHadIso_ttg" source="photons/photon_cut5_ntHadIso_ttg"/>
+  </validation>
+
+  <validation type="ttjets_1l_g" file="results_ttjets_1l_g.root" weight="CrossSections8TeV.txt:ttjets_1l">
+    <TH1 name="cut0_et_ttjets_1l_g" source="photons/photon_cut0_pt_ttjets_1l_g"/>
+    <TH1 name="cut0_eta_ttjets_1l_g" source="photons/photon_cut0_eta_ttjets_1l_g"/>
+    <TH1 name="cut0_phi_ttjets_1l_g" source="photons/photon_cut0_phi_ttjets_1l_g"/>
+    <TH1 name="cut1_eVeto_ttjets_1l_g" source="photons/photon_cut1_eVeto_ttjets_1l_g"/>
+    <TH1 name="cut2_HoverE_ttjets_1l_g" source="photons/photon_cut2_HoverE_ttjets_1l_g"/>
+    <TH1 name="cut3_sigmaietaieta_ttjets_1l_g" source="photons/photon_cut3_sigmaietaieta_ttjets_1l_g"/>
+    <TH1 name="cut5_ntHadIso_ttjets_1l_g" source="photons/photon_cut5_ntHadIso_ttjets_1l_g"/>
+  </validation>
+
+  <validation type="ttjets_2l_g" file="results_ttjets_2l_g.root" weight="CrossSections8TeV.txt:ttjets_2l">
+    <TH1 name="cut0_et_ttjets_2l_g" source="photons/photon_cut0_pt_ttjets_2l_g"/>
+    <TH1 name="cut0_eta_ttjets_2l_g" source="photons/photon_cut0_eta_ttjets_2l_g"/>
+    <TH1 name="cut0_phi_ttjets_2l_g" source="photons/photon_cut0_phi_ttjets_2l_g"/>
+    <TH1 name="cut1_eVeto_ttjets_2l_g" source="photons/photon_cut1_eVeto_ttjets_2l_g"/>
+    <TH1 name="cut2_HoverE_ttjets_2l_g" source="photons/photon_cut2_HoverE_ttjets_2l_g"/>
+    <TH1 name="cut3_sigmaietaieta_ttjets_2l_g" source="photons/photon_cut3_sigmaietaieta_ttjets_2l_g"/>
+    <TH1 name="cut5_ntHadIso_ttjets_2l_g" source="photons/photon_cut5_ntHadIso_ttjets_2l_g"/>
+  </validation>
+
+<!-- EWK  -->
+  <validation type="Wjets" file="results_Wjets.root" weight="CrossSections8TeV.txt:Wjets">
+    <TH1 name="cut0_et_Wjets" source="photons/photon_cut0_pt_Wjets"/>
+    <TH1 name="cut0_eta_Wjets" source="photons/photon_cut0_eta_Wjets"/>
+    <TH1 name="cut0_phi_Wjets" source="photons/photon_cut0_phi_Wjets"/>
+    <TH1 name="cut1_eVeto_Wjets" source="photons/photon_cut1_eVeto_Wjets"/>
+    <TH1 name="cut2_HoverE_Wjets" source="photons/photon_cut2_HoverE_Wjets"/>
+    <TH1 name="cut3_sigmaietaieta_Wjets" source="photons/photon_cut3_sigmaietaieta_Wjets"/>
+    <TH1 name="cut5_ntHadIso_Wjets" source="photons/photon_cut5_ntHadIso_Wjets"/>
+  </validation>
+
+  <validation type="DYJetsToLL" file="results_DYJetsToLL.root" weight="CrossSections8TeV.txt:DYJetsToLL">
+    <TH1 name="cut0_et_DYJetsToLL" source="photons/photon_cut0_pt_DYJetsToLL"/>
+    <TH1 name="cut0_eta_DYJetsToLL" source="photons/photon_cut0_eta_DYJetsToLL"/>
+    <TH1 name="cut0_phi_DYJetsToLL" source="photons/photon_cut0_phi_DYJetsToLL"/>
+    <TH1 name="cut1_eVeto_DYJetsToLL" source="photons/photon_cut1_eVeto_DYJetsToLL"/>
+    <TH1 name="cut2_HoverE_DYJetsToLL" source="photons/photon_cut2_HoverE_DYJetsToLL"/>
+    <TH1 name="cut3_sigmaietaieta_DYJetsToLL" source="photons/photon_cut3_sigmaietaieta_DYJetsToLL"/>
+    <TH1 name="cut5_ntHadIso_DYJetsToLL" source="photons/photon_cut5_ntHadIso_DYJetsToLL"/>
+  </validation>
+
+<!-- done loading histograms -->
+
+<!-- add all the single top samples into one called ST -->
+  <additionArray name="ST" title="ST">
+    <additionArrayItem array="t_s"/>
+    <additionArrayItem array="t_t"/>
+    <additionArrayItem array="t_tW"/>
+    <additionArrayItem array="tbar_s"/>
+    <additionArrayItem array="tbar_t"/>
+    <additionArrayItem array="tbar_tW"/>
+  </additionArray>
+
+  <additionArray name="TTjets" title="TTjets">
+    <additionArrayItem array="ttjets_0l"/>
+    <additionArrayItem array="ttjets_1l"/>
+    <additionArrayItem array="ttjets_2l"/>
+  </additionArray>
+
+  <additionArray name="ttV" title="ttV">
+    <additionArrayItem array="ttW"/>
+    <additionArrayItem array="ttZ"/>
+  </additionArray>
+
+  <additionArray name="ttg_all" title="ttg_all">
+    <additionArrayItem array="ttg"/>
+    <additionArrayItem array="ttjets_1l_g"/>
+    <additionArrayItem array="ttjets_2l_g"/>
+  </additionArray>
+
+  <superimpose name="cut0_et" title="cut0_et" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="cut0_et_data" color="1" legend="Data"/>
+    <superimposeItem name="cut0_et_ttg_all" color="870" legend="t#bar{t}+#gamma"/> 
+    <superimposeItem name="cut0_et_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut0_et_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut0_et_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut0_et_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut0_et_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+  <superimpose name="cut0_eta" title="cut0_eta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="false" PlotDiff="true" >
+    <superimposeItem name="cut0_eta_data" color="1" legend="Data"/>
+    <superimposeItem name="cut0_eta_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+    <superimposeItem name="cut0_eta_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut0_eta_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut0_eta_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut0_eta_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut0_eta_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+  <superimpose name="cut0_phi" title="cut0_phi" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="false" PlotDiff="true" >
+    <superimposeItem name="cut0_phi_data" color="1" legend="Data"/>
+    <superimposeItem name="cut0_phi_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+    <superimposeItem name="cut0_phi_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut0_phi_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut0_phi_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut0_phi_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut0_phi_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+  <superimpose name="cut1_eVeto" title="cut1_eVeto" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="false" PlotDiff="true" >
+    <superimposeItem name="cut1_eVeto_data" color="1" legend="Data"/>
+    <superimposeItem name="cut1_eVeto_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+    <superimposeItem name="cut1_eVeto_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut1_eVeto_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut1_eVeto_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut1_eVeto_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut1_eVeto_TTjets" color="633" legend="t#bar{t}+jets"/></superimpose>
+
+  <superimpose name="cut2_HoverE" title="cut2_HoverE" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="cut2_HoverE_data" color="1" legend="Data"/>
+    <superimposeItem name="cut2_HoverE_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+    <superimposeItem name="cut2_HoverE_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut2_HoverE_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut2_HoverE_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut2_HoverE_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut2_HoverE_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+  <superimpose name="cut3_sigmaietaieta" title="cut3_sigmaietaieta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="cut3_sigmaietaieta_data" color="1" legend="Data"/>
+    <superimposeItem name="cut3_sigmaietaieta_ttg_all" color="870" legend="t#bar{t}+#gamma"/>    
+    <superimposeItem name="cut3_sigmaietaieta_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut3_sigmaietaieta_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut3_sigmaietaieta_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut3_sigmaietaieta_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut3_sigmaietaieta_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+  <superimpose name="cut5_ntHadIso" title="cut5_ntHadIso" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+    <superimposeItem name="cut5_ntHadIso_data" color="1" legend="Data"/>
+    <superimposeItem name="cut5_ntHadIso_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
+    <superimposeItem name="cut5_ntHadIso_ttV" color="797" legend="t#bar{t}+V"/>
+    <superimposeItem name="cut5_ntHadIso_ST" color="616" legend="Single top"/>
+    <superimposeItem name="cut5_ntHadIso_DYJetsToLL" color="858" legend="Z/#gamma*#rightarrowl^{+}l^{-}"/>
+    <superimposeItem name="cut5_ntHadIso_Wjets" color="413" legend="W#rightarrowl#nu"/>
+    <superimposeItem name="cut5_ntHadIso_TTjets" color="633" legend="t#bar{t}+jets"/>
+  </superimpose>
+
+
+</cuy>
