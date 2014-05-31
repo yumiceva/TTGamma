@@ -290,6 +290,11 @@ void ttgamma3::SlaveBegin(TTree * tree)
   hphotons["sigmaietaieta"] = new TH1F("photon_sigmaietaieta"+hname,"#sigma_{i#etai#eta}",50,0,0.03);
   hphotons["chHadIso"] = new TH1F("photon_chHadIso"+hname,"Charged Hadron Isolation",40,0,10);
   hphotons["Ngood"] = new TH1F("photon_Ngood"+hname,"Number of photons",8,-0.5,7.5);
+  hphotons["et"] = new TH1F("photon_pt"+hname,"p_{T}^{#gamma} [GeV/c]", 50, 20,500);
+  hphotons["eta"] = new TH1F("photon_eta"+hname,"#eta^{#gamma}", 20, -2.1, 2.1);
+  hphotons["phi"] = new TH1F("photon_phi"+hname,"#phi^{#gamma}", 20, 0, 3.15);
+  hphotons["pfIso"] = new TH1F("photon_pfIso"+hname,"PF photon Isolation",40,0,10);
+  hphotons["ntHadIso"] = new TH1F("photon_ntHadIso"+hname,"Neutral Hadron Isolation",40,0,10);
   // mass
   hM["M3"] = new TH1F("M3"+hname,"M3 [GeV/c^{2}]", 40, 0, 1000); 
   hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
@@ -414,25 +419,22 @@ Bool_t ttgamma3::Process(Long64_t entry)
   fReader->GetEntry(entry);
 
   // MC plots for ttbar samples
-  if ( fSample == "ttg" || fSample == "ttjets_0l" || fSample == "ttjets_1l" || fSample == "ttjets_2l" || fSample == "ttjets_0l_g" || fSample == "ttjets_1l_g" || fSample == "ttjets_2l_g")
+  if ( fSample == "ttg" || fSample == "ttgWhizard" || fSample == "ttjets_0l" || fSample == "ttjets_1l" || fSample == "ttjets_2l" || fSample == "ttjets_0l_g" || fSample == "ttjets_1l_g" || fSample == "ttjets_2l_g")
     {
       for(int imc = 0; imc < fReader->nMC; ++imc)             //Loop over gen particles
         {
           hMC["PID"]->Fill( fReader->mcPID->at(imc) );
-        }
-    }
-
-  ///////////////////////////////////
-  // check photon mom in ttg sample
-  ///////////////////////////////////
-  if ( fSample == "ttg" ) 
-    {
-      for(int imc = 0; imc < fReader->nMC; ++imc)             //Loop over gen particles
-        {
-          // photons
-          if ( fReader->mcPID->at(imc) == 22 && fReader->mcStatus->at(imc) == 1)
+        
+          ///////////////////////////////////
+          // check photon mom in ttg sample
+          ///////////////////////////////////
+          if ( fSample == "ttg" || fSample == "ttgWhizard" ) 
             {
-              hphotons["mc_momID"]->Fill( fReader->mcMomPID->at(imc) );
+              // photons
+              if ( fReader->mcPID->at(imc) == 22 && fReader->mcStatus->at(imc) == 1)
+                {
+                  hphotons["mc_momID"]->Fill( fReader->mcMomPID->at(imc) );
+                }
             }
         }
     }
@@ -938,7 +940,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   ///////////////////////////////////
   float Ngamma[8] = {0.};
   int Ngood_gamma = 0;
-
+  
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedPhotonID2012
   // photon ID is not going to be changed every time this code runs
   // barrel/endcap, Loose/Medium/Tight
@@ -1024,8 +1026,12 @@ Bool_t ttgamma3::Process(Long64_t entry)
                         if ( pfIso < ( photonID_RhoCorrR03PhoIso_0[region][photon_ID] + tmpp4.Et() * photonID_RhoCorrR03PhoIso_1[region][photon_ID] ) ) 
                           {
                             Ngamma[7]+= EvtWeight;
-                            hphotons["sigmaietaieta"]->Fill( ietaieta, EvtWeight );
-                            hphotons["chHadIso"]->Fill( chHadIso, EvtWeight );
+                            if ( Ngood_gamma == 0 )
+                              {
+                                p4photon = tmpp4;
+                                hphotons["sigmaietaieta"]->Fill( ietaieta, EvtWeight );
+                                hphotons["chHadIso"]->Fill( chHadIso, EvtWeight );
+                              }
                             Ngood_gamma++;
                           }
                       }

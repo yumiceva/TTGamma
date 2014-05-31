@@ -157,10 +157,10 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixMC+"job_summer12_ttg.root");
       vsamples.insert(StrVecPair("ttg",vec));
       vec.clear();
-      //ttgWz
-      //vec.push_back(prefixMC+"job_summer12_ttg_WHIZARD_v11.root");
-      //vsamples.insert(StrVecPair("ttgWz",vec));
-      //vec.clear();
+      //ttgWhizard
+      vec.push_back("/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/misha/job_summer12_whizard_2to5_ttA.root");
+      vsamples.insert(StrVecPair("ttgWhizard",vec));
+      vec.clear();
       //ttjets
       //vec.push_back(prefixMC+"job_summer12_ttinclusive.root");
       //vsamples.insert(StrVecPair("ttjets",vec));
@@ -322,10 +322,10 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixSkim+"skim_ttg.root");
       vsamples.insert(StrVecPair("ttg",vec));
       vec.clear();
-      //ttgWz
-      //vec.push_back(prefixSkim+"skim_ttg_WHIZARD_v11.root");
-      //vsamples.insert(StrVecPair("ttgWz",vec));
-      //vec.clear();
+      //ttgWhizard
+      vec.push_back(prefixSkim+"skim_ttgWhizard.root");
+      vsamples.insert(StrVecPair("ttgWhizard",vec));
+      vec.clear();
       //ttjets_1l
       vec.push_back(prefixSkim+"skim_ttjets_1l.root");
       vsamples.insert(StrVecPair("ttjets_1l",vec));

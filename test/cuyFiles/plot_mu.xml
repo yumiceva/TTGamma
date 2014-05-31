@@ -126,14 +126,14 @@
     <TH1 name="muon_relisocorr_ttZ" source="muons/muon_relisocorr_ttZ"/>
   </validation>
 
-  <validation type="ttg" file="results_ttg.root" weight="CrossSections8TeV.txt:ttg">
-    <TH1 name="muon_pt_ttg" source="muons/muon_pt_ttg"/>
-    <TH1 name="muon_eta_ttg" source="muons/muon_eta_ttg"/>
-    <TH1 name="jet_N_ttg" source="jets/jet_N_ttg"/>
-    <TH1 name="jet_pt1_ttg" source="jets/jet_pt1_ttg"/>
-    <TH1 name="MET_ttg" source="MET/MET_ttg"/>
-    <TH1 name="NPV_ttg" source="PV/NPV_ttg"/>
-    <TH1 name="muon_relisocorr_ttg" source="muons/muon_relisocorr_ttg"/>
+  <validation type="ttgWhizard" file="results_ttgWhizard.root" weight="CrossSections8TeV.txt:ttgWhizard">
+    <TH1 name="muon_pt_ttgWhizard" source="muons/muon_pt_ttgWhizard"/>
+    <TH1 name="muon_eta_ttgWhizard" source="muons/muon_eta_ttgWhizard"/>
+    <TH1 name="jet_N_ttgWhizard" source="jets/jet_N_ttgWhizard"/>
+    <TH1 name="jet_pt1_ttgWhizard" source="jets/jet_pt1_ttgWhizard"/>
+    <TH1 name="MET_ttgWhizard" source="MET/MET_ttgWhizard"/>
+    <TH1 name="NPV_ttgWhizard" source="PV/NPV_ttgWhizard"/>
+    <TH1 name="muon_relisocorr_ttgWhizard" source="muons/muon_relisocorr_ttgWhizard"/>
   </validation>
 
   <validation type="ttjets_1l_g" file="results_ttjets_1l_g.root" weight="CrossSections8TeV.txt:ttjets_1l">
@@ -201,7 +201,7 @@
   </additionArray>
 
   <additionArray name="ttg_all" title="ttg_all">
-    <additionArrayItem array="ttg"/>
+    <additionArrayItem array="ttgWhizard"/>
     <additionArrayItem array="ttjets_1l_g"/>
     <additionArrayItem array="ttjets_2l_g"/>
   </additionArray>

@@ -10,6 +10,8 @@
 data            1.0             1.0
 # MC
 # signal Whizard 1.816
+ttgWhizard      1.8             1074860
+# old ttgamma MG: 
 ttg             1.8             1719954
 #
 # 252.89*0.676*(1-0.676)*2, without filter: 24849110

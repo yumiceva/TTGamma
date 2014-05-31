@@ -126,14 +126,14 @@
     <TH1 name="muon_relisocorr_ttZ" source="muons/muon_relisocorr_pre_ttZ"/>
   </validation>
 
-  <validation type="ttg" file="results_ttg.root" weight="CrossSections8TeV.txt:ttg">
-    <TH1 name="muon_pt_ttg" source="muons/muon_pt_pre_ttg"/>
-    <TH1 name="muon_eta_ttg" source="muons/muon_eta_pre_ttg"/>
-    <TH1 name="jet_N_ttg" source="jets/jet_N_pre_ttg"/>
-    <TH1 name="jet_pt1_ttg" source="jets/jet_pt1_pre_ttg"/>
-    <TH1 name="MET_ttg" source="MET/MET_pre_ttg"/>
-    <TH1 name="NPV_ttg" source="PV/NPV_pre_ttg"/>
-    <TH1 name="muon_relisocorr_ttg" source="muons/muon_relisocorr_pre_ttg"/>
+  <validation type="ttgWhizard" file="results_ttgWhizard.root" weight="CrossSections8TeV.txt:ttgWhizard">
+    <TH1 name="muon_pt_ttgWhizard" source="muons/muon_pt_pre_ttgWhizard"/>
+    <TH1 name="muon_eta_ttgWhizard" source="muons/muon_eta_pre_ttgWhizard"/>
+    <TH1 name="jet_N_ttgWhizard" source="jets/jet_N_pre_ttgWhizard"/>
+    <TH1 name="jet_pt1_ttgWhizard" source="jets/jet_pt1_pre_ttgWhizard"/>
+    <TH1 name="MET_ttgWhizard" source="MET/MET_pre_ttgWhizard"/>
+    <TH1 name="NPV_ttgWhizard" source="PV/NPV_pre_ttgWhizard"/>
+    <TH1 name="muon_relisocorr_ttgWhizard" source="muons/muon_relisocorr_pre_ttgWhizard"/>
   </validation>
 
 <!-- EWK  -->
