@@ -43,6 +43,12 @@ public :
   bool              fdoJER;
   bool              fdoJERdown;
   bool              fdoJERup;
+  bool              fdoBTAG;
+  bool              fdoBTAGdown;
+  bool              fdoBTAGup;
+  bool              fdoTOPPT;
+  bool              fdoTOPPTdown;
+  bool              fdoTOPPTup;
   bool              fdoHLT;
   bool              fdoSkim;
   bool              fdoMuSF;
@@ -58,6 +64,7 @@ public :
   map< string, TH1*> helectrons;
   map< string, TH1*> hphotons;
   map< string, TH1*> hjets;
+  map< string, TH1*> hbtag;
   map< string, TH1*> hPVs;
   map< string, TH1*> hMET;
   map< string, TH1*> hM;
@@ -72,6 +79,7 @@ public :
   double phoEffArea03ChHad( double phoEta);
   double phoEffArea03NeuHad( double phoEta);
   double phoEffArea03Pho( double phoEta);
+  float SFtop( float pt );
 
   ttgamma3(TTree * /*tree*/ =0) : fProofFile(0),h1test(0),hPU_weights(0),fFile(0),fChain(0) 
   { 
@@ -88,6 +96,12 @@ public :
     fdoHLT   =       true;
     fdoSkim  =       false;
     fdoMuSF  =       true;
+    fdoBTAG  =       true;
+    fdoBTAGdown =    false;
+    fdoBTAGup   =    false;
+    fdoTOPPT =       true;
+    fdoTOPPTdown =   false;
+    fdoTOPPTup   =   false;
     fKeepOnlyPhotons=false;
     fN_tt_filter =   0;
   }

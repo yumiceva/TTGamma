@@ -57,6 +57,14 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(xroo_prefix + "/store/user/makouski/job_summer12_Wjets.root");
       vsamples.insert(StrVecPair("Wjets",vec));
       vec.clear();
+      //W3jets
+      vec.push_back("/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/iraklis/Makouski/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/W3JetsToLNu_TuneZ2Star_8TeV-madgraph.root");
+      vsamples.insert(StrVecPair("W3jets",vec));
+      vec.clear();
+      //W4jets
+      vec.push_back("/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/iraklis/Makouski/CMSSW_5_3_12/src/ggAnalysis/ggNtuplizer/test/W4JetsToLNu_TuneZ2Star_8TeV-madgraph.root");
+      vsamples.insert(StrVecPair("W4jets",vec));
+      vec.clear();
       //WW_2l2nu
       //vec.push_back(prefixMC+"job_summer12_WW_2l2nu.root");
       //vsamples.insert(StrVecPair("WW_2l2nu",vec));
@@ -221,6 +229,14 @@ void InitSamples( TString ExtraOpts= "")
       //Wjets
       vec.push_back(prefixSkim+"skim_Wjets.root");
       vsamples.insert(StrVecPair("Wjets",vec));
+      vec.clear();
+      //W3jets
+      vec.push_back(prefixSkim+"skim_W3jets.root");
+      vsamples.insert(StrVecPair("W3jets",vec));
+      vec.clear();
+      //W4jets
+      vec.push_back(prefixSkim+"skim_W4jets.root");
+      vsamples.insert(StrVecPair("W4jets",vec));
       vec.clear();
       //WW_2l2nu
       //vec.push_back(prefixSkim+"skim_WW_2l2nu.root");

@@ -11,6 +11,7 @@ sleep 1m
 ./ttgamma Wjets muon inputskim outdir=./histos/ >& histos/histos_Wjets.log &
 sleep 1m
 ./ttgamma ttg muon inputskim outdir=./histos/ >& histos/histos_ttg.log &
+./ttgamma ttgWhizard muon inputskim outdir=./histos/ >& histos/histos_ttgWhizard.log &
 ./ttgamma ttW muon inputskim outdir=./histos/ >& histos/histos_ttW.log &
 ./ttgamma ttZ muon inputskim outdir=./histos/ >& histos/histos_ttZ.log &
 sleep 1m

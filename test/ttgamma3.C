@@ -28,6 +28,8 @@
 #include "ElectronSelector.h"
 #include "MuonSelector.h"
 #include "MuonScaleFactor.h"
+#include "BTagScaleFactor.h"
+
 #include <TH2.h>
 #include <TStyle.h>
 #include <TSystem.h>
@@ -64,6 +66,13 @@ double ttgamma3::phoEffArea03Pho(double phoEta){
   double eta = TMath::Abs(phoEta);
   static const double area[7] = {0.148, 0.130, 0.112, 0.216, 0.262, 0.260, 0.266};
   return area[phoRegion(eta)];
+}
+
+// https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopPtReweighting
+float ttgamma3::SFtop(float pt){
+  if(fdoTOPPT && fdoTOPPTdown==false && fdoTOPPTup==false) return exp(0.159 - 0.00141*pt);
+  if(fdoTOPPT && fdoTOPPTup) return exp(0.148 - 0.00129*pt);
+  return 1.0;
 }
 
 void ttgamma3::ParseInput()
@@ -121,11 +130,15 @@ void ttgamma3::ParseInput()
   if (fIsMC) 
     {
       fPUreweighting = true;
+      fdoTOPPT = true;
+      fdoBTAG = false;
     }
   else 
     {
       fPUreweighting = false;
       fdoMuSF = false;
+      fdoTOPPT = false;
+      fdoBTAG = false;
     }
 
   if (fMyOpt.Contains("sync"))
@@ -147,8 +160,10 @@ void ttgamma3::ParseInput()
 
   if ( fMyOpt.Contains("noMuSF") ) fdoMuSF = false;
   
-  if ( fPUreweighting ) Info("Begin","Apply PU reweighting");
-  if ( fdoMuSF ) Info("Begin","Apply muon scale factors");
+  if ( fPUreweighting ) Info("Begin","Apply PU reweighting.");
+  if ( fdoMuSF ) Info("Begin","Apply muon scale factors.");
+  if ( fdoTOPPT ) Info("Begin","Apply top pt reweighting.");
+  if ( fdoBTAG ) Info("Begin","Apply b-tagging scale factors.");
 }
 
 void ttgamma3::WriteHistograms(const char* name, map<string, TH1*> hcontainer)
@@ -267,6 +282,17 @@ void ttgamma3::SlaveBegin(TTree * tree)
   hjets["Nbtags_CSVM"] = new TH1F("Nbjets_CSVM"+hname,"Tagged b-jets",3,-0.5,2.5);
   hjets["btag_CSV"] = new TH1F("btag_CSV"+hname,"btag CSV discriminator",50,0,1);
   hjets["pt_top"]  = new TH1F("pt_top"+hname,"top p_{T} [GeV]",50,0,1500);
+  // btagging
+  hbtag["jet_pt_b"] = new  TH1F("jet_pt_b","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["jet_pt_c"] = new  TH1F("jet_pt_c","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["jet_pt_udsg"] = new  TH1F("jet_pt_udsg","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["jet_pt_CSVM_b"] = new  TH1F("jet_pt_CSVM_b","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["jet_pt_CSVM_c"] = new  TH1F("jet_pt_CSVM_c","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["jet_pt_CSVM_udsg"] = new  TH1F("jet_pt_CSVM_udsg","Jet p_{T} [GeV/c]", 50, 0, 200);
+  hbtag["discriminator_CSV"] = new TH1F("discriminator_CSV", "Discriminator CSV", 1500, -20, 20);
+  hbtag["discriminator_CSV_b"] = new TH1F("discriminator_CSV_b", "Discriminator CSV", 1500, -20, 20);
+  hbtag["discriminator_CSV_c"] = new TH1F("discriminator_CSV_c", "Discriminator CSV", 1500, -20, 20);
+  hbtag["discriminator_CSV_udsg"] = new TH1F("discriminator_CSV_udsg", "Discriminator CSV", 1500, -20, 20);
   // MET
   hMET["MET_pre"] = new TH1F("MET_pre"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
   hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
@@ -296,7 +322,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
   hphotons["pfIso"] = new TH1F("photon_pfIso"+hname,"PF photon Isolation",40,0,10);
   hphotons["ntHadIso"] = new TH1F("photon_ntHadIso"+hname,"Neutral Hadron Isolation",40,0,10);
   // mass
-  hM["M3"] = new TH1F("M3"+hname,"M3 [GeV/c^{2}]", 40, 0, 1000); 
+  hM["M3"] = new TH1F("M3"+hname,"M3 [GeV/c^{2}]", 100, 0, 1000); 
   hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
   // MC
   hMC["PID"] = new TH1F("MC_ID","MC ID",51,-25.5,25.5);
@@ -306,6 +332,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
   allhistos.insert( hphotons.begin(), hphotons.end() );
   allhistos.insert( hmuons.begin(), hmuons.end() );
   allhistos.insert( hjets.begin(), hjets.end() );
+  allhistos.insert( hbtag.begin(), hbtag.end() );
   allhistos.insert( hMET.begin(), hMET.end() );
   allhistos.insert( hM.begin(), hM.end() );
   allhistos.insert( hMC.begin(), hMC.end() );
@@ -511,6 +538,26 @@ Bool_t ttgamma3::Process(Long64_t entry)
           
       if (fVerbose) cout << "event kept." << endl;
     }
+
+  ////////////////////////////////////////
+  // top pt reweighting
+  ///////////////////////////////////////
+  float gen_toppt=0.0;
+  float gen_antitoppt=0.0;
+  float toppt_weight = 1.0;
+  for(int imc = 0; imc < fReader->nMC; ++imc)             //Loop over gen particles
+    {
+      if ( fReader->mcPID->at(imc) == 6 ) gen_toppt = fReader->mcPt->at(imc);
+      if ( fReader->mcPID->at(imc) == -6 ) gen_antitoppt = fReader->mcPt->at(imc);
+    }
+  
+  if( gen_toppt > 0.001 && gen_antitoppt > 0.001)
+    toppt_weight = sqrt( SFtop(gen_toppt) * SFtop(gen_antitoppt) );
+
+  if (fdoTOPPTup && fdoTOPPT) { EvtWeight = EvtWeight*toppt_weight*toppt_weight; }
+  else if ( fdoTOPPT && fdoTOPPTup==false && fdoTOPPTdown==false ) { EvtWeight = EvtWeight*toppt_weight; }
+  // fdoTOPPTdown is when no top pt reweighting is applied!
+  
 
   ////////////////////////////////////////
   // get PU weight for MC samples
@@ -734,6 +781,9 @@ Bool_t ttgamma3::Process(Long64_t entry)
   bool pass1stJet, pass2ndJet, pass3rdJet, pass4thJet;
   pass1stJet = pass2ndJet = pass3rdJet = pass4thJet = false;
 
+  float the_btag_weight = 1.0;
+  BTagScaleFactor btagSF = BTagScaleFactor();
+
   for (int ij= 0; ij < fReader->nJet; ++ij)
     {
       TLorentzVector tmpp4;
@@ -743,13 +793,14 @@ Bool_t ttgamma3::Process(Long64_t entry)
       met_x += uncorr_jet_pt*TMath::Cos( fReader->jetPhi->at(ij) );
       met_y += uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) );
 
+      float jet_pt = fReader->jetPt->at(ij);
+      float jet_eta = fReader->jetEta->at(ij);
+      
       // Apply JER smearing in MC
       if ( fIsMC && fdoJER && fReader->jetPt->at(ij) > 10 )
         {
           float gen_pt = fReader->jetGenJetPt->at(ij);
-          if ( gen_pt < 0 ) continue;
-          float jet_pt = fReader->jetPt->at(ij);
-          float jet_eta = fReader->jetEta->at(ij);
+          if ( gen_pt < 0 ) continue;        
           // factor is (c - 1), where c are the eta-dependent scale factors, to be taken from the official twiki
           float c = 0;
           // from https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution
@@ -782,7 +833,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
           met_x -= uncorr_jet_pt*TMath::Cos( fReader->jetPhi->at(ij) ) * ptscale;
           met_y -= uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) ) * ptscale;
         }
-
+      
       if ( tmpp4.Pt() > 10 &&
            fabs( tmpp4.Eta() ) < 2.5 &&
            fReader->jetPFLooseId->at(ij) == true )
@@ -796,11 +847,23 @@ Bool_t ttgamma3::Process(Long64_t entry)
           //if ( aDeltaR <= jminDeltaR ) jminDeltaR = aDeltaR;
 
           float bdiscriminator = fReader->jetCombinedSecondaryVtxBJetTags->at(ij);
+          int jetPartonID = fReader->jetPartonID->at(ij);
+
+          if (fIsMC)
+            {
+              float SFb = 1.0;
+              if ( fabs(jetPartonID) == 5 ) SFb = btagSF.bJetSF(jet_pt);
+              else if ( fabs(jetPartonID) == 4) SFb = btagSF.cJetSF(jet_pt);
+              else SFb = btagSF.lfJetSF(jet_pt, jet_eta);
+              the_btag_weight *= 1.0 - SFb;
+            }
 
           if (Ngood_Jets == 0 && tmpp4.Pt() > 55.0 )
             {
               p4jets.push_back( tmpp4 );
               pass1stJet = true;
+
+              //bool Isbtagged = false;
               if ( bdiscriminator > CSVM )
                 {
                   vec_btags.push_back( true );
@@ -881,6 +944,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
   ////////////////////////
   // b-tagging selection
   ///////////////////////
+  if (fVerbose) cout << "b-tagging weight = " << (1. - the_btag_weight) << endl;
+  if ( fdoBTAG ) EvtWeight = EvtWeight*(1. - the_btag_weight);
 
   if ( Nbtags >= 1 )
     {
@@ -913,6 +978,38 @@ Bool_t ttgamma3::Process(Long64_t entry)
 
   if ( ! passPreSel ) return kTRUE;
 
+  // Compute M3
+  float maxPt = -1.0;
+  float  M3 = -1.0 ;
+  TLorentzVector M3p4;
+
+  for( int ij = 0; ij < fReader->nJet; ++ij  )
+    {
+      TLorentzVector tmpp4_1;
+      tmpp4_1.SetPtEtaPhiE( fReader->jetPt->at(ij), fReader->jetEta->at(ij), fReader->jetPhi->at(ij), fReader->jetEn->at(ij) );
+      for ( int kj = ij+1; kj < fReader->nJet; ++kj )
+        {
+          TLorentzVector tmpp4_2;
+          tmpp4_2.SetPtEtaPhiE( fReader->jetPt->at(kj), fReader->jetEta->at(kj), fReader->jetPhi->at(kj), fReader->jetEn->at(kj) );
+          for ( int nj = kj+1;nj < fReader->nJet; ++nj )
+            {
+              TLorentzVector tmpp4_3;
+              tmpp4_3.SetPtEtaPhiE( fReader->jetPt->at(nj), fReader->jetEta->at(nj), fReader->jetPhi->at(nj), fReader->jetEn->at(nj) );
+              
+              M3p4 = tmpp4_1 + tmpp4_2 + tmpp4_3;
+
+              float sumPt = M3p4.Pt();
+              
+              if (sumPt > maxPt )
+                {
+                  maxPt = sumPt;
+                  M3 = M3p4.M();
+
+                }
+            }
+        }
+    }
+
   //hPVs["N_pre"]->Fill( fReader->nVtx , EvtWeight );
   if (fChannel==1)
     {
@@ -932,6 +1029,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   hjets["N_pre"]->Fill( Ngood_Jets, EvtWeight );
   hjets["pt1_pre"]->Fill( p4jets[0].Pt(), EvtWeight );
   hMET["MET_pre"]->Fill( fReader->pfMET, EvtWeight );
+  hM["M3"]->Fill( M3, EvtWeight);
 
   if (fVerbose) cout << " pre-selection done." << endl;
 
@@ -1128,10 +1226,12 @@ void ttgamma3::SlaveTerminate()
           WriteHistograms("electrons", helectrons);
           WriteHistograms("muons", hmuons);
           WriteHistograms("jets", hjets);
+          WriteHistograms("btag", hbtag);
           WriteHistograms("photons", hphotons);
           WriteHistograms("MET", hMET);
           WriteHistograms("PV", hPVs);
           WriteHistograms("MC", hMC);
+          WriteHistograms("mass",hM);
         }
       else
         {

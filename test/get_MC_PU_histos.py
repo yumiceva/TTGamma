@@ -60,7 +60,8 @@ def main():
     
     #files = files_tmp
     #files = [ prefix2 + "job_summer12_ttjets_2l.root" ]
-    files = [ "/eos/uscms/store/user/troy2012/GG_MC_12/TTJets_Hadronic/TTJets_hadronic.root" ]
+    files = ["/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/misha/job_summer12_whizard_2to5_ttA.root"]
+        #"/eos/uscms/store/user/troy2012/GG_MC_12/TTJets_Hadronic/TTJets_hadronic.root" ]
     
     outname = "MyMCPileupHistogram.root"
     tf_out = TFile( outname, "UPDATE") # update will append new histograms
@@ -75,6 +76,7 @@ def main():
         MC_sample = string.replace( MC_sample, "job_summer12_", "")
         MC_sample = string.replace( MC_sample, ".root", "")
         #MC_sample = "ttjets_0l"
+        MC_sample = "ttgWhizard"
         
         h = tfile.Get("//ggNtuplizer/hPUTrue")
         hnew_name = "hPUTrue_"+MC_sample
