@@ -14,11 +14,13 @@ ttgWhizard      1.8             1074860
 # old ttgamma MG: 
 ttg             1.8             1719954
 #
+# NNLO ttbar is 252.89
 # 252.89*0.676*(1-0.676)*2, without filter: 24849110
-ttjets_1l      110.78           24849110
+# now using CMS measurement of 239 
+ttjets_1l      104.7           24849110
 # 252.89*(1-0.676)*(1-0.676), without filter: 12016664
-ttjets_2l       26.55           12016664
-ttjets_0l      115.56           6987889
+ttjets_2l       25.05           12016664
+ttjets_0l      109.2           6987889
 #
 #ttjets_1l_g     0.79           8343
 #ttjets_2l_g     0.19           2349
@@ -26,6 +28,8 @@ ttjets_0l      115.56           6987889
 #ttjets         252.89
 # /WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM
 Wjets        36703.2            57709905
+W3jets         519.0            15408303
+W4jets         214.0            11742268
 t_s             3.79            259961
 tbar_s          1.76            139974
 t_t             56.4            99876

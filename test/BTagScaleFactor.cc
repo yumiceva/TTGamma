@@ -2,25 +2,25 @@
 
 #include "BTagScaleFactor.h"
 
-float BTagScaleFactor::lfJetCSVM(float x, float jeteta){
+double BTagScaleFactor::lfJetCSVM(double x, double jeteta){
   if(jeteta < 0.8) return ((1.07541+(0.00231827*x))+(-4.74249e-06*(x*x)))+(2.70862e-09*(x*(x*x)));
   if(jeteta < 1.6) return ((1.05613+(0.00114031*x))+(-2.56066e-06*(x*x)))+(1.67792e-09*(x*(x*x)));
   return ((1.05625+(0.000487231*x))+(-2.22792e-06*(x*x)))+(1.70262e-09*(x*(x*x)));
 }
 
-float BTagScaleFactor::lfJetCSVMmin(float x, float jeteta){
+double BTagScaleFactor::lfJetCSVMmin(double x, double jeteta){
   if(jeteta < 0.8) return ((0.964527+(0.00149055*x))+(-2.78338e-06*(x*x)))+(1.51771e-09*(x*(x*x)));
   if(jeteta < 1.6) return ((0.946051+(0.000759584*x))+(-1.52491e-06*(x*x)))+(9.65822e-10*(x*(x*x)));
   return ((0.956736+(0.000280197*x))+(-1.42739e-06*(x*x)))+(1.0085e-09*(x*(x*x)));
 }
 
-float BTagScaleFactor::lfJetCSVMmax(float x, float jeteta){
+double BTagScaleFactor::lfJetCSVMmax(double x, double jeteta){
   if(jeteta < 0.8) return ((1.18638+(0.00314148*x))+(-6.68993e-06*(x*x)))+(3.89288e-09*(x*(x*x)));
   if(jeteta < 1.6) return ((1.16624+(0.00151884*x))+(-3.59041e-06*(x*x)))+(2.38681e-09*(x*(x*x)));
   return ((1.15575+(0.000693344*x))+(-3.02661e-06*(x*x)))+(2.39752e-09*(x*(x*x)));
 }
 
-float BTagScaleFactor::lfJetSF(float jetpt, float jeteta)
+double BTagScaleFactor::lfJetSF(double jetpt, double jeteta)
 {
   bool pthigh = false;
   if(jeteta < 1.6 && jetpt > 1000.0) {jetpt = 1000.0; pthigh = true;}
@@ -40,7 +40,7 @@ float BTagScaleFactor::lfJetSF(float jetpt, float jeteta)
 
 }
 
-float BTagScaleFactor::bSFerr(float jetpt)
+double BTagScaleFactor::bSFerr(double jetpt)
 {
   //Tagger: CSVM within 20 < pt < 800 GeV, abs(eta) < 2.4, x = pt
   static double ptmax[16] = {30, 40, 50, 60, 
@@ -66,10 +66,10 @@ float BTagScaleFactor::bSFerr(float jetpt)
 
 }
 
-float BTagScaleFactor::bJetSF(float jetpt){
+double BTagScaleFactor::bJetSF(double jetpt){
   return (0.939158+(0.000158694*jetpt))+(-2.53962e-07*(jetpt*jetpt)) + bSFerr(jetpt);
 }
 
-float BTagScaleFactor::cJetSF(float jetpt){
+double BTagScaleFactor::cJetSF(double jetpt){
   return (0.939158+(0.000158694*jetpt))+(-2.53962e-07*(jetpt*jetpt)) + 2.0*bSFerr(jetpt);
 }

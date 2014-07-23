@@ -17,7 +17,7 @@ public:
 
   BTagScaleFactor() 
   {
-    btagvar012_g = 0;
+    btagvar012_g = 1; // central
   }
   ~BTagScaleFactor() {}
 
@@ -25,13 +25,13 @@ public:
   // https://twiki.cern.ch/twiki/pub/CMS/BtagPOG/SFb-pt_NOttbar_payload_EPS13.txt
   // weight for >=1 btag :  1 - prod(1-SFi) over all b-tagged jets
 
-  float lfJetCSVM(float x, float jeteta);
-  float lfJetCSVMmin(float x, float jeteta);
-  float lfJetCSVMmax(float x, float jeteta);
-  float lfJetSF(float jetpt, float jeteta);
-  float bSFerr(float jetpt);
-  float bJetSF(float jetpt);
-  float cJetSF(float jetpt);
+  double lfJetCSVM(double x, double jeteta);
+  double lfJetCSVMmin(double x, double jeteta);
+  double lfJetCSVMmax(double x, double jeteta);
+  double lfJetSF(double jetpt, double jeteta);
+  double bSFerr(double jetpt);
+  double bJetSF(double jetpt);
+  double cJetSF(double jetpt);
 
     private:
 

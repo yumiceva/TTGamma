@@ -131,7 +131,7 @@ void ttgamma3::ParseInput()
     {
       fPUreweighting = true;
       fdoTOPPT = true;
-      fdoBTAG = false;
+      fdoBTAG = true;
     }
   else 
     {
@@ -781,7 +781,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   bool pass1stJet, pass2ndJet, pass3rdJet, pass4thJet;
   pass1stJet = pass2ndJet = pass3rdJet = pass4thJet = false;
 
-  float the_btag_weight = 1.0;
+  double the_btag_weight = 1.0;
   BTagScaleFactor btagSF = BTagScaleFactor();
 
   for (int ij= 0; ij < fReader->nJet; ++ij)
@@ -793,8 +793,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
       met_x += uncorr_jet_pt*TMath::Cos( fReader->jetPhi->at(ij) );
       met_y += uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) );
 
-      float jet_pt = fReader->jetPt->at(ij);
-      float jet_eta = fReader->jetEta->at(ij);
+      double jet_pt = fReader->jetPt->at(ij);
+      double jet_eta = fReader->jetEta->at(ij);
       
       // Apply JER smearing in MC
       if ( fIsMC && fdoJER && fReader->jetPt->at(ij) > 10 )
@@ -847,16 +847,24 @@ Bool_t ttgamma3::Process(Long64_t entry)
           //if ( aDeltaR <= jminDeltaR ) jminDeltaR = aDeltaR;
 
           float bdiscriminator = fReader->jetCombinedSecondaryVtxBJetTags->at(ij);
-          int jetPartonID = fReader->jetPartonID->at(ij);
+          //if (fVerbose) cout << "bdiscriminator = " << bdiscriminator << endl;
+          //if (fVerbose) cout <<"jetPartonID = " << jetPartonID << endl;
 
-          if (fIsMC)
+          if (fIsMC && bdiscriminator > CSVM)
             {
-              float SFb = 1.0;
+              int jetPartonID = fReader->jetPartonID->at(ij);
+              float SFb = 0.0;
               if ( fabs(jetPartonID) == 5 ) SFb = btagSF.bJetSF(jet_pt);
               else if ( fabs(jetPartonID) == 4) SFb = btagSF.cJetSF(jet_pt);
+              //else if ( fabs(jetPartonID) == 1 ||
+              //          fabs(jetPartonID) == 2 ||
+              //          fabs(jetPartonID) == 3 ||
+              //          fabs(jetPartonID) == 21 ) SFb = btagSF.lfJetSF(jet_pt, jet_eta);
               else SFb = btagSF.lfJetSF(jet_pt, jet_eta);
+
               the_btag_weight *= 1.0 - SFb;
             }
+          
 
           if (Ngood_Jets == 0 && tmpp4.Pt() > 55.0 )
             {
@@ -944,8 +952,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
   ////////////////////////
   // b-tagging selection
   ///////////////////////
-  if (fVerbose) cout << "b-tagging weight = " << (1. - the_btag_weight) << endl;
-  if ( fdoBTAG ) EvtWeight = EvtWeight*(1. - the_btag_weight);
+  if (fVerbose) cout << "b-tagging weight ( 0 = no btags ) = " << (1. - the_btag_weight) << endl;
+  if ( fdoBTAG && (1. - the_btag_weight) > 0 ) EvtWeight = EvtWeight*(1. - the_btag_weight);
 
   if ( Nbtags >= 1 )
     {
