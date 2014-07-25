@@ -14,7 +14,7 @@
     <TH1 name="MET_data" source="MET/MET_data"/>
     <TH1 name="NPV_data" source="PV/NPV_data"/>
     <TH1 name="muon_relisocorr_data" source="muons/muon_relisocorr_data"/>
-    <TH1 name="M3_data" source="M3/M3_data"/>
+    <TH1 name="M3_data" source="mass/M3_data"/>
   </validation>
 <!-- ttbar -->
   <validation type="ttjets_0l" file="results_ttjets_0l.root" weight="CrossSections8TeV.txt:ttjets_0l">
@@ -25,7 +25,7 @@
     <TH1 name="MET_ttjets_0l" source="MET/MET_ttjets_0l"/>
     <TH1 name="NPV_ttjets_0l" source="PV/NPV_ttjets_0l"/>
     <TH1 name="muon_relisocorr_ttjets_0l" source="muons/muon_relisocorr_ttjets_0l"/>
-    <TH1 name="M3_ttjets_0l" source="M3/M3_ttjets_0l"/>
+    <TH1 name="M3_ttjets_0l" source="mass/M3_ttjets_0l"/>
   </validation>
 
   <validation type="ttjets_1l" file="results_ttjets_1l.root" weight="CrossSections8TeV.txt:ttjets_1l">
@@ -36,7 +36,7 @@
     <TH1 name="MET_ttjets_1l" source="MET/MET_ttjets_1l"/>
     <TH1 name="NPV_ttjets_1l" source="PV/NPV_ttjets_1l"/>
     <TH1 name="muon_relisocorr_ttjets_1l" source="muons/muon_relisocorr_ttjets_1l"/>
-    <TH1 name="M3_ttjets_1l" source="M3/M3_ttjets_1l"/>
+    <TH1 name="M3_ttjets_1l" source="mass/M3_ttjets_1l"/>
   </validation>
 
   <validation type="ttjets_2l" file="results_ttjets_2l.root" weight="CrossSections8TeV.txt:ttjets_2l">
@@ -47,7 +47,7 @@
     <TH1 name="MET_ttjets_2l" source="MET/MET_ttjets_2l"/>
     <TH1 name="NPV_ttjets_2l" source="PV/NPV_ttjets_2l"/>
     <TH1 name="muon_relisocorr_ttjets_2l" source="muons/muon_relisocorr_ttjets_2l"/>
-    <TH1 name="M3_ttjets_2l" source="M3/M3_ttjets_2l"/>
+    <TH1 name="M3_ttjets_2l" source="mass/M3_ttjets_2l"/>
   </validation>
 <!-- single top -->
   <validation type="t_s" file="results_t_s.root" weight="CrossSections8TeV.txt:t_s">
@@ -58,7 +58,7 @@
     <TH1 name="MET_t_s" source="MET/MET_t_s"/>
     <TH1 name="NPV_t_s" source="PV/NPV_t_s"/>
     <TH1 name="muon_relisocorr_t_s" source="muons/muon_relisocorr_t_s"/>
-    <TH1 name="M3_t_s" source="M3/M3_t_s"/>
+    <TH1 name="M3_t_s" source="mass/M3_t_s"/>
   </validation>
 
   <validation type="t_t" file="results_t_t.root" weight="CrossSections8TeV.txt:t_t">
@@ -69,7 +69,7 @@
     <TH1 name="MET_t_t" source="MET/MET_t_t"/>
     <TH1 name="NPV_t_t" source="PV/NPV_t_t"/>
     <TH1 name="muon_relisocorr_t_t" source="muons/muon_relisocorr_t_t"/>
-    <TH1 name="M3_t_t" source="M3/M3_t_t"/>
+    <TH1 name="M3_t_t" source="mass/M3_t_t"/>
   </validation>
 
   <validation type="t_tW" file="results_t_tW.root" weight="CrossSections8TeV.txt:t_tW">
@@ -80,7 +80,7 @@
     <TH1 name="MET_t_tW" source="MET/MET_t_tW"/>
     <TH1 name="NPV_t_tW" source="PV/NPV_t_tW"/>
     <TH1 name="muon_relisocorr_t_tW" source="muons/muon_relisocorr_t_tW"/>
-    <TH1 name="M3_t_tW" source="M3/M3_t_tW"/>
+    <TH1 name="M3_t_tW" source="mass/M3_t_tW"/>
   </validation>
 
   <validation type="tbar_s" file="results_tbar_s.root" weight="CrossSections8TeV.txt:tbar_s">
@@ -91,7 +91,7 @@
     <TH1 name="MET_tbar_s" source="MET/MET_tbar_s"/>
     <TH1 name="NPV_tbar_s" source="PV/NPV_tbar_s"/>
     <TH1 name="muon_relisocorr_tbar_s" source="muons/muon_relisocorr_tbar_s"/>
-    <TH1 name="M3_tbar_s" source="M3/M3_tbar_s"/>
+    <TH1 name="M3_tbar_s" source="mass/M3_tbar_s"/>
   </validation>
 
   <validation type="tbar_t" file="results_tbar_t.root" weight="CrossSections8TeV.txt:tbar_t">
@@ -102,7 +102,7 @@
     <TH1 name="MET_tbar_t" source="MET/MET_tbar_t"/>
     <TH1 name="NPV_tbar_t" source="PV/NPV_tbar_t"/>
     <TH1 name="muon_relisocorr_tbar_t" source="muons/muon_relisocorr_tbar_t"/>
-    <TH1 name="M3_tbar_t" source="M3/M3_tbar_t"/>
+    <TH1 name="M3_tbar_t" source="mass/M3_tbar_t"/>
   </validation>
 
   <validation type="tbar_tW" file="results_tbar_tW.root" weight="CrossSections8TeV.txt:tbar_tW">
@@ -113,7 +113,7 @@
     <TH1 name="MET_tbar_tW" source="MET/MET_tbar_tW"/>
     <TH1 name="NPV_tbar_tW" source="PV/NPV_tbar_tW"/>
     <TH1 name="muon_relisocorr_tbar_tW" source="muons/muon_relisocorr_tbar_tW"/>
-    <TH1 name="M3_tbar_tW" source="M3/M3_tbar_tW"/>
+    <TH1 name="M3_tbar_tW" source="mass/M3_tbar_tW"/>
   </validation>
 <!-- associate ttbarX -->
   <validation type="ttW" file="results_ttW.root" weight="CrossSections8TeV.txt:ttW">
@@ -124,7 +124,7 @@
     <TH1 name="MET_ttW" source="MET/MET_ttW"/>
     <TH1 name="NPV_ttW" source="PV/NPV_ttW"/>
     <TH1 name="muon_relisocorr_ttW" source="muons/muon_relisocorr_ttW"/>
-    <TH1 name="M3_ttW" source="M3/M3_ttW"/>
+    <TH1 name="M3_ttW" source="mass/M3_ttW"/>
   </validation>
 
   <validation type="ttZ" file="results_ttZ.root" weight="CrossSections8TeV.txt:ttZ">
@@ -135,7 +135,7 @@
     <TH1 name="MET_ttZ" source="MET/MET_ttZ"/>
     <TH1 name="NPV_ttZ" source="PV/NPV_ttZ"/>
     <TH1 name="muon_relisocorr_ttZ" source="muons/muon_relisocorr_ttZ"/>
-    <TH1 name="M3_ttZ" source="M3/M3_ttZ"/>
+    <TH1 name="M3_ttZ" source="mass/M3_ttZ"/>
   </validation>
 
   <validation type="ttgWhizard" file="results_ttgWhizard.root" weight="CrossSections8TeV.txt:ttgWhizard">
@@ -146,7 +146,7 @@
     <TH1 name="MET_ttgWhizard" source="MET/MET_ttgWhizard"/>
     <TH1 name="NPV_ttgWhizard" source="PV/NPV_ttgWhizard"/>
     <TH1 name="muon_relisocorr_ttgWhizard" source="muons/muon_relisocorr_ttgWhizard"/>
-    <TH1 name="M3_ttgWhizard" source="M3/M3_ttgWhizard"/>
+    <TH1 name="M3_ttgWhizard" source="mass/M3_ttgWhizard"/>
   </validation>
 
   <validation type="ttjets_1l_g" file="results_ttjets_1l_g.root" weight="CrossSections8TeV.txt:ttjets_1l">
@@ -157,7 +157,7 @@
     <TH1 name="MET_ttjets_1l_g" source="MET/MET_ttjets_1l_g"/>
     <TH1 name="NPV_ttjets_1l_g" source="PV/NPV_ttjets_1l_g"/>
     <TH1 name="muon_relisocorr_ttjets_1l_g" source="muons/muon_relisocorr_ttjets_1l_g"/>
-    <TH1 name="M3_ttjets_1l_g" source="M3/M3_ttjets_1l_g"/>
+    <TH1 name="M3_ttjets_1l_g" source="mass/M3_ttjets_1l_g"/>
   </validation>
 
   <validation type="ttjets_2l_g" file="results_ttjets_2l_g.root" weight="CrossSections8TeV.txt:ttjets_2l">
@@ -168,7 +168,7 @@
     <TH1 name="MET_ttjets_2l_g" source="MET/MET_ttjets_2l_g"/>
     <TH1 name="NPV_ttjets_2l_g" source="PV/NPV_ttjets_2l_g"/>
     <TH1 name="muon_relisocorr_ttjets_2l_g" source="muons/muon_relisocorr_ttjets_2l_g"/>
-    <TH1 name="M3_ttjets_2l_g" source="M3/M3_ttjets_2l_g"/>
+    <TH1 name="M3_ttjets_2l_g" source="mass/M3_ttjets_2l_g"/>
   </validation>
 
 <!-- EWK  -->
@@ -180,7 +180,7 @@
     <TH1 name="MET_Wjets" source="MET/MET_Wjets"/>
     <TH1 name="NPV_Wjets" source="PV/NPV_Wjets"/>
     <TH1 name="muon_relisocorr_Wjets" source="muons/muon_relisocorr_Wjets"/>
-    <TH1 name="M3_Wjets" source="M3/M3_Wjets"/>
+    <TH1 name="M3_Wjets" source="mass/M3_Wjets"/>
   </validation>
 
   <validation type="DYJetsToLL" file="results_DYJetsToLL.root" weight="CrossSections8TeV.txt:DYJetsToLL">
@@ -191,7 +191,7 @@
     <TH1 name="MET_DYJetsToLL" source="MET/MET_DYJetsToLL"/>
     <TH1 name="NPV_DYJetsToLL" source="PV/NPV_DYJetsToLL"/>
     <TH1 name="muon_relisocorr_DYJetsToLL" source="muons/muon_relisocorr_DYJetsToLL"/>
-    <TH1 name="M3_DYJetsToLL" source="M3/M3_DYJetsToLL"/>
+    <TH1 name="M3_DYJetsToLL" source="mass/M3_DYJetsToLL"/>
   </validation>
 
 <!-- done loading histograms -->
@@ -219,8 +219,8 @@
 
   <additionArray name="ttg_all" title="ttg_all">
     <additionArrayItem array="ttgWhizard"/>
-    <additionArrayItem array="ttjets_1l_g"/>
-    <additionArrayItem array="ttjets_2l_g"/>
+    <!-- <additionArrayItem array="ttjets_1l_g"/>
+    <additionArrayItem array="ttjets_2l_g"/> -->
   </additionArray>
 
   <superimpose name="NPV" title="NPV" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
@@ -263,7 +263,7 @@
     <superimposeItem name="jet_pt1_ttg_all" color="870" legend="t#bar{t}+#gamma"/>
   </superimpose>
 
-  <superimpose name="M3" title="muon eta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="true" PlotDiff="true" >
+  <superimpose name="M3" title="muon eta" YTitle="Events" Weight="true" Lumi="19630" Stack="true" Fill="true" SubBanner="" SetLogy="false" PlotDiff="true" >
     <superimposeItem name="M3_data" color="1" legend="Data"/>
     <superimposeItem name="M3_ttV" color="797" legend="t#bar{t}+V"/>
     <superimposeItem name="M3_ST" color="616" legend="Single top"/>

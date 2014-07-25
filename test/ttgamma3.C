@@ -321,6 +321,11 @@ void ttgamma3::SlaveBegin(TTree * tree)
   hphotons["phi"] = new TH1F("photon_phi"+hname,"#phi^{#gamma}", 20, 0, 3.15);
   hphotons["pfIso"] = new TH1F("photon_pfIso"+hname,"PF photon Isolation",40,0,10);
   hphotons["ntHadIso"] = new TH1F("photon_ntHadIso"+hname,"Neutral Hadron Isolation",40,0,10);
+  hphotons["SCFRChIso"] = new TH1F("photon_SCFRChIso"+hname,"SCFR Charged Hadron Isolation",100,-0.5,20);
+  hphotons["RandIso"] = new TH1F("photon_RandIso"+hname,"Random Cone Isolation",100,-0.5,20);
+  hphotons["temp_sigmaietaieta"] = new TH1F("photon_temp_sigmaietaieta"+hname,"#sigma_{i#etai#eta}",50,0,0.03);
+  hphotons["temp_SCFRChIso"] = new TH1F("photon_temp_SCFRChIso"+hname,"SCFR Charged Hadron Isolation",100,-0.5,20);
+  //hphotons["temp2D_sigmaVsSCFRCh"] = new TH2F("photon_temp_sigmaVsSCFRCh"+hname,"#sigma_{i#etai#eta} vs ",50,0,0.03,100,-0.5,20); 
   // mass
   hM["M3"] = new TH1F("M3"+hname,"M3 [GeV/c^{2}]", 100, 0, 1000); 
   hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
@@ -523,7 +528,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
           //  }
           ipho++;
         }
-      
+      p4MCPhotonsVec.clear();
+
       if ( mcNphotons_overlap > 0 && fKeepOnlyPhotons == false )
         {
           if (fVerbose) cout << "overlap photon, skip event" << endl;
@@ -834,8 +840,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
           met_y -= uncorr_jet_pt*TMath::Sin( fReader->jetPhi->at(ij) ) * ptscale;
         }
       
-      if ( tmpp4.Pt() > 10 &&
-           fabs( tmpp4.Eta() ) < 2.5 &&
+      if ( tmpp4.Pt() > 30 &&
+           fabs( tmpp4.Eta() ) < 2.4 &&
            fReader->jetPFLooseId->at(ij) == true )
         {
           
@@ -864,62 +870,37 @@ Bool_t ttgamma3::Process(Long64_t entry)
 
               the_btag_weight *= 1.0 - SFb;
             }
-          
+
+          // store jets and btags
+          p4jets.push_back( tmpp4 );
+          if ( bdiscriminator > CSVM )
+            {
+              //vec_btags.push_back( true );
+              Nbtags++;
+            }
+          //else
+          //vec_btags.push_back( false );
 
           if (Ngood_Jets == 0 && tmpp4.Pt() > 55.0 )
             {
-              p4jets.push_back( tmpp4 );
               pass1stJet = true;
-
-              //bool Isbtagged = false;
-              if ( bdiscriminator > CSVM )
-                {
-                  vec_btags.push_back( true );
-                  Nbtags++;
-                }
-              else
-                vec_btags.push_back( false );
 
               hjets["deltaR_lepton_pre"]->Fill(tmpDeltaR);
             }
 
           if (Ngood_Jets == 1 && tmpp4.Pt() > 45.0 )
             {
-              p4jets.push_back( tmpp4 );
               pass2ndJet = true;
-              if ( bdiscriminator > CSVM )
-                {
-                  vec_btags.push_back( true );
-                  Nbtags++;
-                }
-              else
-                vec_btags.push_back( false );
             }
 
           if (Ngood_Jets == 2 && tmpp4.Pt() > 35.0 )
             {
-              p4jets.push_back( tmpp4 );
               pass3rdJet = true;
-              if ( bdiscriminator > CSVM )
-                {
-                  vec_btags.push_back( true );
-                  Nbtags++;
-                }
-              else
-                vec_btags.push_back( false );
             }
 
-          if (Ngood_Jets == 3 && tmpp4.Pt() > 20.0 )
+          if (Ngood_Jets == 3 && tmpp4.Pt() > 20.0 )// mim jet pt is 30, different from top ref. sel.
             {
-              p4jets.push_back( tmpp4 );
               pass4thJet = true;
-              if ( bdiscriminator > CSVM )
-                {
-                  vec_btags.push_back( true );
-                  Nbtags++;
-                }
-              else
-                vec_btags.push_back( false );
             }
           
           Ngood_Jets++;
@@ -927,8 +908,12 @@ Bool_t ttgamma3::Process(Long64_t entry)
 
     } // end jets
 
+  if (fVerbose) cout << "Number of good jets = " << Ngood_Jets << endl;
   if (fVerbose) cout << "Pass jets = " << pass1stJet << " " << pass2ndJet << " " << pass3rdJet << " " << pass4thJet << endl;
 
+  
+  // for the top ref. selection:
+  /*
   if ( pass1stJet  )
     {
       cutmap["1Jets"] += EvtWeight;
@@ -945,9 +930,16 @@ Bool_t ttgamma3::Process(Long64_t entry)
             } else return kTRUE;
         } else return kTRUE;
     } else return kTRUE;
+  */
 
-  //hPVs["N"]->Fill( fReader->nVtx , EvtWeight );
-  h1test->Fill( p4lepton.Pt() ); // leading pT lepton
+  //h1test->Fill( p4lepton.Pt() ); // leading pT lepton
+
+  ////////////////////////
+  // Jet selection
+  if ( Ngood_Jets > 3 )
+    {
+      cutmap["4Jets"] += EvtWeight;
+    } else return kTRUE;
 
   ////////////////////////
   // b-tagging selection
@@ -969,40 +961,41 @@ Bool_t ttgamma3::Process(Long64_t entry)
   if (fdoSkim) 
     {
       // skim with at least 4 good jets
-      if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet )
+      //if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet )
+      if ( Ngood_Jets > 3 )
         {
           fReader->FillSkim( fFile );
           if (entry%1000 == 1) fReader->AutoSave();
         }
+      return kTRUE;
     }
 
   ////////////////////////
   // pre-selection plots
   ///////////////////////
   bool passPreSel = false;
-  if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet &&
+  //if ( pass1stJet && pass2ndJet && pass3rdJet && pass4thJet &&
+  if ( Ngood_Jets > 3 &&
        Nbtags >= 1 )
     passPreSel = true;
 
   if ( ! passPreSel ) return kTRUE;
+  if (fVerbose) cout << "pass pre-selection" << endl;
 
   // Compute M3
   float maxPt = -1.0;
   float  M3 = -1.0 ;
   TLorentzVector M3p4;
 
-  for( int ij = 0; ij < fReader->nJet; ++ij  )
+  for ( int ij = 0; ij < p4jets.size(); ++ij)
     {
-      TLorentzVector tmpp4_1;
-      tmpp4_1.SetPtEtaPhiE( fReader->jetPt->at(ij), fReader->jetEta->at(ij), fReader->jetPhi->at(ij), fReader->jetEn->at(ij) );
-      for ( int kj = ij+1; kj < fReader->nJet; ++kj )
+      TLorentzVector tmpp4_1 = p4jets[ij];
+      for ( int kj= ij+1; kj != p4jets.size(); ++kj )
         {
-          TLorentzVector tmpp4_2;
-          tmpp4_2.SetPtEtaPhiE( fReader->jetPt->at(kj), fReader->jetEta->at(kj), fReader->jetPhi->at(kj), fReader->jetEn->at(kj) );
-          for ( int nj = kj+1;nj < fReader->nJet; ++nj )
+          TLorentzVector tmpp4_2 = p4jets[kj];
+          for ( int nj= kj+1; nj != p4jets.size(); ++nj )
             {
-              TLorentzVector tmpp4_3;
-              tmpp4_3.SetPtEtaPhiE( fReader->jetPt->at(nj), fReader->jetEta->at(nj), fReader->jetPhi->at(nj), fReader->jetEn->at(nj) );
+              TLorentzVector tmpp4_3 = p4jets[nj];
               
               M3p4 = tmpp4_1 + tmpp4_2 + tmpp4_3;
 
@@ -1012,7 +1005,6 @@ Bool_t ttgamma3::Process(Long64_t entry)
                 {
                   maxPt = sumPt;
                   M3 = M3p4.M();
-
                 }
             }
         }
@@ -1108,17 +1100,26 @@ Bool_t ttgamma3::Process(Long64_t entry)
                 hphotons["cut3_sigmaietaieta"]->Fill( ietaieta, EvtWeight );
                 if (fVerbose) cout << "photon: ietaieta = " << ietaieta << endl;
 
+                float chHadIso = fReader->phoPFChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( tmpp4.Eta() );
+                float SCFRChIso = fReader->phoSCRChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( tmpp4.Eta() );
+                float ntHadIso = fReader->phoPFNeuIso->at(ip) - fReader->rho2012 * phoEffArea03NeuHad( tmpp4.Eta() );
+                float rand_chHadIso = fReader->phoRandConeChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( tmpp4.Eta() );
+                float pfIso = fReader->phoPFPhoIso->at(ip)  - fReader->rho2012 * phoEffArea03Pho( tmpp4.Eta() );
+
+                // templates
+                if ( ntHadIso < (photonID_RhoCorrR03NeuHadIso_0[region][photon_ID] + tmpp4.Et() * photonID_RhoCorrR03NeuHadIso_1[region][photon_ID]) )
+                  {
+                    hphotons["temp_sigmaietaieta"]->Fill( ietaieta, EvtWeight );
+                    hphotons["temp_SCFRChIso"]->Fill( SCFRChIso, EvtWeight );
+                    //hphotons["temp2D_sigmaVsSCFRCh"]->Fill( (double)ietaieta, (double)SCFRChIso, EvtWeight);
+                  }
+
                 if ( ietaieta < photonID_SigmaIEtaIEta[region][photon_ID] )
                   {
                     Ngamma[4]+= EvtWeight;
 
-                    float chHadIso = fReader->phoPFChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( tmpp4.Eta() );
                     hphotons["cut4_chHadIso"]->Fill( chHadIso, EvtWeight );
-                      //fReader->phoSCRChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( fReader->phoEta->at(ip) );
 
-                    float ntHadIso = fReader->phoPFNeuIso->at(ip) - fReader->rho2012 * phoEffArea03NeuHad( tmpp4.Eta() );
-                    float rand_chHadIso = fReader->phoRandConeChIso->at(ip) - fReader->rho2012 * phoEffArea03ChHad( tmpp4.Eta() ); 
-                    float pfIso = fReader->phoPFPhoIso->at(ip)  - fReader->rho2012 * phoEffArea03Pho( tmpp4.Eta() );
 
                     //if ( chHadIso < (photonID_RhoCorrR03ChHadIso[region][photon_ID] + tmpp4.Et() * photonID_RhoCorrR03ChHadIso[region][photon_ID]) )
                     //{
@@ -1137,6 +1138,8 @@ Bool_t ttgamma3::Process(Long64_t entry)
                                 p4photon = tmpp4;
                                 hphotons["sigmaietaieta"]->Fill( ietaieta, EvtWeight );
                                 hphotons["chHadIso"]->Fill( chHadIso, EvtWeight );
+                                hphotons["SCFRChIso"]->Fill( SCFRChIso, EvtWeight );
+                                hphotons["RandIso"]->Fill( rand_chHadIso, EvtWeight );
                               }
                             Ngood_gamma++;
                           }
