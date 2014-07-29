@@ -211,12 +211,12 @@ void ttgamma3::SlaveBegin(TTree * tree)
 
   // get PU weights
   if (fPUreweighting) {
-    TFile *PU_data_file     = new TFile( "HelperFiles/MyDataPileupHistogram.root" );
+    TFile *PU_data_file     = TFile::Open( "HelperFiles/MyDataPileupHistogram.root" );
     if ( PU_data_file->IsZombie() ) {
       Info("SlaveBegin","Error opening file: %s", PU_data_file->GetName() );
     }
     hPU_weights = new TH1F( *(static_cast<TH1F*>(PU_data_file->Get( "pileup" )->Clone() )) );
-    TFile *PU_MC_file = new TFile( "HelperFiles/MyMCPileupHistogram.root");
+    TFile *PU_MC_file = TFile::Open( "HelperFiles/MyMCPileupHistogram.root");
     if ( PU_MC_file->IsZombie() ) {
       Info("SlaveBegin","Error opening file: %s", PU_MC_file->GetName() );
     }
@@ -242,7 +242,7 @@ void ttgamma3::SlaveBegin(TTree * tree)
   }
   if ( fSample != "" ) tmpfilename = fOutdir+outprefixfile+fSample+".root";
   else tmpfilename = fOutdir + outprefixfile+"data.root";
-  fFile = new TFile( tmpfilename, "RECREATE");
+  fFile = TFile::Open( tmpfilename, "RECREATE");
   //Info("SlaveBegin", "Output filename: %s", tmpfilename );
 
   TString hname = "_"+fSample;
@@ -1194,6 +1194,10 @@ Bool_t ttgamma3::Process(Long64_t entry)
       hMET["MET"]->Fill( fReader->pfMET, EvtWeight );
     }
 
+  // clear vectors
+  p4jets.clear();
+  vec_btags.clear();
+
   if (fVerbose) cout << "analysis done." << endl;
    return kTRUE;
 }
@@ -1267,6 +1271,8 @@ void ttgamma3::SlaveTerminate()
       cleanup = kTRUE;
     }
         
+    Info("SlaveTerminate", "Everything saved. Closing file.");
+
     gDirectory = savedir;
     fFile->Close();
     // Cleanup, if needed
@@ -1284,7 +1290,8 @@ void ttgamma3::SlaveTerminate()
     }
 
   }
-
+  
+  Info("SlaveTerminate", "done.");
 }
 
 void ttgamma3::Terminate()

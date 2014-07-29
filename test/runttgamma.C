@@ -220,7 +220,7 @@ void InitSamples( TString ExtraOpts= "")
       // SKIMS
       string prefixSkim = xroo_prefix + "/store/user/yumiceva/ttgamma/skim/v0/electron/";
       if ( ExtraOpts.Contains("muon") ) 
-        prefixSkim = xroo_prefix + "/store/user/yumiceva/ttgamma/skim/v0/muon/";
+        prefixSkim = xroo_prefix + "/store/user/yumiceva/ttgamma/skim/v2/muon/";
 
       //DYJetsToLL
       vec.push_back(prefixSkim+"skim_DYJetsToLL.root");
@@ -356,7 +356,13 @@ void InitSamples( TString ExtraOpts= "")
       vec.clear();
       //DATA
       if ( ExtraOpts.Contains("muon") )
-        vec.push_back(prefixSkim+"skim_data_mu_all.root");
+        {
+        //vec.push_back(prefixSkim+"skim_data_mu_all.root");
+        vec.push_back(prefixSkim+"skim_data_mu_a.root");
+        vec.push_back(prefixSkim+"skim_data_mu_b.root");
+        vec.push_back(prefixSkim+"skim_data_mu_c.root");
+        vec.push_back(prefixSkim+"skim_data_mu_d.root");
+        }
       else
         vec.push_back(prefixSkim+"skim_data_ele_all.root");
       vsamples.insert(StrVecPair("data",vec));
@@ -409,6 +415,7 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
     //chain->Process("ttgamma3.C",opts.Data() );
     chain->Process(myselector, opts.Data() );
     cout << "Process: ttgamma.C done" << endl;
+
   }
   // logs
   
@@ -429,7 +436,7 @@ void runttgamma(TString sample="all", TString ExtraOpts= "", int workers=8)
   //proof->ClearInputData();
   //delete proof;
   if ( foundSample )
-    cout << "done"<<endl;
+    cout << "runttgamma done"<<endl;
   else
     cout << "Error: No sample found with name: " << sample.Data() << endl;
 }
