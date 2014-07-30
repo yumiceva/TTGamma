@@ -43,9 +43,9 @@ public :
   bool              fdoJER;
   bool              fdoJERdown;
   bool              fdoJERup;
-  bool              fdoBTAG;
-  bool              fdoBTAGdown;
-  bool              fdoBTAGup;
+  bool              fdoBTAGSF;
+  bool              fdoBTAGSFdown;
+  bool              fdoBTAGSFup;
   bool              fdoTOPPT;
   bool              fdoTOPPTdown;
   bool              fdoTOPPTup;
@@ -96,9 +96,9 @@ public :
     fdoHLT   =       true;
     fdoSkim  =       false;
     fdoMuSF  =       true;
-    fdoBTAG  =       true;
-    fdoBTAGdown =    false;
-    fdoBTAGup   =    false;
+    fdoBTAGSF  =       true;
+    fdoBTAGSFdown =    false;
+    fdoBTAGSFup   =    false;
     fdoTOPPT =       true;
     fdoTOPPTdown =   false;
     fdoTOPPTup   =   false;

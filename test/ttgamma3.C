@@ -131,14 +131,15 @@ void ttgamma3::ParseInput()
     {
       fPUreweighting = true;
       fdoTOPPT = true;
-      fdoBTAG = true;
+      fdoBTAGSF = true;
+      fdoMuSF = true;
     }
   else 
     {
       fPUreweighting = false;
       fdoMuSF = false;
       fdoTOPPT = false;
-      fdoBTAG = false;
+      fdoBTAGSF = false;
     }
 
   if (fMyOpt.Contains("sync"))
@@ -163,7 +164,7 @@ void ttgamma3::ParseInput()
   if ( fPUreweighting ) Info("Begin","Apply PU reweighting.");
   if ( fdoMuSF ) Info("Begin","Apply muon scale factors.");
   if ( fdoTOPPT ) Info("Begin","Apply top pt reweighting.");
-  if ( fdoBTAG ) Info("Begin","Apply b-tagging scale factors.");
+  if ( fdoBTAGSF ) Info("Begin","Apply b-tagging scale factors.");
 }
 
 void ttgamma3::WriteHistograms(const char* name, map<string, TH1*> hcontainer)
@@ -530,7 +531,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
         }
       p4MCPhotonsVec.clear();
 
-      if ( mcNphotons_overlap > 0 && fKeepOnlyPhotons == false )
+      if ( mcNphotons_overlap > 0 && fKeepOnlyPhotons == false && fdoSkim == false)
         {
           if (fVerbose) cout << "overlap photon, skip event" << endl;
           fN_tt_filter++;
@@ -724,13 +725,15 @@ Bool_t ttgamma3::Process(Long64_t entry)
       if ( Ngood_Mu == 1 )
         {
           // Get SF for muon
-          MuonScaleFactor muSF = MuonScaleFactor();
-          muSF.Init();
-          float muon_sf = 1.0;
-          muon_sf = muSF.GetSF( p4lepton.Eta() );
-          if (fVerbose) cout << "muon SF = " << muon_sf << endl;
-          EvtWeight *= muon_sf;
-
+          if ( fdoMuSF )
+            {
+              MuonScaleFactor muSF = MuonScaleFactor();
+              muSF.Init();
+              float muon_sf = 1.0;
+              muon_sf = muSF.GetSF( p4lepton.Eta() );
+              if (fVerbose) cout << "muon SF = " << muon_sf << endl;
+              EvtWeight *= muon_sf;
+            }
           cutmap["OneIsoMuon"] += EvtWeight;
         }
       else 
@@ -945,7 +948,7 @@ Bool_t ttgamma3::Process(Long64_t entry)
   // b-tagging selection
   ///////////////////////
   if (fVerbose) cout << "b-tagging weight ( 0 = no btags ) = " << (1. - the_btag_weight) << endl;
-  if ( fdoBTAG && (1. - the_btag_weight) > 0 ) EvtWeight = EvtWeight*(1. - the_btag_weight);
+  if ( fdoBTAGSF && (1. - the_btag_weight) > 0 ) EvtWeight = EvtWeight*(1. - the_btag_weight);
 
   if ( Nbtags >= 1 )
     {

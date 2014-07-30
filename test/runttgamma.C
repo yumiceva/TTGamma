@@ -346,6 +346,15 @@ void InitSamples( TString ExtraOpts= "")
       vec.push_back(prefixSkim+"skim_ttjets_1l.root");
       vsamples.insert(StrVecPair("ttjets_1l",vec));
       vec.clear();
+
+      vec.push_back(prefixSkim+"skim_ttjets_1l_a.root");
+      vsamples.insert(StrVecPair("ttjets_1l_a",vec));
+      vec.clear();
+
+      vec.push_back(prefixSkim+"skim_ttjets_1l_b.root");
+      vsamples.insert(StrVecPair("ttjets_1l_b",vec));
+      vec.clear();
+
       //ttjets_2l
       vec.push_back(prefixSkim+"skim_ttjets_2l.root");
       vsamples.insert(StrVecPair("ttjets_2l",vec));
@@ -356,16 +365,26 @@ void InitSamples( TString ExtraOpts= "")
       vec.clear();
       //DATA
       if ( ExtraOpts.Contains("muon") )
-        {
-        //vec.push_back(prefixSkim+"skim_data_mu_all.root");
-        vec.push_back(prefixSkim+"skim_data_mu_a.root");
-        vec.push_back(prefixSkim+"skim_data_mu_b.root");
-        vec.push_back(prefixSkim+"skim_data_mu_c.root");
-        vec.push_back(prefixSkim+"skim_data_mu_d.root");
-        }
+        vec.push_back(prefixSkim+"skim_data_mu_all.root");
       else
         vec.push_back(prefixSkim+"skim_data_ele_all.root");
       vsamples.insert(StrVecPair("data",vec));
+      vec.clear();
+      
+      vec.push_back(prefixSkim+"skim_data_mu_a.root");
+      vsamples.insert(StrVecPair("data_mu_a",vec));
+      vec.clear();
+
+      vec.push_back(prefixSkim+"skim_data_mu_b.root");
+      vsamples.insert(StrVecPair("data_mu_b",vec));
+      vec.clear();
+
+      vec.push_back(prefixSkim+"skim_data_mu_c.root");
+      vsamples.insert(StrVecPair("data_mu_c",vec));
+      vec.clear();
+
+      vec.push_back(prefixSkim+"skim_data_mu_d.root");
+      vsamples.insert(StrVecPair("data_mu_d",vec));
       vec.clear();
 
     }
