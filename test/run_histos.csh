@@ -1,4 +1,10 @@
-./ttgamma data muon inputskim outdir=./histos/ >& histos/histos_data.log &
+#./ttgamma data muon inputskim outdir=./histos/ >& histos/histos_data.log &
+
+./ttgamma data_mu_a muon inputskim outdir=./histos/ >& histos/histos_data_mu_a.log &
+./ttgamma data_mu_b muon inputskim outdir=./histos/ >& histos/histos_data_mu_b.log &
+./ttgamma data_mu_c muon inputskim outdir=./histos/ >& histos/histos_data_mu_c.log &
+./ttgamma data_mu_d muon inputskim outdir=./histos/ >& histos/histos_data_mu_d.log &
+
 ./ttgamma t_s muon inputskim outdir=./histos/ >& histos/histos_t_s.log &
 ./ttgamma t_t muon inputskim outdir=./histos/ >& histos/histos_t_t.log &
 ./ttgamma t_tW muon inputskim outdir=./histos/ >& histos/histos_t_tW.log &
